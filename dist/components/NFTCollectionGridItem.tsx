@@ -16,23 +16,24 @@ const NFTCollectionGridItem: React.FC<IProps> = ({
   creator,
 }) => {
   return (
-    <ImageWithActions
-      src={coverPhotoImageSrc}
-      actions={[
-        <ActionButton
-          size={'large'}
-          className={'bg-gray-900 text-white text-xs sm:text-lg cursor-pointer'}
-        >
-          {amountCollected}
-        </ActionButton>,
-        <ActionButton
-          size={'large'}
-          className={'border-2 border-solid border-purple-500 cursor-pointer'}
-        >
-          <img src={creator.avatarImageSrc} alt={creator.username} />
-        </ActionButton>,
-      ]}
-    />
+    <div></div>
+    // <ImageWithActions
+    //   src={coverPhotoImageSrc}
+    //   actions={[
+    //     <ActionButton
+    //       size={'large'}
+    //       className={'bg-gray-900 text-white text-xs sm:text-lg cursor-pointer'}
+    //     >
+    //       {amountCollected}
+    //     </ActionButton>,
+    //     <ActionButton
+    //       size={'large'}
+    //       className={'border-2 border-solid border-purple-500 cursor-pointer'}
+    //     >
+    //       <img src={creator.avatarImageSrc} alt={creator.username} />
+    //     </ActionButton>,
+    //   ]}
+    // />
   )
 }
 
