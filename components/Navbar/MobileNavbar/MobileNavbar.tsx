@@ -5,7 +5,7 @@
 import React, { useState } from 'react'
 import { IProps } from '../types'
 // TODO: figure out why inline require'ing these don't work (webpack issue?)
-import logoImage from '../REDPILL.svg'
+// import logoImage from '/REDPILL.svg'
 import SearchInput from '../SearchInput'
 // import closeButtonIcon from './close-button-icon.svg'
 // import searchIcon from './search-icon.svg'
@@ -14,6 +14,8 @@ import NavigationLinks from './NavigationLinks'
 import { MenuIcon } from '@heroicons/react/outline'
 import { XIcon } from '@heroicons/react/outline'
 import { SearchIcon } from '@heroicons/react/outline'
+import ConnectButton from '../../ConnectButton'
+
 type State = 'initial' | 'search' | 'menu'
 
 const MobileNavbar: React.FC<IProps> = () => {
@@ -29,7 +31,7 @@ const MobileNavbar: React.FC<IProps> = () => {
         <div className={'w-full'}>
           {['initial', 'menu'].includes(state) && (
             <img
-              src={logoImage}
+              src={'/REDPILL.svg'}
               alt={'Lil Nifty Logo'}
               className={'cursor-pointer'}
               width={100}
@@ -47,6 +49,7 @@ const MobileNavbar: React.FC<IProps> = () => {
             </div>
           )}
         </div>
+        <ConnectButton />
         <div className={'flex space-x-3 items-center'}>
           {state === 'initial' && (
             <div

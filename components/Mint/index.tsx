@@ -31,6 +31,7 @@ export default function Mint() {
         deactivate,
         library,
       } = useWeb3React<Web3Provider>()
+      const [id, setId] = useState("")
 
 
     async function createToken(uri: string) {
@@ -82,6 +83,7 @@ export default function Mint() {
             name: title,
             creationDate: media.lastModified,
             uri: imageUrl,
+            description: description,
             media: {
                 mimeType: media.type,
                 size: media.size
@@ -162,7 +164,7 @@ export default function Mint() {
                     id="title"
                     value={title}
                     onChange={e => setTitle(e.target.value)}
-                    className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-none rounded-md sm:text-sm border-gray-700 bg-gray-800"
+                    className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-none rounded-md sm:text-sm border-gray-700 bg-gray-900"
                   />
                 </div>
               </div>
@@ -180,7 +182,7 @@ export default function Mint() {
                   id="about"
                   name="about"
                   rows={3}
-                  className="max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-700 rounded-md bg-gray-800"
+                  className="max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-700 rounded-md bg-gray-900"
                   defaultValue={''}
 
                   value={description}
@@ -205,7 +207,7 @@ export default function Mint() {
                   name="about"
                   rows={3}
                   placeholder={'music, experimental, jazz'}
-                  className="max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-700 rounded-md bg-gray-800"
+                  className="max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-700 rounded-md bg-gray-900"
                   defaultValue={''}
 
                   value={tags}
@@ -246,9 +248,10 @@ export default function Mint() {
                   <div className="flex text-sm text-gray-600">
                     <label
                       htmlFor="file-upload"
-                      className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                    >
-                      <span>Upload a file</span>
+                      className="mt-4 w-full justify-center inline-flex items-center px-2 py-2 border border-red-300 shadow-sm text-red-300 text-sm font-medium rounded-full text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                      >
+                      <span
+                      >Upload a file</span>
                       <input
                         id="file-upload"
                         name="file-upload"
@@ -258,8 +261,8 @@ export default function Mint() {
                         onChange={e => setMedia(e.target.files[0])}
                         />
                     </label>
-                    <p className="pl-1">or drag and drop</p>
                   </div>
+                  <p className="pl-1 text-sm text-gray-300">or drag and drop</p>
                   <p className="text-xs text-gray-500">
                     Upload files up to 10MB
                   </p>
@@ -270,14 +273,14 @@ export default function Mint() {
  </>}
  </div>
 
-    
-          
           </div>
          
 
           <button
             type="submit"
-            className="mt-4 w-full justify-center button--gradient inline-flex items-center px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            // className="ml-6 inline-flex items-center px-4 py-2 border border-red-300 text-xs rounded-full font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+
+            className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
             disabled={!media}
           >
             Mint
@@ -303,6 +306,7 @@ export default function Mint() {
               ></path>
             </svg>}
           </button>
+          <div className={'text-white'}>{id && `https://opensea.io/assets/matic/0x310dB1c2a19cb03Fe45493139AE89a7d92f49f44/${id}`}</div>
         </div>
       </div>
     </form>

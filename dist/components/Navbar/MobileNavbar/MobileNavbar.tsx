@@ -11,7 +11,7 @@ import closeButtonIcon from './close-button-icon.svg'
 import searchIcon from './search-icon.svg'
 import menuIcon from './menu-icon.svg'
 import NavigationLinks from './NavigationLinks'
-
+import ConnectButton from '../../ConnectButton'
 type State = 'initial' | 'search' | 'menu'
 
 const MobileNavbar: React.FC<IProps> = () => {
@@ -19,6 +19,8 @@ const MobileNavbar: React.FC<IProps> = () => {
 
   return (
     <div className={'relative'}>
+                  <ConnectButton />
+
       <div
         className={
           'flex justify-between mx-auto w-11/12 items-center h-12 z-10'
@@ -26,13 +28,15 @@ const MobileNavbar: React.FC<IProps> = () => {
       >
         <div className={'w-full'}>
           {['initial', 'menu'].includes(state) && (
-            <img
+            <><img
               src={logoImage}
               alt={'Lil Nifty Logo'}
               className={'cursor-pointer'}
               width={25}
               height={25}
             />
+            <ConnectButton /></>
+
           )}
 
           {state === 'search' && (
@@ -47,7 +51,7 @@ const MobileNavbar: React.FC<IProps> = () => {
             </div>
           )}
         </div>
-        <div className={'flex space-x-3 items-center'}>
+        <div className={'flex  items-center'}>
           {state === 'initial' && (
             <div
               className={'cursor-pointer'}
@@ -61,13 +65,15 @@ const MobileNavbar: React.FC<IProps> = () => {
           {['initial', 'menu'].includes(state) && (
             <div className={'cursor-pointer'}>
               {state === 'initial' && (
-                <img
+                <><img
                   src={menuIcon}
                   alt={'Menu'}
                   onClick={() => {
                     setState('menu')
                   }}
                 />
+                <ConnectButton /></>
+
               )}
               {state === 'menu' && (
                 <img

@@ -6,7 +6,7 @@ const Layout: React.FC = ({ children }) => {
   const [open, setOpen] = useState(true)
 
   return (
-    <div className={'space-y-4 lg:pb-20 bg-black'}>
+    <div className={'space-y-4 lg:pb-20 bg-black h-full'}>
       <Navbar />
       <Modal open={open} setOpen={setOpen} connect={true} />
       <div>{children}</div>

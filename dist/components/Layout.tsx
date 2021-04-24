@@ -3,7 +3,7 @@ import { Navbar } from '.'
 
 const Layout: React.FC = ({ children }) => {
   return (
-    <div className={'space-y-4 lg:pb-20'}>
+    <div className={'bg-black h-screen w-screen'}>
       <Navbar />
       <div>{children}</div>
     </div>
