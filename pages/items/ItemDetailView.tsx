@@ -19,7 +19,7 @@ const ItemDetailView: React.VFC<IProps> = ({
     <div className={'flex flex-col space-y-12'}>
       <div className={'flex flex-col space-y-8'}>
         <div className={'space-y-3'}>
-          <ImageWithActions // TODO: Compose into ShareableImage
+          {/* <ImageWithActions // TODO: Compose into ShareableImage
             src={
               'https://firebasestorage.googleapis.com/v0/b/lilnif.appspot.com/o/images%2FIMG_8385.jpeg?alt=media&token=6a96e213-8a67-4a66-bb90-6a1ef5013015'
             }
@@ -42,7 +42,7 @@ const ItemDetailView: React.VFC<IProps> = ({
                 2
               </ActionButton>,
             ]}
-          />
+          /> */}
         </div>
 
         <div className={'px-3'}>
