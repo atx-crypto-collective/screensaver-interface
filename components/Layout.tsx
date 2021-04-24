@@ -8,7 +8,7 @@ const Layout: React.FC = ({ children }) => {
   return (
     <div className={'space-y-4 lg:pb-20 bg-black h-full'}>
       <Navbar />
-      <Modal open={open} setOpen={setOpen} connect={true} />
+      <Modal open={open} setOpen={setOpen} />
       <div>{children}</div>
     </div>
   )

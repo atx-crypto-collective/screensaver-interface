@@ -14,7 +14,6 @@ import { GALLERY_ABI } from '../constants/gallery'
 interface IProps {
   open: boolean
   setOpen: (open: boolean) => void
-  connect: boolean
 }
 
 async function approve() {
@@ -26,7 +25,7 @@ async function approve() {
   )
 }
 
-const Modal: React.VFC<IProps> = ({ open, setOpen, connect = false }) => {
+const Modal: React.VFC<IProps> = ({ open, setOpen }) => {
   const galleryContract = useGalleryContract(
     '0x310dB1c2a19cb03Fe45493139AE89a7d92f49f44',
   )
