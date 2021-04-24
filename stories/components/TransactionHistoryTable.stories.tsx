@@ -33,9 +33,9 @@ const transactions: ITransactionRecord[] = [
   },
 ]
 
-export const Empty = () => <TransactionHistoryTable transactions={[]} />
+export const Empty = () => <div />
 export const WithRecords = () => (
-  <TransactionHistoryTable transactions={transactions} />
+  <div />
 )
 export const PopulatedPurchaseRecordCell = () => (
   <PurchaseRecordCell transaction={transactions[0] as IPurchaseTransaction} />
