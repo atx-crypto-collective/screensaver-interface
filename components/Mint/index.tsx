@@ -72,14 +72,19 @@ export default function Mint() {
         var uri = "https://us-central1-broccoli-df8cd.cloudfunctions.net/api/mint"
 
         var parsedTags = parseTags(tags)
-        console.log("imageUrl", imageUrl)
+        console.log("imageUrl", imageUrl, mimeType, size, date)
+
+        // setDate(media.lastModified)
+        // setSize(media.size)
+        // setType(media.type)
 
         const metadata = {
             name: title,
-            creationDate: new Date(),
+            creationDate: media.lastModified,
             uri: imageUrl,
             media: {
-                mimeType
+                mimeType: media.type,
+                size: media.size
             },
             tags: parsedTags
         }
@@ -119,9 +124,7 @@ export default function Mint() {
         evt.preventDefault();
         console.log("HELLO", media)
 
-        setDate(media.lastModified)
-        setSize(media.size)
-        setType(media.type)
+        console.log("METADTA MEDIA", "DATE", date, media.lastModified, "SIZE", size, media.size,"TYPE", mimeType, media.type)
 
         mintNFT()
     }
