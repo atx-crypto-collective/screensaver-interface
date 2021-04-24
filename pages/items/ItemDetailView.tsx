@@ -81,7 +81,7 @@ const ItemDetailView: React.VFC<IProps> = ({
           <hr className={'border-gray-700 border-t-2'} />
         </div>
         <div>
-          <TransactionHistoryTable
+          {/* <TransactionHistoryTable
             transactions={[
               {
                 type: 'purchase',
@@ -104,7 +104,7 @@ const ItemDetailView: React.VFC<IProps> = ({
                 },
               },
             ]}
-          />
+          /> */}
         </div>
       </div>
     </div>
