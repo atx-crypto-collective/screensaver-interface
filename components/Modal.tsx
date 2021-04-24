@@ -118,7 +118,7 @@ const Modal: React.VFC<IProps> = ({ open, setOpen }) => {
                     <button
                       type="button"
                       onClick={!account ? () => activate(injected) : deactivate}
-                      className="inline-flex items-center px-6 py-3 shadow-sm text-base font-medium rounded-md text-white"
+                      className="inline-flex items-center px-6 py-3 shadow-sm text-base font-medium rounded-md text-white bg-red-300"
                     >
                       {!account ? 'Connect with Metamask' : 'Deactivate'}
                     </button>
