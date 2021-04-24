@@ -22,7 +22,7 @@ export default function Mint() {
     const [media, setMedia] = useState< File >()
     const [date, setDate] = useState(0)
     const [size, setSize] = useState(0)
-    const [type, setType] = useState("")
+    const [mimeType, setType] = useState("")
     const {
         chainId,
         account,
@@ -79,7 +79,7 @@ export default function Mint() {
             creationDate: new Date(),
             uri: imageUrl,
             media: {
-                mimeType: type
+                mimeType
             },
             tags: parsedTags
         }
