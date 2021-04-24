@@ -54,12 +54,11 @@ export default function Mint() {
             console.log("HERER", mediaUrl)
             // 2. send metadata 
             const uri = await postMetadata(mediaUrl)
+            console.log("URI", uri)
 
-            console.log(uri)
             // 3. call createToken 
             await createToken(uri)
 
-            console.log("URI", uri)
             setLoading(false)
         } catch(error) {
             console.log(error)
@@ -68,21 +67,24 @@ export default function Mint() {
 
     }
 
-    async function postMetadata(url: string) {
+    async function postMetadata(imageUrl: string) {
 
         var uri = "https://us-central1-broccoli-df8cd.cloudfunctions.net/api/mint"
 
         var parsedTags = parseTags(tags)
+        console.log("imageUrl", imageUrl)
 
         const metadata = {
             name: title,
             creationDate: new Date(),
-            uri: url,
+            uri: imageUrl,
             media: {
                 mimeType: type
             },
             tags: parsedTags
         }
+
+        console.log("METADATA", metadata)
 
         // post request 
 
@@ -213,59 +215,67 @@ export default function Mint() {
             </div>
 
             <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+              { media ? <div className={'text-white'}>File Loaded!</div> :
+              <>
               <label
-                htmlFor="cover_photo"
-                className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
-              >
-                Upload NFT
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                  <div className="space-y-1 text-center">
-                    <svg
-                      className="mx-auto h-12 w-12 text-gray-400"
-                      stroke="currentColor"
-                      fill="none"
-                      viewBox="0 0 48 48"
-                      aria-hidden="true"
+              htmlFor="cover_photo"
+              className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
+            >
+              Upload NFT
+            </label>
+            <div className="mt-1 sm:mt-0 sm:col-span-2">
+              <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                <div className="space-y-1 text-center">
+                  <svg
+                    className="mx-auto h-12 w-12 text-gray-400"
+                    stroke="currentColor"
+                    fill="none"
+                    viewBox="0 0 48 48"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <div className="flex text-sm text-gray-600">
+                    <label
+                      htmlFor="file-upload"
+                      className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                     >
-                      <path
-                        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    <div className="flex text-sm text-gray-600">
-                      <label
-                        htmlFor="file-upload"
-                        className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                      >
-                        <span>Upload a file</span>
-                        <input
-                          id="file-upload"
-                          name="file-upload"
-                          type="file"
-                          className="sr-only"
-                        //   value={media}
-                          onChange={e => setMedia(e.target.files[0])}
-                          />
-                      </label>
-                      <p className="pl-1">or drag and drop</p>
-                    </div>
-                    <p className="text-xs text-gray-500">
-                      PNG, JPG, GIF up to 10MB
-                    </p>
+                      <span>Upload a file</span>
+                      <input
+                        id="file-upload"
+                        name="file-upload"
+                        type="file"
+                        className="sr-only"
+                      //   value={media}
+                        onChange={e => setMedia(e.target.files[0])}
+                        />
+                    </label>
+                    <p className="pl-1">or drag and drop</p>
                   </div>
+                  <p className="text-xs text-gray-500">
+                    Upload files up to 10MB
+                  </p>
                 </div>
               </div>
+              
             </div>
+ </>}
+ </div>
+
+    
+          
           </div>
+         
 
           <button
             type="submit"
             className="mt-4 w-full justify-center button--gradient inline-flex items-center px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            // disabled
+            disabled={!media}
           >
             Mint
             { loading && <svg
