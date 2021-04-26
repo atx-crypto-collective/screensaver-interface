@@ -28,19 +28,20 @@ const MobileNavbar: React.FC<IProps> = () => {
 
   return (
     <div className={'fixed bg-black right-0 top-0 w-full border-b-2 border-gray-800'} >
-    <div >
+    <div className={'mx-4'}>
       <div
         className={
           'flex justify-between mx-auto w-11/12 items-center h-14 z-10'
         }
       >
-        <div className={'w-full'}>
+        <span className={"inline text-2xl"}>💊</span>
+        <div className={'w-full ml-2'}>
           {['initial', 'menu'].includes(state) && (
             <img
               src={'/REDPILL.svg'}
               alt={'Lil Nifty Logo'}
               className={'cursor-pointer'}
-              width={100}
+              width={80}
             />
           )}
 
@@ -67,11 +68,12 @@ const MobileNavbar: React.FC<IProps> = () => {
               {/* <SearchIcon className={'h-5 w-5 text-white'}/> */}
             </div>
           )}
-          {/* {['initial', 'menu'].includes(state) && (
+          {['initial', 'menu'].includes(state) && (
             <div className={'cursor-pointer'}>
               {state === 'initial' && (
                 <MenuIcon
-                className={'h-5 w-5 text-white'}
+
+                className={' text-red-300 p-2 border border-red-300 text-md rounded-full font-medium rounded-sm shadow-sm text-red-300 hover:text-black bg-gray-900 hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'}
                   onClick={() => {
                     setState('menu')
                   }}
@@ -87,7 +89,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                 />
               )}
             </div>
-          )} */}
+          )}
         </div>
       </div>
       {state === 'menu' && (

@@ -11,10 +11,12 @@ export default function Banner() {
             <span className="hidden md:inline">Red Pill runs on Matic. Please switch networks.</span>
             <span className="inline sm:hidden">Switch to Matic.</span>
             <span className="inline">
+            {' '}
               <a href="https://wiki.aavegotchi.com/en/polygon" target="_blank" className="text-white font-bold underline">
-                {' '}
-                Learn how.<span aria-hidden="true">&rarr;</span>
+                Learn how
               </a>
+              {' '}
+              <span aria-hidden="true">&rarr;</span>
             </span>
           </p>
         </div>

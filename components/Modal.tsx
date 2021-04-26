@@ -17,35 +17,27 @@ interface IProps {
   setOpen: (open: boolean) => void
 }
 
-async function approve() {
-  const galleryContract = useGalleryContract(
-    '0x310dB1c2a19cb03Fe45493139AE89a7d92f49f44',
-  )
-  const estimatedGas = await galleryContract.approve(
-    '0x8237c3EB572DBc370cCe499a09F57c9986971e40',
-  )
-}
-
 const SwitchView = () => {
 
     return (
+        <div className={' m-4'}>
         <div>
-        <div>
-        <div className="mt-3 text-center sm:mt-5">
-          <Dialog.Title
-            as="h3"
-            className="text-xl leading-6 font-bold text-gray-900"
-          >
-            Switch to Matic
-          </Dialog.Title>
+            <div className="mt-3 text-center sm:mt-5">
+            <Dialog.Title
+                as="h3"
+                className="text-xl leading-6 font-bold text-gray-900"
+            >
+                Switch to Matic
+            </Dialog.Title>
+            </div>
         </div>
-      </div>
-      <div className="mt-5 sm:mt-6">
+            {/* <div className="mt-5 sm:mt-5"> */}
+            <button className="h-0 w-0 overflow-hidden"/>
 
-            <p className={"text-gray-700 mb-4"} >RedPill runs on Matic. Switch your Metamask network to Matic.</p>
-          <a className={"text-gray-700 underline mt-8"}>Learn more.</a>
-      </div>
-      </div>
+                <p className={"text-gray-700 mb-4"} >RedPill runs on Matic. Switch your Metamask network to Matic.</p>
+                <a className={"text-gray-700 underline mt-8"}>Learn more.</a>
+            {/* </div> */}
+        </div>
     )
 }
 
@@ -111,18 +103,6 @@ function ModalViews({ status }) {
   }
 
 const Modal: React.VFC<IProps> = ({ status, open, setOpen }) => {
-  const galleryContract = useGalleryContract(
-    '0x310dB1c2a19cb03Fe45493139AE89a7d92f49f44',
-  )
-
-//   const {
-//     chainId,
-//     account,
-//     activate,
-//     active,
-//     deactivate,
-//     library,
-//   } = useWeb3React<Web3Provider>()
 
   return (
     <Transition.Root show={open} as={Fragment}>

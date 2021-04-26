@@ -132,6 +132,7 @@ export default function Mint() {
         console.log("METADTA MEDIA", "DATE", date, media.lastModified, "SIZE", size, media.size,"TYPE", mimeType, media.type)
         if (chainId !== 137) {
           setOpen(true)
+          console.log("HEHEHER")
         } else {
           mintNFT()
         } 

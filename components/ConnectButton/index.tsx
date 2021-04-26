@@ -17,7 +17,7 @@ export default function index() {
 
   return (
     <>
-      <Modal status={"status"} open={open} setOpen={setOpen} />
+      <Modal status={"connect"} open={open} setOpen={setOpen} />
 
       <div>
         <button 
