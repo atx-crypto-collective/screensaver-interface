@@ -1,12 +1,12 @@
 
 [[redirects]]
-  from = "/item/:item"
-  to = "/items/[items].html?items=:items"
+  from = "/object/:object"
+  to = "/object/[object].html?object=:object"
   status = 200
 
 [[redirects]]
-  from = "/objects/:objects"
-  to = "/objects/[objects].html?objects=:objects"
+  from = "/collection/:collection"
+  to = "/collection/[collection].html?collection=:collection"
   status = 200
 
 [[redirects]]
