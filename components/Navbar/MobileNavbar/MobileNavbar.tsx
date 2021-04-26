@@ -21,7 +21,7 @@ import { Web3Provider } from '@ethersproject/providers'
 import { useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-import logoImage from "../../../assets/REDPILL.svg";
+import logoImage from "../../../assets/redpill.svg";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')

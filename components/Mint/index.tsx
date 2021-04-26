@@ -31,17 +31,25 @@ export default function Mint() {
     deactivate,
     library,
   } = useWeb3React<Web3Provider>()
+  const [mintSuccess, setMintSuccess] = useState(false);
   const [id, setId] = useState('')
   const [open, setOpen] = useState(true)
+  const [totalSupply, setTotalSupply] = useState(0)
+
+  const contract = new ethers.Contract(
+    process.env.NEXT_PUBLIC_CONTRACT_ID,
+    GALLERY_ABI,
+    library.getSigner(account),
+  )
 
   async function createToken(uri: string) {
-    const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
-      GALLERY_ABI,
-      library.getSigner(account),
-    )
-
+    getBalance()
     await contract.createToken(uri)
+  }
+
+  async function getBalance() {
+    var supply = await contract.totalSupply()
+    setTotalSupply(supply + 1)
   }
 
   async function mintNFT() {
@@ -56,6 +64,8 @@ export default function Mint() {
 
       // 3. call createToken
       await createToken(uri)
+
+      setMintSuccess(true)
 
       setLoading(false)
     } catch (error) {
@@ -293,7 +303,7 @@ export default function Mint() {
               disabled={!media}
               // onClick={() => setOpen(true)}
             >
-              Preview NFT
+              MINT
               {loading && (
                 <svg
                   className="animate-spin -mr-1 ml-3 h-5 w-5 text-white"
@@ -318,8 +328,8 @@ export default function Mint() {
               )}
             </button>
             <div className={'text-white'}>
-              {id &&
-                `https://opensea.io/assets/matic/0x310dB1c2a19cb03Fe45493139AE89a7d92f49f44/${id}`}
+              {mintSuccess &&
+                `https://opensea.io/assets/matic/0x310dB1c2a19cb03Fe45493139AE89a7d92f49f44/${totalSupply}`}
             </div>
           </div>
         </div>
