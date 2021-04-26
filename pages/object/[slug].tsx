@@ -5,6 +5,9 @@ import ItemDetailView from './ItemDetailView'
 
 const ItemDetailPage: React.VFC = () => {
   // TODO: Pull item by slug from router
+
+  // state : preview & not preview 
+  
   return (
     <Layout>
       <div className={'md:mt-12 pb-8 w-11/12 mx-auto'}>

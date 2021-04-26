@@ -7,7 +7,7 @@ import { NetworkConnector } from './NetworkConnector'
 
 const NETWORK_URL = 0 // process.env.REACT_APP_NETWORK_URL
 
-export const NETWORK_CHAIN_ID: number = parseInt(process.env.REACT_APP_CHAIN_ID ?? '137')
+export const NETWORK_CHAIN_ID: number = parseInt(process.env.REACT_APP_CHAIN_ID ?? '6')
 
 if (typeof NETWORK_URL === 'undefined') {
   throw new Error(`REACT_APP_NETWORK_URL must be a defined environment variable`)

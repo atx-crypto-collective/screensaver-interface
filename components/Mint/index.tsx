@@ -33,7 +33,7 @@ export default function Mint() {
   } = useWeb3React<Web3Provider>()
   const [mintSuccess, setMintSuccess] = useState(false);
   const [id, setId] = useState('')
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
   const [totalSupply, setTotalSupply] = useState(0)
 
   async function createToken(uri: string) {
