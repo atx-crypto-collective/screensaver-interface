@@ -68,7 +68,7 @@ const MobileNavbar: React.FC<IProps> = () => {
               {/* <SearchIcon className={'h-5 w-5 text-white'}/> */}
             </div>
           )}
-          {['initial', 'menu'].includes(state) && (
+          {/* {['initial', 'menu'].includes(state) && (
             <div className={'cursor-pointer'}>
               {state === 'initial' && (
                 <MenuIcon
@@ -89,7 +89,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                 />
               )}
             </div>
-          )}
+          )} */}
         </div>
       </div>
       {state === 'menu' && (
@@ -114,7 +114,7 @@ const MobileNavbar: React.FC<IProps> = () => {
       )}
     </div>
 
-    { chainId !== 137 &&  <Banner />}
+    { (chainId !== 137 && account) && <Banner />}
          
           </div>
 
