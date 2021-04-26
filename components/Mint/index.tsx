@@ -142,6 +142,7 @@ export default function Mint() {
 
   return (
     <div className={'mt-20'}>
+
       <Modal status={'switch-network'} open={open} setOpen={setOpen} />
 
       <form className="space-y-8 divide-y divide-gray-200" onSubmit={submit}>
@@ -292,7 +293,7 @@ export default function Mint() {
               disabled={!media}
               // onClick={() => setOpen(true)}
             >
-              Mint
+              Preview NFT
               {loading && (
                 <svg
                   className="animate-spin -mr-1 ml-3 h-5 w-5 text-white"
