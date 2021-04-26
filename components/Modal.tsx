@@ -41,7 +41,12 @@ const SwitchView = () => {
     )
 }
 
-const ConnectView = () => {
+interface ConnectIProps {
+  setOpen: (open: boolean) => void
+}
+
+
+const ConnectView: React.VFC<ConnectIProps>  = ({setOpen}) => {
     const {
         chainId,
         account,
@@ -68,7 +73,11 @@ const ConnectView = () => {
       <div className="mt-5 sm:mt-6">
         <button
           type="button"
-          onClick={!account ? () => activate(injected) : deactivate}
+          onClick={!account ? () => {
+              activate(injected)
+              setOpen(false)
+           } : deactivate
+        }
           className="inline-flex items-center px-6 py-3 shadow-sm text-base font-medium rounded-md text-white bg-red-300"
         >
           {!account ? 'Connect with Metamask' : 'Deactivate'}
@@ -83,13 +92,13 @@ const ConnectView = () => {
     )
 }
 
-function ModalViews({ status }) {
+function ModalViews({ status, setOpen }) {
     return (
       <div>
         {(() => {
           switch (status) {
             case 'connect':
-              return <ConnectView />;
+              return <ConnectView setOpen={setOpen} />;
             case 'switch-network':
                 return <SwitchView />;
                 // case 'error':
@@ -103,6 +112,7 @@ function ModalViews({ status }) {
   }
 
 const Modal: React.VFC<IProps> = ({ status, open, setOpen }) => {
+    const { account } = useWeb3React<Web3Provider>()
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -144,7 +154,7 @@ const Modal: React.VFC<IProps> = ({ status, open, setOpen }) => {
           >
             <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-center overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
              
-            <ModalViews status={status} />
+            <ModalViews status={!account ? "connect" : status} setOpen={setOpen} />
             
             </div>
           </Transition.Child>

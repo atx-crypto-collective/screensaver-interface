@@ -43,19 +43,7 @@ const MobileNavbar: React.FC<IProps> = () => {
               className={'cursor-pointer'}
               width={80}
             />
-          )}
-
-          {state === 'search' && (
-            <div className={'flex space-x-4 w-full items-center'}>
-              <XIcon
-                className={'cursor-pointer'}
-                onClick={() => setState('initial')}
-                color={'white'}
-              />
-              <SearchInput placeholder={'Search...'} size={'small'} />
-            </div>
-          )}
-        </div>
+          )}        </div>
         <ConnectButton />
         <div className={'flex space-x-3 items-center'}>
           {state === 'initial' && (
@@ -65,10 +53,9 @@ const MobileNavbar: React.FC<IProps> = () => {
                 setState('search')
               }}
             >
-              {/* <SearchIcon className={'h-5 w-5 text-white'}/> */}
             </div>
           )}
-          {/* {['initial', 'menu'].includes(state) && (
+          {['initial', 'menu'].includes(state) && (
             <div className={'cursor-pointer'}>
               {state === 'initial' && (
                 <MenuIcon
@@ -81,7 +68,7 @@ const MobileNavbar: React.FC<IProps> = () => {
               )}
               {state === 'menu' && (
                 <XIcon
-                className={'h-5 w-5 text-white'}
+                className={'h-5 w-5 text-white '}
 
                   onClick={() => {
                     setState('initial')
@@ -89,26 +76,26 @@ const MobileNavbar: React.FC<IProps> = () => {
                 />
               )}
             </div>
-          )} */}
+          )}
         </div>
       </div>
       {state === 'menu' && (
         <div
           className={
-            'absolute bg-black border-t-2 border-white border-opacity-10 w-full z-10 text-white py-6 overflow-scroll'
+            'absolute left-0 bg-black border-t-2 border-white border-opacity-10 w-full z-10 text-white py-6 overflow-scroll'
           }
         >
           {/** Main Menu */}
-          <div style={{ maxWidth: '81.1%' }} className={'mx-auto'}>
+          {/* <div style={{ maxWidth: '80%' }} className={'mx-auto w-screen'}> */}
             <NavigationLinks />
-          </div>
-          <div
+          {/* </div> */}
+          {/* <div
             className={
               'py-6 mt-12 border-t border-white border-opacity-10 w-full text-center'
             }
           >
             <button>Login</button>
-          </div>
+          </div> */}
           {/** ./ Main Menu */}
         </div>
       )}

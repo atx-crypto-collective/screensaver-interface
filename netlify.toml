@@ -1,0 +1,20 @@
+
+[[redirects]]
+  from = "/item/:item"
+  to = "/items/[items].html?items=:items"
+  status = 200
+
+[[redirects]]
+  from = "/objects/:objects"
+  to = "/objects/[objects].html?objects=:objects"
+  status = 200
+
+[[redirects]]
+  from = "/mint/:mint"
+  to = "/mint/:mint"
+  status = 200
+
+[[redirects]]
+  from = "/explore/:explore"
+  to = "/explore/:explore"
+  status = 200

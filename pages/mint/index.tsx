@@ -5,7 +5,7 @@ import Mint from '../../components/Mint'
 export default function MintPage() {
   return (
     <Layout>
-      <div className={'w-11/12 max-w-6xl mx-auto'}>
+      <div className={'w-11/12 max-w-xl mx-auto'}>
         <Mint />
       </div>
     </Layout>

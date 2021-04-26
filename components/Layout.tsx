@@ -14,8 +14,6 @@ const Layout: React.FC = ({ children }) => {
 
   return (
     <div className={'space-y-4 lg:pb-20 bg-black h-full'}>
-      { chainId !== 137 && <div className={'mt-20'} /> }
-      <div className={'mt-8'} />
       <Navbar />
       <div>{children}</div>
     </div>
