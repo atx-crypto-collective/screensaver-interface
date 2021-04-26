@@ -5,7 +5,7 @@
 import React, { useState } from 'react'
 import { IProps } from '../types'
 // TODO: figure out why inline require'ing these don't work (webpack issue?)
-import logoImage from './REDPILL.svg'
+// import logoImage from './REDPILL.svg'
 import SearchInput from '../SearchInput'
 // import closeButtonIcon from './close-button-icon.svg'
 // import searchIcon from './search-icon.svg'
@@ -48,7 +48,7 @@ const MobileNavbar: React.FC<IProps> = () => {
           <div className={'w-full ml-2'}>
             {['initial', 'menu'].includes(state) && (
               <img
-                src={logoImage}
+                src={'/REPILL.svg'}
                 alt={'Lil Nifty Logo'}
                 className={'cursor-pointer'}
                 width={80}
