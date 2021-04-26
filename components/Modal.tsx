@@ -12,6 +12,7 @@ import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../constants/gallery'
 
 interface IProps {
+    status: string
   open: boolean
   setOpen: (open: boolean) => void
 }
@@ -25,41 +26,103 @@ async function approve() {
   )
 }
 
-const Modal: React.VFC<IProps> = ({ open, setOpen }) => {
+const SwitchView = () => {
+
+    return (
+        <div>
+        <div>
+        <div className="mt-3 text-center sm:mt-5">
+          <Dialog.Title
+            as="h3"
+            className="text-xl leading-6 font-bold text-gray-900"
+          >
+            Switch to Matic
+          </Dialog.Title>
+        </div>
+      </div>
+      <div className="mt-5 sm:mt-6">
+
+            <p className={"text-gray-700 mb-4"} >RedPill runs on Matic. Switch your Metamask network to Matic.</p>
+          <a className={"text-gray-700 underline mt-8"}>Learn more.</a>
+      </div>
+      </div>
+    )
+}
+
+const ConnectView = () => {
+    const {
+        chainId,
+        account,
+        activate,
+        active,
+        deactivate,
+        library,
+      } = useWeb3React<Web3Provider>()
+
+    return (
+        <div>
+        <div>
+        <div className="mt-3 text-center sm:mt-5">
+          <Dialog.Title
+            as="h3"
+            className="text-xl leading-6 font-bold text-gray-900"
+          >
+            {!account
+              ? 'Connect Your Wallet'
+              : shortenAddress(account)}
+          </Dialog.Title>
+        </div>
+      </div>
+      <div className="mt-5 sm:mt-6">
+        <button
+          type="button"
+          onClick={!account ? () => activate(injected) : deactivate}
+          className="inline-flex items-center px-6 py-3 shadow-sm text-base font-medium rounded-md text-white bg-red-300"
+        >
+          {!account ? 'Connect with Metamask' : 'Deactivate'}
+        </button>
+
+        <div className="mt-4">
+          <p className="text-sm text-gray-500">New to Ethereum?</p>
+          <a>Learn more about wallets</a>
+        </div>
+      </div>
+      </div>
+    )
+}
+
+function ModalViews({ status }) {
+    return (
+      <div>
+        {(() => {
+          switch (status) {
+            case 'connect':
+              return <ConnectView />;
+            case 'switch-network':
+                return <SwitchView />;
+                // case 'error':
+                //     return <ConnectView />;
+                    default:
+              return null;
+          }
+        })()}
+      </div>
+    );
+  }
+
+const Modal: React.VFC<IProps> = ({ status, open, setOpen }) => {
   const galleryContract = useGalleryContract(
     '0x310dB1c2a19cb03Fe45493139AE89a7d92f49f44',
   )
 
-  const {
-    chainId,
-    account,
-    activate,
-    active,
-    deactivate,
-    library,
-  } = useWeb3React<Web3Provider>()
-
-  useEffect(() => {
-    console.log('ACCOUNT', account)
-
-    if (!account) return
-    async function approveMethod() {
-      const contract = new ethers.Contract(
-        '0x310dB1c2a19cb03Fe45493139AE89a7d92f49f44',
-        GALLERY_ABI,
-        library.getSigner(account),
-      )
-
-      const transaction = await contract.approve(
-        '0x310dB1c2a19cb03Fe45493139AE89a7d92f49f44',
-        1,
-      )
-
-      console.log(transaction)
-    }
-
-    approveMethod()
-  }, [account])
+//   const {
+//     chainId,
+//     account,
+//     activate,
+//     active,
+//     deactivate,
+//     library,
+//   } = useWeb3React<Web3Provider>()
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -100,64 +163,9 @@ const Modal: React.VFC<IProps> = ({ open, setOpen }) => {
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-center overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
-              {true ? (
-                <>
-                  <div>
-                    <div className="mt-3 text-center sm:mt-5">
-                      <Dialog.Title
-                        as="h3"
-                        className="text-xl leading-6 font-bold text-gray-900"
-                      >
-                        {!account
-                          ? 'Connect Your Wallet'
-                          : shortenAddress(account)}
-                      </Dialog.Title>
-                    </div>
-                  </div>
-                  <div className="mt-5 sm:mt-6">
-                    <button
-                      type="button"
-                      onClick={!account ? () => activate(injected) : deactivate}
-                      className="inline-flex items-center px-6 py-3 shadow-sm text-base font-medium rounded-md text-white bg-red-300"
-                    >
-                      {!account ? 'Connect with Metamask' : 'Deactivate'}
-                    </button>
-
-                    <div className="mt-4">
-                      <p className="text-sm text-gray-500">New to Ethereum?</p>
-                      <a>Learn more about wallets</a>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div>
-                    <div className="mt-3 text-center sm:mt-5">
-                      <Dialog.Title
-                        as="h3"
-                        className="text-xl leading-6 font-bold text-gray-900"
-                      >
-                        Approve Broccoli Contract
-                      </Dialog.Title>
-                    </div>
-                  </div>
-                  <div className="mt-5 sm:mt-6">
-                    <button
-                      onClick={() => console.log('HELLO')}
-                      type="button"
-                      className="inline-flex items-center px-6 py-3 shadow-sm text-base font-medium rounded-md text-white bg-red-300"
-                    >
-                      Approve
-                    </button>
-
-                    <div className="mt-4">
-                      <p className="text-sm text-gray-500">
-                        Allow Broccoli contract to operate bidding.
-                      </p>
-                    </div>
-                  </div>
-                </>
-              )}
+             
+            <ModalViews status={status} />
+            
             </div>
           </Transition.Child>
         </div>

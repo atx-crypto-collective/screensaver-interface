@@ -15,17 +15,23 @@ import { MenuIcon } from '@heroicons/react/outline'
 import { XIcon } from '@heroicons/react/outline'
 import { SearchIcon } from '@heroicons/react/outline'
 import ConnectButton from '../../ConnectButton'
+import Banner from '../../Banner'
+import { useWeb3React } from "@web3-react/core";
+import { Web3Provider } from "@ethersproject/providers";
+import { useEffect } from 'react'
 
 type State = 'initial' | 'search' | 'menu'
 
 const MobileNavbar: React.FC<IProps> = () => {
   const [state, setState] = useState<State>('initial')
+  const { account, chainId } = useWeb3React();
 
   return (
-    <div className={'relative'}>
+    <div className={'fixed bg-black right-0 top-0 w-full border-b-2 border-gray-800'} >
+    <div >
       <div
         className={
-          'flex justify-between mx-auto w-11/12 items-center h-12 z-10'
+          'flex justify-between mx-auto w-11/12 items-center h-14 z-10'
         }
       >
         <div className={'w-full'}>
@@ -61,7 +67,7 @@ const MobileNavbar: React.FC<IProps> = () => {
               {/* <SearchIcon className={'h-5 w-5 text-white'}/> */}
             </div>
           )}
-          {['initial', 'menu'].includes(state) && (
+          {/* {['initial', 'menu'].includes(state) && (
             <div className={'cursor-pointer'}>
               {state === 'initial' && (
                 <MenuIcon
@@ -81,7 +87,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                 />
               )}
             </div>
-          )}
+          )} */}
         </div>
       </div>
       {state === 'menu' && (
@@ -105,6 +111,11 @@ const MobileNavbar: React.FC<IProps> = () => {
         </div>
       )}
     </div>
+
+    { chainId !== 137 &&  <Banner />}
+         
+          </div>
+
   )
 }
 

@@ -14,7 +14,7 @@
     "@ethersproject/contracts": "^5.1.0",
     "@ethersproject/providers": "^5.1.0",
     "@ethersproject/solidity": "^5.1.0",
-    "@headlessui/react": "^1.0.0",
+    "@headlessui/react": "^1.0.0-43d5270",
     "@heroicons/react": "^1.0.0",
     "@stripe/react-stripe-js": "^1.4.0",
     "@stripe/stripe-js": "^1.13.2",
