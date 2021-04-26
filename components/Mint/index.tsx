@@ -36,7 +36,7 @@ export default function Mint() {
 
   async function createToken(uri: string) {
     const contract = new ethers.Contract(
-      '0x310dB1c2a19cb03Fe45493139AE89a7d92f49f44',
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       library.getSigner(account),
     )

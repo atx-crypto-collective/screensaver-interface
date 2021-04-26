@@ -21,6 +21,7 @@ import { Web3Provider } from '@ethersproject/providers'
 import { useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
+import logoImage from "../../../assets/REDPILL.svg";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -48,7 +49,7 @@ const MobileNavbar: React.FC<IProps> = () => {
           <div className={'w-full ml-2'}>
             {['initial', 'menu'].includes(state) && (
               <img
-                src={'/REPILL.svg'}
+                src={logoImage}
                 alt={'Lil Nifty Logo'}
                 className={'cursor-pointer'}
                 width={80}
