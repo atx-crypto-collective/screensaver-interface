@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ItemDetailView from '../../../pages/items/ItemDetailView'
+import ItemDetailView from '../../../pages/object/ItemDetailView'
 
 export const AuthenticatedActiveListing = () => (
   <div className={'max-w-md mx-auto'}>
