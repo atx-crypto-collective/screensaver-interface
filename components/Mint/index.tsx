@@ -36,18 +36,22 @@ export default function Mint() {
   const [open, setOpen] = useState(true)
   const [totalSupply, setTotalSupply] = useState(0)
 
-  const contract = new ethers.Contract(
-    process.env.NEXT_PUBLIC_CONTRACT_ID,
-    GALLERY_ABI,
-    library.getSigner(account),
-  )
-
   async function createToken(uri: string) {
+    const contract = new ethers.Contract(    
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      GALLERY_ABI,
+      library.getSigner(account),
+    )
     getBalance()
     await contract.createToken(uri)
   }
 
   async function getBalance() {
+    const contract = new ethers.Contract(    
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      GALLERY_ABI,
+      library.getSigner(account),
+    )
     var supply = await contract.totalSupply()
     setTotalSupply(supply + 1)
   }
