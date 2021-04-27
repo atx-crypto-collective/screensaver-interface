@@ -36,7 +36,7 @@ const MobileNavbar: React.FC<IProps> = () => {
   return (
     <div
       className={
-        'fixed bg-black right-0 top-0 w-full border-b-2 border-gray-800'
+        'fixed z-10 bg-black right-0 top-0 w-full border-b-2 border-gray-800'
       }
     >
       <div className={'mx-4'}>

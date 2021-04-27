@@ -8,6 +8,7 @@ import { GALLERY_ABI } from '../../constants/gallery'
 import Modal from '../../components/Modal'
 import classNames from 'classnames'
 import { injected } from '../../connectors'
+import { useRouter } from 'next/router'
 
 const parseTags = (tags: string): string[] => {
   var tagString = tags.replace(/\s/g, '')
@@ -37,6 +38,7 @@ export default function Mint() {
   const [id, setId] = useState('')
   const [open, setOpen] = useState(false)
   const [totalSupply, setTotalSupply] = useState(0)
+  const router = useRouter()
 
   async function createToken(uri: string) {
     const contract = new ethers.Contract(    
@@ -69,10 +71,14 @@ export default function Mint() {
       const uri = await postMetadata(mediaUrl)
       console.log('URI', uri)
 
-      // 3. call createToken
-      await createToken(uri)
+      const hash = uri.split('/')
 
-      setMintSuccess(true)
+      // 3. call createToken
+      // await createToken(uri)
+      router.push(`/object/1?preview=${hash[hash.length - 1]}`)
+
+      // setMintSuccess(true)
+      
 
       setLoading(false)
     } catch (error) {
@@ -150,12 +156,12 @@ export default function Mint() {
       mimeType,
       media.type,
     )
-    if (chainId !== 137) {
-      setOpen(true)
-      console.log('HEHEHER')
-    } else {
+    // if (chainId !== 137) {
+    //   setOpen(true)
+    //   console.log('HEHEHER')
+    // } else {
       mintNFT()
-    }
+    // }
   }
 
   return (
@@ -311,7 +317,7 @@ export default function Mint() {
               disabled={!media}
               // onClick={() => setOpen(true)}
             >
-              MINT
+              Preview NFT
               {loading && (
                 <svg
                   className="animate-spin -mr-1 ml-3 h-5 w-5 text-white"
