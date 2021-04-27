@@ -4,12 +4,12 @@ import ItemDetailView from '../../../pages/object/ItemDetailView'
 
 export const AuthenticatedActiveListing = () => (
   <div className={'max-w-md mx-auto'}>
-    <ItemDetailView userIsAuthenticated itemListingState={'active'} />
+    {/* <ItemDetailView userIsAuthenticated itemListingState={'active'} /> */}
   </div>
 )
 export const AuthenticatedPastListing = () => (
   <div className={'max-w-md mx-auto'}>
-    <ItemDetailView userIsAuthenticated itemListingState={'past'} />
+    {/* <ItemDetailView userIsAuthenticated itemListingState={'past'} /> */}
   </div>
 )
 
