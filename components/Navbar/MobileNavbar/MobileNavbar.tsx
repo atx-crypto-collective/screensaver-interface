@@ -166,27 +166,24 @@ const MobileNavbar: React.FC<IProps> = () => {
             </Menu>
           </div>
         </div>
-        {state === 'menu' && (
+        {/* {state === 'menu' && (
           <div
             className={
               'absolute left-0 bg-black border-t-2 border-white border-opacity-10 w-full z-10 text-white py-6 overflow-scroll'
             }
           >
-            {/** Main Menu */}
-            {/* <div style={{ maxWidth: '80%' }} className={'mx-auto w-screen'}> */}
+            <div style={{ maxWidth: '80%' }} className={'mx-auto w-screen'}>
             <NavigationLinks />
-            {/* </div> */}
-            {/* <div
+            </div>
+            <div
             className={
               'py-6 mt-12 border-t border-white border-opacity-10 w-full text-center'
             }
           >
             <button>Login</button>
-          </div> */}
-            {/** ./ Main Menu */}
           </div>
-        )}
-        {/* Profile dropdown */}
+          </div>
+        )} */}
       </div>
 
       {chainId !== 137 && account && <Banner />}

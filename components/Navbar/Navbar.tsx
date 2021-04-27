@@ -5,7 +5,7 @@ import { IProps } from './types'
 
 const Navbar: React.VFC<IProps> = () => {
   return (
-    <div className={'border-b-2 border-white border-opacity-10 bg-black'}>
+    <div>
       {/* <div className={'xl:hidden'}> */}
         <MobileNavbar />
       {/* </div>

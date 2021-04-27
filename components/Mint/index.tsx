@@ -6,6 +6,7 @@ import { useWeb3React } from '@web3-react/core'
 import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../../constants/gallery'
 import Modal from '../../components/Modal'
+import classNames from 'classnames'
 
 const parseTags = (tags: string): string[] => {
   var tagString = tags.replace(/\s/g, '')
@@ -155,7 +156,7 @@ export default function Mint() {
   }
 
   return (
-    <div className={'mt-20'}>
+    <div>
 
       <Modal status={'switch-network'} open={open} setOpen={setOpen} />
 
@@ -333,7 +334,7 @@ export default function Mint() {
             </button>
             <div className={'text-white'}>
               {mintSuccess &&
-                `https://opensea.io/assets/matic/0x310dB1c2a19cb03Fe45493139AE89a7d92f49f44/${totalSupply}`}
+                `https://opensea.io/assets/matic/0x91A5b869bF327A3E0A2ffb4aF5Ca138749fb7851/${totalSupply}`}
             </div>
           </div>
         </div>

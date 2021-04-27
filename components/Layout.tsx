@@ -3,6 +3,7 @@ import { Navbar } from '.'
 import Modal from './Modal'
 import { useWeb3React } from "@web3-react/core";
 import { useEffect } from 'react'
+import classNames from 'classnames'
 
 const Layout: React.FC = ({ children }) => {
   const [open, setOpen] = useState(false)
@@ -11,9 +12,14 @@ const Layout: React.FC = ({ children }) => {
   useEffect(() => {
     console.log("CHAIN ID", chainId)
   }, [account])
-
+  
   return (
-    <div className={'space-y-4 lg:pb-20 bg-black h-full'}>
+    <div 
+    className={classNames(
+      (!!account && chainId !== 137) ? 'mt-24' : 'mt-14',
+      'space-y-4 lg:pb-20 bg-black h-full '
+    )}
+    >
       <Navbar />
       <div>{children}</div>
     </div>
