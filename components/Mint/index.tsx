@@ -99,6 +99,7 @@ export default function Mint() {
         size: media.size,
       },
       tags: parsedTags,
+      creator: account
     }
 
     console.log('METADATA', metadata)
@@ -291,7 +292,7 @@ export default function Mint() {
                           or drag and drop
                         </p>
                         <p className="text-xs text-gray-500">
-                          Upload files up to 10MB
+                          Upload .png and .jpg up to 10MB. More file support coming very soon!
                         </p>
                       </div>
                     )}

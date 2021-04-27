@@ -47,14 +47,12 @@ const MobileNavbar: React.FC<IProps> = () => {
         >
           <span className={'inline text-2xl'}>💊</span>
           <div className={'w-full ml-2'}>
-            {['initial', 'menu'].includes(state) && (
               <img
                 src={logoImage}
                 alt={'Lil Nifty Logo'}
                 className={'cursor-pointer'}
                 width={80}
               />
-            )}{' '}
           </div>
           <ConnectButton />
           <div className={'flex space-x-3 items-center'}>
