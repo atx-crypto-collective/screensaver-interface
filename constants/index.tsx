@@ -19,6 +19,18 @@ export const iconUrlByProviderId: { [key: string]: string } = {
 
 export const NetworkContextName = 'NETWORK'
 
+export const POLYGON_MAINNET_PARAMS = {
+  chainId: '0x89', // A 0x-prefixed hexadecimal chainId
+  chainName: 'Polygon Mainnet',
+  nativeCurrency: {
+      name: 'Matic',
+      symbol: 'MATIC',
+      decimals: 18
+  },
+  rpcUrls: ['https://rpc-mainnet.matic.network'],
+  blockExplorerUrls: ['https://explorer.matic.network/']
+}
+
 export interface ContractList {
   delegation?: string
   controlledCommitteeRewardsBuilder?: string

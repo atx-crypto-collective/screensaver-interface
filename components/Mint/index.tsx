@@ -7,6 +7,7 @@ import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../../constants/gallery'
 import Modal from '../../components/Modal'
 import classNames from 'classnames'
+import { injected } from '../../connectors'
 
 const parseTags = (tags: string): string[] => {
   var tagString = tags.replace(/\s/g, '')
@@ -37,12 +38,38 @@ export default function Mint() {
   const [open, setOpen] = useState(false)
   const [totalSupply, setTotalSupply] = useState(0)
 
+  const POLYGON_MAINNET_PARAMS = {
+    chainId: '137', // A 0x-prefixed hexadecimal chainId
+    chainName: 'Polygon Mainnet',
+    nativeCurrency: {
+        name: 'Matic',
+        symbol: 'MATIC',
+        decimals: 18
+    },
+    rpcUrls: ['https://rpc-mainnet.matic.network'],
+    blockExplorerUrls: ['https://explorer.matic.network/']
+}
+
+async function switchToPolygon() {
+  injected.getProvider().then(provider => {
+    provider
+      .request({
+        method: 'wallet_addEthereumChain',
+        params: [POLYGON_MAINNET_PARAMS]
+      })
+      .catch((error: any) => {
+        console.log(error)
+      })
+  })
+}
+
   async function createToken(uri: string) {
     const contract = new ethers.Contract(    
       process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       library.getSigner(account),
     )
+
     getBalance()
     await contract.createToken(uri)
   }

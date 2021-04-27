@@ -9,7 +9,7 @@ import { injected } from '../connectors'
 import styles from '../styles/Wallet.module.css'
 import { useGalleryContract } from '../hooks/useContract'
 import { ethers } from 'ethers'
-import { GALLERY_ABI } from '../constants/gallery'
+import { POLYGON_MAINNET_PARAMS } from '../constants/'
 
 interface IProps {
     status: string
@@ -19,23 +19,48 @@ interface IProps {
 
 const SwitchView = () => {
 
+  const {
+    chainId,
+    account,
+  } = useWeb3React<Web3Provider>()
+
+  async function switchToPolygon() {
+    injected.getProvider().then(provider => {
+      provider
+        .request({
+          method: 'wallet_addEthereumChain',
+          params: [POLYGON_MAINNET_PARAMS]
+        })
+        .catch((error: any) => {
+          console.log(error)
+        })
+    })
+  }
+
+
     return (
         <div className={' m-4'}>
         <div>
             <div className="mt-3 text-center sm:mt-5">
             <Dialog.Title
                 as="h3"
-                className="text-xl leading-6 font-bold text-gray-900"
+                className="text-xl leading-6 font-bold text-gray-900 mb-6"
             >
-                Switch to Matic
+            RedPill runs on Polygon
             </Dialog.Title>
             </div>
         </div>
             {/* <div className="mt-5 sm:mt-5"> */}
-            <button className="h-0 w-0 overflow-hidden"/>
+            <button
+          type="button"
+          onClick={switchToPolygon}
+          className="inline-flex items-center px-6 py-3 shadow-sm text-base font-medium rounded-md text-white bg-red-300"
+        >
+          Switch to Polygon
+        </button>
 
-                <p className={"text-gray-700 mb-4"} >RedPill runs on Matic. Switch your Metamask network to Matic.</p>
-                <a className={"text-gray-700 underline mt-8"}>Learn more.</a>
+                <p className={"text-gray-700 mt-6"} >RedPill runs on Polygon so artists can enjoy low fees and guilt free minting.</p>
+                {/* <a className={"text-gray-700 underline mt-8"}>Learn more.</a> */}
             {/* </div> */}
         </div>
     )

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Layout, Navbar } from '../../components'
 
 import ItemDetailView from './ItemDetailView'
@@ -7,6 +7,10 @@ const ItemDetailPage: React.VFC = () => {
   // TODO: Pull item by slug from router
 
   // state : preview & not preview 
+
+  useEffect(() => {
+    // call contract with id 
+  }, [])
   
   return (
     <Layout>

@@ -45,25 +45,26 @@ const MobileNavbar: React.FC<IProps> = () => {
             'flex justify-between mx-auto w-11/12 items-center h-14 z-10'
           }
         >
-          <span className={'inline text-2xl'}>💊</span>
-          <div className={'w-full ml-2'}>
+          <div className={'flex'}>
+            <span className={'inline text-2xl mr-2'}>💊</span>
               <img
                 src={logoImage}
                 alt={'Lil Nifty Logo'}
                 className={'cursor-pointer'}
                 width={80}
               />
-          </div>
-          <ConnectButton />
+          </div>          
           <div className={'flex space-x-3 items-center'}>
-            {state === 'initial' && (
+            <ConnectButton />
+            
+            {/* {state === 'initial' && (
               <div
-                className={'cursor-pointer'}
+                className={'cursor-pointer ml-2'}
                 onClick={() => {
                   setState('search')
                 }}
               ></div>
-            )}
+            )} */}
             {/* {['initial', 'menu'].includes(state) && (
             <div className={'cursor-pointer'}>
               {state === 'initial' && (
@@ -184,7 +185,7 @@ const MobileNavbar: React.FC<IProps> = () => {
         )} */}
       </div>
 
-      {chainId !== 137 && account && <Banner />}
+      {/* {chainId !== 137 && account && <Banner />} */}
     </div>
   )
 }

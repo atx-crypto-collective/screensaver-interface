@@ -15,10 +15,7 @@ const Layout: React.FC = ({ children }) => {
   
   return (
     <div 
-    className={classNames(
-      (!!account && chainId !== 137) ? 'mt-24' : 'mt-14',
-      'space-y-4 lg:pb-20 bg-black h-full '
-    )}
+    className={'mt-14 space-y-4 lg:pb-20 bg-black h-full'}
     >
       <Navbar />
       <div>{children}</div>
