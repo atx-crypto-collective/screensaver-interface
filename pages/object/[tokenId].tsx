@@ -73,7 +73,7 @@ const ItemDetailPage: React.VFC = () => {
       getUri()
     }
 
-  }, [])
+  }, [tokenId, preview])
 
   if (loading) return <Layout><div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>Loading...</div></Layout>
   

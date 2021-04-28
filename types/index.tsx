@@ -10,6 +10,7 @@ type NFT = {
       size: string
     },
     tags: string[]
+    tokenId: number
 }
 
 export default NFT

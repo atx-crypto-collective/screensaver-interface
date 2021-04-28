@@ -15,6 +15,6 @@
   status = 200
 
 [[redirects]]
-  from = "/explore/:explore"
-  to = "/explore/:explore"
+  from = "/gallery/:gallery"
+  to = "/gallery/:gallery"
   status = 200

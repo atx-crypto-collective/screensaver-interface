@@ -22,7 +22,7 @@ const NFTItemCard: React.FC<IProps> = ({
             /> */}
           </div>
           <div className={'flex justify-between items-center w-full'}>
-            <h2 className={'font-medium text-sm opacity-80'}>{creator.name}</h2>
+            <h2 className={'font-medium text-sm opacity-80'}>{creator}</h2>
             {/* <div className={'font-bold text-sm uppercase'}>
               {amountCollected} collected
             </div> */}

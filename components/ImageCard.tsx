@@ -18,7 +18,7 @@ const ImageCard: React.FC<IProps> = ({ srcUrl, altText, footer, children }) => {
         <div
           className={'flex flex-col w-full mx-auto space-y-3'}
         >
-          <div className={'rounded-t-2xl overflow-hidden'}>
+          <div className={'rounded-t-2xl overflow-hidden h-96'}>
             <img src={srcUrl} alt={altText} />
           </div>
           {children && <div>{children}</div>}

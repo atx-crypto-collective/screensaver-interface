@@ -1,10 +1,8 @@
 export interface IProps {
   title: string
   coverImageSrc: string
-  creator: {
-    avatarImageSrc: string
-    name: string
-  }
+  creator: string
   endDateTime: Date
   amountCollected: number
+  tokenId: number
 }
