@@ -1,7 +1,7 @@
 
 [[redirects]]
   from = "/object/:object"
-  to = "/object/[object].html?object=:object"
+  to = "/object/[tokenId].html?object=:tokenId"
   status = 200
 
 [[redirects]]
