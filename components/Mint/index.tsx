@@ -156,12 +156,12 @@ export default function Mint() {
       mimeType,
       media.type,
     )
-    // if (chainId !== 137) {
-    //   setOpen(true)
-    //   console.log('HEHEHER')
-    // } else {
+    if (chainId !== 137) {
+      setOpen(true)
+      console.log('HEHEHER')
+    } else {
       mintNFT()
-    // }
+    }
   }
 
   return (

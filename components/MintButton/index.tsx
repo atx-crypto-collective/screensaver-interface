@@ -41,6 +41,7 @@ const index: React.FC<IProps> = ({hash}) => {
       library.getSigner(account),
     )
 
+
     setLoading(true)
 
     await contract.createToken(uri)
@@ -52,18 +53,16 @@ let filter = {
     topics: [ topic ]
 }
 
-getBalance()
-
 getNetworkLibrary().on(filter, (result) => {
     console.log("HEREWEARE", result);
-    router.push(`/object/${supply}`)
+    goToNFT()
 });
 
     console.log("URI", uri)
     
   }
 
-  async function getBalance() {
+  async function goToNFT() {
     const contract = new ethers.Contract(    
       process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
@@ -73,7 +72,8 @@ getNetworkLibrary().on(filter, (result) => {
     var supply = await contract.totalSupply()
 
     var parsedSupply = supply.toNumber()
-        setSupply(parsedSupply)
+    
+    router.push(`/object/${parsedSupply}`)
     
   }
 
