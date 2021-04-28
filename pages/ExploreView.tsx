@@ -57,6 +57,11 @@ const ExploreView: React.VFC = () => {
     var totalSupply = await contract.totalSupply()
 
     var total = totalSupply.toNumber() 
+
+    if (total <= 5) {
+      setNoMore(true)
+    }
+
     var lowRange;
     var range;
     var result;
@@ -88,7 +93,6 @@ const ExploreView: React.VFC = () => {
     console.log(total, filteredResults)
 
     await getNFTs(filteredResults)
-
     
     // set new offset 
     setOffset(lowRange)
