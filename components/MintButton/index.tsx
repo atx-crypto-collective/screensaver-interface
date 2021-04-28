@@ -9,8 +9,11 @@ import { POLYGON_MAINNET_PARAMS } from '../../constants'
 import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../../constants/gallery'
 import classNames from 'classnames'
-import { useRouter } from 'next/router'
+import { Router, useRouter } from 'next/router'
 import { LibraryIcon } from "@heroicons/react/outline";
+import { BigNumber } from 'ethers'
+import { getNetworkLibrary } from '../../connectors'
+
 var utils = require('ethers').utils;
 
 interface IProps {
@@ -19,6 +22,11 @@ interface IProps {
 
 const index: React.FC<IProps> = ({hash}) => {
   const [open, setOpen] = useState(false);
+  const [initialSupply, setInitialSupply] = useState< number | null >(null);
+  const [supply, setSupply] = useState< number | null >(null);
+  const [loading, setLoading] = useState(false)
+
+  const router = useRouter()
 
   const {
     chainId,
@@ -33,14 +41,42 @@ const index: React.FC<IProps> = ({hash}) => {
       library.getSigner(account),
     )
 
+    setLoading(true)
+
     await contract.createToken(uri)
+
+    let topic = ethers.utils.id("Transfer(address,address,uint256)");
+
+let filter = {
+    address: process.env.NEXT_PUBLIC_CONTRACT_ID,
+    topics: [ topic ]
+}
+
+getBalance()
+
+getNetworkLibrary().on(filter, (result) => {
+    console.log("HEREWEARE", result);
+    router.push(`/object/${supply}`)
+});
+
     console.log("URI", uri)
+    
   }
 
+  async function getBalance() {
+    const contract = new ethers.Contract(    
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      GALLERY_ABI,
+      library.getSigner(account),
+    )
 
-  useEffect(() => {
-    console.log("CHAIN ID", chainId)
-  }, [account])
+    var supply = await contract.totalSupply()
+
+    var parsedSupply = supply.toNumber()
+        setSupply(parsedSupply)
+    
+  }
+
 
   return (
     <>
@@ -49,9 +85,31 @@ const index: React.FC<IProps> = ({hash}) => {
       <div className={'mr-2'}>
         <button 
           onClick={(!account || chainId !== 137) ? () => setOpen(true) : () => createToken(`https://ipfs.io/ipfs/${hash}`)}
-          className="px-6 w-full py-2 border border-red-300 text-sm rounded-full font-medium rounded-sm shadow-sm text-red-300 hover:text-black bg-gray-900 hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-        >
+          className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          >
             Mint this NFT
+            {loading && (
+                <svg
+                  className="animate-spin -mr-1 ml-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              )}
         </button>
       </div>
     </>
