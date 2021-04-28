@@ -57,7 +57,7 @@ const ItemDetailView: React.VFC<IProps> = ({
 
         <div className={'px-3'}>
         { preview &&  <MintButton hash={hash}/>}
-        <div className={'text-2xl font-bold py-3'} >{metadata.name}</div>
+        <div className={'text-2xl font-bold py-3'} >Name: {metadata.name}</div>
 
         <div className={'text-sm text-lg py-3'} ><strong>Description: </strong>{metadata.description}</div>
           <div className={'text-sm py-3'}><strong>Creator: </strong> {metadata.creator}</div>
