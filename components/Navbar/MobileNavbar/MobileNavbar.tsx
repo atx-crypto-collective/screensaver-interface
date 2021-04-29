@@ -154,7 +154,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                               'block px-4 py-2 text-sm text-gray-700',
                             )}
                           >
-                            What is Red Pill Dao?
+                            What is Screensaver Dao?
                           </a>
                         )}
                       </Menu.Item>

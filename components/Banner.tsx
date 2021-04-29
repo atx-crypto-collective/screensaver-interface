@@ -8,7 +8,7 @@ export default function Banner() {
         <div className="pr-16 sm:text-center sm:px-16">
           <p className="font-medium text-white">
             {/* <span className="md:hidden">We announced a new product!</span> */}
-            <span className="hidden md:inline">Red Pill runs on Matic. Please switch networks.</span>
+            <span className="hidden md:inline">Screensaver runs on Matic. Please switch networks.</span>
             <span className="inline sm:hidden">Switch to Matic.</span>
             <span className="inline">
             {' '}
