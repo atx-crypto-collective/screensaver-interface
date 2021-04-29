@@ -46,7 +46,7 @@ const MobileNavbar: React.FC<IProps> = () => {
           }
         >
           <div className={'flex'}>
-            <span className={'inline text-2xl mr-2'}>💊</span>
+            {/* <span className={'inline text-2xl mr-2'}>💊</span> */}
               <img
                 src={logoImage}
                 alt={'Lil Nifty Logo'}

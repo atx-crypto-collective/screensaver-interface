@@ -31,7 +31,7 @@ const NFTItemCard: React.FC<IProps> = ({
 
       
       <div className={'flex flex-col space-y-2 px-5 py-3 overflow-hidden'}>
-        <h1 className={'font-semibold text-3xl h-8'}>{title}</h1>
+        <h1 className={'font-semibold text-2xl h-8'}>{title}</h1>
         <div className={'flex items-center space-x-1'}>
           <h2 className={'font-medium text-md h-8'}>{creator}</h2>
         </div>

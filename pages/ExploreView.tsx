@@ -132,7 +132,6 @@ const ExploreView: React.VFC = () => {
   return (
     <div className={'flex flex-col space-y-4'}>
    
-      <div className={'font-light'}>Gallery</div>
       <div className={'grid gap-4 md:grid-cols-2 lg:grid-cols-3 mx-auto'}>
     
         {
