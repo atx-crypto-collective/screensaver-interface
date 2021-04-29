@@ -31,6 +31,7 @@ const ItemDetailView: React.VFC<IProps> = ({
             src={
               metadata.image
             }
+            alt={metadata.name}
             nft={metadata}
             actions={
               [
