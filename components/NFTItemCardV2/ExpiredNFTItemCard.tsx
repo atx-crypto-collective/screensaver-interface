@@ -11,7 +11,7 @@ const NFTItemCard: React.FC<IProps> = ({
   amountCollected,
 }) => {
   return (
-    <ImageCard srcUrl={coverImageSrc} altText={`${title} cover image`}>
+    // <ImageCard srcUrl={coverImageSrc} altText={`${title} cover image`}>
       <div className={'flex flex-col space-y-1 px-2 pt-3'}>
         <h1 className={'font-bold text-base'}>{title}</h1>
         <div className={'flex items-center space-x-1'}>
@@ -29,7 +29,7 @@ const NFTItemCard: React.FC<IProps> = ({
           </div>
         </div>
       </div>
-    </ImageCard>
+    // </ImageCard>
   )
 }
 
