@@ -8,16 +8,15 @@ export default function Banner() {
         <div className="pr-16 sm:text-center sm:px-16">
           <p className="font-medium text-white">
             {/* <span className="md:hidden">We announced a new product!</span> */}
-            <span className="hidden md:inline">Screensaver runs on Matic. Please switch networks.</span>
-            <span className="inline sm:hidden">Switch to Matic.</span>
-            <span className="inline">
+            <span className="hidden md:inline">🚧 This is experimental software. Use at your own risk. 💀</span>
+            {/* <span className="inline">
             {' '}
               <a href="https://wiki.aavegotchi.com/en/polygon" target="_blank" className="text-white font-bold underline">
                 Learn how
               </a>
               {' '}
               <span aria-hidden="true">&rarr;</span>
-            </span>
+            </span> */}
           </p>
         </div>
         {/* <div className="absolute inset-y-0 right-0 pt-1 pr-1 flex items-start sm:pt-1 sm:pr-2 sm:items-start">

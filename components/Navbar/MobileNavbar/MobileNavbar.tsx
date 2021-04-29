@@ -185,7 +185,7 @@ const MobileNavbar: React.FC<IProps> = () => {
         )} */}
       </div>
 
-      {/* {chainId !== 137 && account && <Banner />} */}
+      <Banner />
     </div>
   )
 }

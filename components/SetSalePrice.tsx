@@ -25,14 +25,14 @@ const SetSalePrice: React.VFC<IProps> = ({ onUpdate, sale = true }) => {
               type="number"
               name="number"
               id="number"
-              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-l-md bg-gray-900"
+              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full text-2xl border-gray-300 rounded-l-sm bg-gray-900"
               placeholder="0.1"
               min="0.00"
               step="0.01"
               value={value}
               onChange={e => setValue(e.target.value)}
             />
-            <span className="inline-flex items-center px-6 rounded-r-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
+            <span className="inline-flex items-center px-6 rounded-r-sm border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
               ETH
             </span>
           </div>

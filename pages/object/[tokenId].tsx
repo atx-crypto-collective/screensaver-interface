@@ -9,6 +9,8 @@ import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../../constants/gallery'
 import { getNetworkLibrary } from '../../connectors'
 import NFT from '../../types'
+import SetSalePrice from '../../components/SetSalePrice'
+import BidRow from '../../components/BidRow'
 
 const ItemDetailPage: React.VFC = () => {
   // TODO: Pull item by slug from router
@@ -86,6 +88,9 @@ const ItemDetailPage: React.VFC = () => {
           }
         >
           <ItemDetailView userIsAuthenticated itemListingState={'past'} metadata={metadata} preview={!!preview} hash={preview?.toString()}/>
+          {/** if is token owner */}
+          <SetSalePrice sale={false} />
+          <BidRow owner={false}/>
         </div>
       </div>
     </Layout>

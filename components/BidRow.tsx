@@ -4,9 +4,9 @@
 import React, { useState, useEffect } from 'react'
 interface IProps {
   onUpdate?: (quantity: number) => void
-  owner: boolean | undefined
+  owner?: boolean | undefined
 }
-const BidRow: React.VFC<IProps> = ({ onUpdate, owner = false }) => {
+const BidRow: React.VFC<IProps> = ({ onUpdate, owner = undefined }) => {
   const [value, setValue] = useState<string>()
 
   const handleSubmit = (evt) => {
@@ -17,18 +17,18 @@ const BidRow: React.VFC<IProps> = ({ onUpdate, owner = false }) => {
 
   return (
         <div className="mt-5">
-          <div className="rounded-md bg-gray-50 px-6 py-5 sm:flex sm:items-start sm:justify-between">
+          <div className="rounded-md px-6 py-5 sm:flex sm:items-start sm:justify-between border-2 border-gray-700">
             <h4 className="sr-only">Visa</h4>
             <div className="sm:flex sm:items-start">
               <div className="mt-3 sm:mt-0 sm:ml-4">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">0.6 ETH</h3>
-                <div className="mt-1 text-sm text-gray-600 sm:flex sm:items-center">
+              <h3 className="text-lg leading-6 font-medium">0.6 ETH</h3>
+                <div className="mt-1 text-sm  sm:flex sm:items-center">
                   <div>0x29398...8298H</div>
                 </div>
               </div>
             </div>
             <div className="mt-4 sm:mt-0 sm:ml-6 sm:flex-shrink-0">
-                { owner !== undefined && 
+                { !!owner && ( owner !== undefined && 
                 
                 (owner ? 
               <button
@@ -44,7 +44,7 @@ const BidRow: React.VFC<IProps> = ({ onUpdate, owner = false }) => {
               >
               Cancel Bid
             </button>)
-                }
+                )}
             </div>
           </div>
         </div>

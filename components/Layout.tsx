@@ -15,7 +15,7 @@ const Layout: React.FC = ({ children }) => {
   
   return (
     <div 
-    className={'mt-24 space-y-4 lg:pb-20 bg-black h-full'}
+    className={'mt-28 space-y-4 lg:pb-20 bg-black h-full'}
     >
       <Navbar />
       <div>{children}</div>
