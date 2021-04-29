@@ -89,8 +89,8 @@ const ItemDetailPage: React.VFC = () => {
         >
           <ItemDetailView userIsAuthenticated itemListingState={'past'} metadata={metadata} preview={!!preview} hash={preview?.toString()}/>
           {/** if is token owner */}
-          <SetSalePrice sale={false} />
-          <BidRow owner={false}/>
+          {/* <SetSalePrice sale={false} />
+          <BidRow owner={false}/> */}
         </div>
       </div>
     </Layout>
