@@ -21,7 +21,7 @@ import { Web3Provider } from '@ethersproject/providers'
 import { useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-import logoImage from "./redpill.svg";
+import logoImage from "./SCREENSAVER.svg";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -51,7 +51,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                 src={logoImage}
                 alt={'Lil Nifty Logo'}
                 className={'cursor-pointer'}
-                width={80}
+                width={200}
               />
           </div>          
           <div className={'flex space-x-3 items-center'}>
