@@ -87,7 +87,7 @@ const MobileNavbar: React.FC<IProps> = () => {
               )}
             </div>
           )} */}
-            <Menu as="div" className="ml-3 relative">
+            <Menu as="div" className="ml-3 relative z-20">
               {({ open }) => (
                 <>
                   <div>
