@@ -138,6 +138,7 @@ const ExploreView: React.VFC = () => {
           nfts.map((item, key) => (
             <div key={key}>
               <NFTItemCard
+                nft={item}
                 title={item?.name}
                 coverImageSrc={item?.image}
                 creator={item?.creator}

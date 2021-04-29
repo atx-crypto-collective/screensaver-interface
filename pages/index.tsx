@@ -1,10 +1,11 @@
 import Head from 'next/head'
 import { Layout } from '../components'
 import Mint from '../components/Mint'
+import { Helmet } from "react-helmet";
 
 export default function Home() {
   return (
-    <Layout >
+    <Layout > 
       <div className={'w-11/12 max-w-2xl mx-auto py-6'}>
         <h1 className={'text-2xl font-bold mb-3'}>Welcome to Screensaver.world Dao</h1>
         <p>

@@ -32,7 +32,7 @@ const ItemDetailPage: React.VFC = () => {
 
   async function getMetadata() {
     var meta = await axios.get(uri)
-    console.log(meta)
+    console.log("METADDDAATA", meta)
     var tempMetadata = meta.data
     tempMetadata.creationDate = new Date(meta.data.creationDate).toString()
     setMetadata(tempMetadata)

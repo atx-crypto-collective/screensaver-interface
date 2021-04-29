@@ -4,7 +4,7 @@ type NFT = {
     creator: string
     creationDate: Date
     image: string
-    animation_uri: string
+    animation_url: string
     media: {
       mimeType: string
       size: string

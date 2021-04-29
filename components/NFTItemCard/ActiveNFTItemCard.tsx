@@ -6,7 +6,7 @@ import AuctionCountdownTextRow from '../AuctionCountdownTextRow'
 import { IProps } from './types'
 
 const NFTItemCard: React.FC<IProps> = ({
-  title,
+  nft,
   coverImageSrc,
   creator,
   endDateTime,
@@ -14,8 +14,9 @@ const NFTItemCard: React.FC<IProps> = ({
 }) => {
   return (
     <ImageCard
-      srcUrl={coverImageSrc}
-      altText={`${title} cover image`}
+      nft={nft}
+      srcUrl={nft.image}
+      altText={`${nft.name} cover image`}
       footer={
         <div className={'py-3 bg-red-300 font-medium rounded-b-2xl px-5'}>
           <div className={'flex flex-col h-16 justify-center'}>
@@ -31,7 +32,7 @@ const NFTItemCard: React.FC<IProps> = ({
 
       
       <div className={'flex flex-col space-y-2 px-5 py-3 overflow-hidden'}>
-        <h1 className={'font-semibold text-2xl h-8'}>{title}</h1>
+        <h1 className={'font-semibold text-2xl h-8'}>{nft.name}</h1>
         <div className={'flex items-center space-x-1'}>
           <h2 className={'font-medium text-md h-8'}>{creator}</h2>
         </div>

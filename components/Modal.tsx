@@ -46,7 +46,7 @@ const SwitchView = () => {
                 as="h3"
                 className="text-xl leading-6 font-bold text-gray-900 mb-6"
             >
-            RedPill runs on Polygon
+            Screensaver.world runs on Polygon
             </Dialog.Title>
             </div>
         </div>
@@ -59,7 +59,7 @@ const SwitchView = () => {
           Switch to Polygon
         </button>
 
-                <p className={"text-gray-700 mt-6"} >RedPill runs on Polygon so artists can enjoy low fees and guilt free minting.</p>
+                <p className={"text-gray-700 mt-6"} >Screensaver.world runs on Polygon so artists can enjoy low fees and guilt free minting.</p>
                 {/* <a className={"text-gray-700 underline mt-8"}>Learn more.</a> */}
             {/* </div> */}
         </div>

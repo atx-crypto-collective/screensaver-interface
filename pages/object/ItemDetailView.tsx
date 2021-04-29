@@ -21,7 +21,7 @@ const ItemDetailView: React.VFC<IProps> = ({
   itemListingState,
   metadata,
   preview,
-  hash
+  hash,
 }) => {
   return (
     <div className={'flex flex-col space-y-12'}>
@@ -31,6 +31,7 @@ const ItemDetailView: React.VFC<IProps> = ({
             src={
               metadata.image
             }
+            nft={metadata}
             actions={
               [
               // TODO: Switch to square buttons
