@@ -15,7 +15,7 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
   return (
     <div className={'relative'}>
       { !!nft?.image ? 
-            <img src={nft.image} alt={alt} />
+            <img src={nft.image} alt={alt} className={'w-full'}/>
             :
     
             <model-viewer
