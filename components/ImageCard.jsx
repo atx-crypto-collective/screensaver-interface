@@ -22,7 +22,7 @@ const ImageCard  = ({ srcUrl, nft, altText, footer, children }) => {
         >
           <div className={'rounded-t-2xl overflow-hidden h-96'}>
             { !!nft?.image ? 
-            <img src={nft.image} alt={altText} />
+            <img src={nft.image} alt={altText} className={'w-full'}/>
             :
             <model-viewer
               style={{width: '100%', height: '100%'}}
