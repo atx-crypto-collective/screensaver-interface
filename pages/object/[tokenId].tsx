@@ -11,6 +11,7 @@ import { getNetworkLibrary } from '../../connectors'
 import NFT from '../../types'
 import SetSalePrice from '../../components/SetSalePrice'
 import BidRow from '../../components/BidRow'
+import BiddingDetailView from './BiddingDetailView'
 
 const ItemDetailPage: React.VFC = () => {
   // TODO: Pull item by slug from router
@@ -88,9 +89,9 @@ const ItemDetailPage: React.VFC = () => {
           }
         >
           <ItemDetailView userIsAuthenticated itemListingState={'past'} metadata={metadata} preview={!!preview} hash={preview?.toString()}/>
-          {/** if is token owner */}
-          {/* <SetSalePrice sale={false} />
-          <BidRow owner={false}/> */}
+
+          {!!tokenId && <BiddingDetailView tokenId={tokenId}/>}
+
         </div>
       </div>
     </Layout>
