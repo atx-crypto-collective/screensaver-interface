@@ -60,11 +60,11 @@ const NFTItemCard: React.FC<IProps> = ({
       srcUrl={nft.image}
       altText={`${nft.name} cover image`}
       footer={
-        <div className={'py-3 bg-red-300 font-medium rounded-b-2xl px-5'}>
+        <div className={'py-3 bg-white bg-opacity-5 font-medium px-5'}>
           <div className={'flex flex-col h-16 justify-center'}>
-            <div className={'text-xl font-light'}>CURRENT BID</div>
+            <div className={'text-xl font-medium'}>CURRENT BID</div>
              
-            <div className={'text-2xl font-light'}>{!!bid ? bid : '-- --'}</div>
+            <div className={'text-3xl font-light'}>{!!bid ? bid : '-- --'}</div>
 
             {/* <button className={'button button--gradient'}>$5 Edition</button> */}
           </div>
@@ -74,8 +74,8 @@ const NFTItemCard: React.FC<IProps> = ({
 
       
       <div className={'flex flex-col space-y-3 px-5 overflow-hidden h-24'}>
-        <h1 className={'font-semibold text-2xl'}>{nft.name}</h1>
-          <h2 className={'font-medium text-md'}>{!!creator && shortenAddress(creator)}</h2>
+        <h1 className={'font-bold text-2xl text-white'}>{nft.name}</h1>
+          <h2 className={'font-medium text-md text-white'}>{!!creator && shortenAddress(creator)}</h2>
       </div>
     </ImageCard>
   )

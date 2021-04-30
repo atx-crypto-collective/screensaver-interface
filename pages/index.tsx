@@ -7,9 +7,9 @@ export default function Home() {
   return (
     <Layout > 
       <div className={'w-11/12 max-w-2xl mx-auto py-6'}>
-        <h1 className={'text-2xl font-bold mb-3'}>Welcome to Screensaver.world Dao</h1>
+        <h1 className={'text-2xl font-bold mb-3'}>Welcome to Screensaver</h1>
         <p>
-          Screensaver.world Dao is the first NFT Marketplace Dao built on Polygon Layer 2. Using Polygon means extremely low minting and bidding fees ( ~ $0.0002) and PoS so no terrible environmental destruction. Screensaver.world is an entirerly open marketplace and takes a very small fee of 2.5%. Royalties for all artists are set to 15%. 
+          Screensaver is the first NFT Marketplace Dao built on Polygon Layer 2. Using Polygon means extremely low minting and bidding fees ( ~ $0.0002) and PoS so no terrible environmental destruction. Screensaver.world is an entirerly open marketplace and takes a very small fee of 2.5%. Royalties for all artists are set to 15%. 
         </p>
           <h1 className={'text-xl font-bold my-3'}>Governance</h1>
         <p>

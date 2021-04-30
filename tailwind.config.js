@@ -13,10 +13,11 @@ module.exports = {
   ],
   theme: {
     boxShadow: {
-      sm: '1px 2px #fe1d1b',
+      white: '0px 0px 2px 2px rgba(255, 255, 255, 0.1)',
+      sm: '1px 2px #A78BFA',
       DEFAULT: '0 1px 3px 0 rgba(255, 0, 0, 0.1), 0 1px 2px 0 rgba(255, 0, 0, 0.06)',
       md: '0 4px 6px -1px rgba(255, 0, 0, 0.1), 0 2px 4px -1px rgba(255, 0, 0, 0.06)',
-      lg: '3px 4px #fe1d1b',
+      lg: '3px 4px #A78BFA',
       xl: '0 20px 25px -5px rgba(255, 0, 0, 0.1), 0 10px 10px -5px rgba(255, 0, 0, 0.04)',
       '2xl': '0 25px 50px -12px rgba(255, 0, 0, 0.25)',
      '3xl': '0 35px 60px -15px rgba(255, 0, 0, 0.3)',
@@ -25,6 +26,7 @@ module.exports = {
     },
     fontFamily: {
       mono: ['IBM Plex Mono', 'monospace'],
+      serif: ['ui-serif', 'Georgia']
     },
     extend: {
       colors: {
@@ -44,8 +46,8 @@ module.exports = {
           50: '#ffe2e2',
           100: '#ffb1b2',
           200: '#ff7f7f',
-          300: '#ff4d4d',
-          400: '#fe1d1b',
+          300: '#A78BFA',
+          400: '#A78BFA',
           500: '#e50501',
           600: '#b30000',
           700: '#810000',

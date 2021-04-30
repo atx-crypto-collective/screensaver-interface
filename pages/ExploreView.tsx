@@ -132,7 +132,7 @@ const ExploreView: React.VFC = () => {
   return (
     <div className={'flex flex-col space-y-4'}>
    
-      <div className={'grid gap-4 md:grid-cols-2 lg:grid-cols-3 mx-auto'}>
+      <div className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto'}>
     
         {
           nfts.map((item, key) => (

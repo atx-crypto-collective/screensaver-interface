@@ -173,8 +173,8 @@ export default function Mint() {
         <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
           <div>
             <div>
-              <h3 className="mt-1 max-w-2xl text-xl text-white font-bold">
-                Mint an NFT.
+              <h3 className="mt-1 max-w-3xl text-3xl text-white font-bold">
+                Mint
               </h3>
               <p className="mt-1 max-w-2xl text-xs text-gray-00 font-light">
                 All creators receive 15% royalties on any resale of their NFTs.
@@ -190,7 +190,7 @@ export default function Mint() {
                   Title
                 </label>
                 <div className="mt-1 sm:mt-0 sm:col-span-2">
-                  <div className="max-w-lg flex rounded-md shadow-sm">
+                  <div className="max-w-lg flex shadow-sm">
                     {/* <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
                         workcation.com/
                       </span> */}
@@ -200,7 +200,7 @@ export default function Mint() {
                       id="title"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      className="flex-1 block w-full focus:ring-red-500 focus:border-red-500 min-w-0 rounded-none rounded-md sm:text-sm border-gray-700 bg-gray-900"
+                      className="flex-1 block w-full focus:ring-red-500 focus:border-red-500 min-w-0 sm:text-sm border-gray-700 bg-gray-900"
                     />
                   </div>
                 </div>
@@ -218,7 +218,7 @@ export default function Mint() {
                     id="about"
                     name="about"
                     rows={3}
-                    className="max-w-lg shadow-sm block w-full focus:ring-red-500 focus:border-red-500 sm:text-sm border-gray-700 rounded-md bg-gray-900"
+                    className="max-w-lg shadow-sm block w-full focus:ring-red-500 focus:border-red-500 sm:text-sm border-gray-700  bg-gray-900"
                     defaultValue={''}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
@@ -242,7 +242,7 @@ export default function Mint() {
                     name="about"
                     rows={3}
                     placeholder={'music, experimental, jazz'}
-                    className="max-w-lg shadow-sm block w-full focus:ring-red-500 focus:border-red-500 sm:text-sm border-gray-700 rounded-md bg-gray-900"
+                    className="max-w-lg shadow-sm block w-full focus:ring-red-500 focus:border-red-500 sm:text-sm border-gray-700 bg-gray-900"
                     defaultValue={''}
                     value={tags}
                     onChange={(e) => setTags(e.target.value)}
@@ -261,7 +261,7 @@ export default function Mint() {
                   Upload NFT
                 </label>
                 <div className="mt-1 sm:mt-0 sm:col-span-2">
-                  <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                  <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed">
                     {media ? (
                       <div>{media.name} ready!</div>
                     ) : (
@@ -313,7 +313,7 @@ export default function Mint() {
               type="submit"
               // className="ml-6 inline-flex items-center px-4 py-2 border border-red-300 text-xs rounded-full font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
 
-              className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
               disabled={!media}
               // onClick={() => setOpen(true)}
             >

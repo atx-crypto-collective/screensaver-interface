@@ -13,7 +13,7 @@ const ImageCard  = ({ srcUrl, nft, altText, footer, children }) => {
   return (
     <div
       className={
-        'border-white border-solid border-2 border-gray-700 max-w-sm rounded-2xl text-white'
+        'border-white border-solid border border-gray-800 shadow-white max-w-sm text-white rounded-2xl '
       }
     >
       <div className={'flex flex-col mx-auto'}>
