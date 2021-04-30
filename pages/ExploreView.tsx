@@ -58,7 +58,7 @@ const ExploreView: React.VFC = () => {
 
     var total = totalSupply.toNumber() 
 
-    if (total <= 5) {
+    if (total <= 20) {
       setNoMore(true)
     }
 
@@ -67,7 +67,7 @@ const ExploreView: React.VFC = () => {
     var result;
 
     if (offset === 0) {
-      lowRange = total - 5
+      lowRange = total - 20
 
       lowRange = lowRange <= 0 ? 0 : lowRange
 
@@ -75,7 +75,7 @@ const ExploreView: React.VFC = () => {
 
       result = new Array(range).fill(true).map((e, i) => i + 1 + lowRange);
     } else {
-      lowRange = offset - 5 
+      lowRange = offset - 20 
 
       range = offset - lowRange 
 
