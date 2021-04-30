@@ -47,12 +47,13 @@ const MobileNavbar: React.FC<IProps> = () => {
         >
           <div className={'flex'}>
             {/* <span className={'inline text-2xl mr-2'}>💊</span> */}
-              <img
+              <a href={'/gallery'}><img
                 src={logoImage}
                 alt={'Lil Nifty Logo'}
                 className={'cursor-pointer'}
                 width={200}
               />
+              </a>
           </div>          
           <div className={'flex space-x-3 items-center'}>
             <ConnectButton />
