@@ -25,6 +25,7 @@ const parseTags = (tags: string): string[] => {
 interface IProps {
   tokenId: string
 }
+
 const BidRow: React.VFC<IProps> = ({ tokenId }) => {
   const [value, setValue] = useState<string>()
   const {
@@ -74,7 +75,7 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
     var currentBid = await contract.currentBidDetailsOfToken(tokenId)
 
     console.log(currentBid)
-    if (utils.formatEther(currentBid[0]) === 0) {
+    if (utils.formatEther(currentBid[0]) === '0.0') {
       setBid(undefined)
       setBidder(currentBid[1])
     } else {

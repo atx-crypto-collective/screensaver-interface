@@ -4,6 +4,20 @@ import ImageCard from '../ImageCard'
 import AuctionCountdownTextRow from '../AuctionCountdownTextRow'
 
 import { IProps } from './types'
+import { useState, useEffect } from 'react'
+import { storage } from '../../config/firebase'
+import axios from 'axios'
+import { Web3Provider } from '@ethersproject/providers'
+import { useWeb3React } from '@web3-react/core'
+import { ethers } from 'ethers'
+import { GALLERY_ABI } from '../../constants/gallery'
+import Modal from '../../components/Modal'
+import classNames from 'classnames'
+import { injected } from '../../connectors'
+import { useRouter } from 'next/router'
+import { shortenAddress } from '../../utils'
+import { getNetworkLibrary } from '../../connectors'
+var utils = require('ethers').utils
 
 const NFTItemCard: React.FC<IProps> = ({
   nft,
@@ -12,6 +26,34 @@ const NFTItemCard: React.FC<IProps> = ({
   endDateTime,
   amountCollected,
 }) => {
+  const [bid, setBid] = useState<number | undefined>()
+
+   // get current bids
+   async function currentBids() {
+
+    if (!nft?.tokenId) return;
+
+    const contract = new ethers.Contract(
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      GALLERY_ABI,
+      getNetworkLibrary(),
+    )
+
+
+    var currentBid = await contract.currentBidDetailsOfToken(nft.tokenId)
+
+    console.log("BID", utils.formatEther(currentBid[0]))
+    if (utils.formatEther(currentBid[0]) === '0.0') {
+      setBid(undefined)
+    } else {
+      setBid(utils.formatEther(currentBid[0]))
+    }
+  }
+
+  useEffect(() => {
+    currentBids()
+  }, [])
+
   return (
     <ImageCard
       nft={nft}
@@ -22,7 +64,7 @@ const NFTItemCard: React.FC<IProps> = ({
           <div className={'flex flex-col h-16 justify-center'}>
             <div className={'text-xl font-light'}>CURRENT BID</div>
              
-            <div className={'text-2xl font-light'}>-- --</div>
+            <div className={'text-2xl font-light'}>{!!bid ? bid : '-- --'}</div>
 
             {/* <button className={'button button--gradient'}>$5 Edition</button> */}
           </div>
@@ -34,7 +76,7 @@ const NFTItemCard: React.FC<IProps> = ({
       <div className={'flex flex-col space-y-2 px-5 py-3 overflow-hidden'}>
         <h1 className={'font-semibold text-2xl h-8'}>{nft.name}</h1>
         <div className={'flex items-center space-x-1'}>
-          <h2 className={'font-medium text-md h-8'}>{creator}</h2>
+          <h2 className={'font-medium text-md h-8'}>{!!creator && shortenAddress(creator)}</h2>
         </div>
       </div>
     </ImageCard>
