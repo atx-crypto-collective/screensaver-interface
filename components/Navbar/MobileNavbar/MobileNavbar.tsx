@@ -42,7 +42,7 @@ const MobileNavbar: React.FC<IProps> = () => {
       <div className={'mx-4'}>
         <div
           className={
-            'flex justify-between mx-auto w-11/12 items-center h-14 z-10'
+            'flex justify-between mx-auto w-11/12 items-center h-16 z-10'
           }
         >
           <div className={'flex'}>
@@ -57,42 +57,12 @@ const MobileNavbar: React.FC<IProps> = () => {
           </div>          
           <div className={'flex space-x-3 items-center'}>
             <ConnectButton />
-            
-            {/* {state === 'initial' && (
-              <div
-                className={'cursor-pointer ml-2'}
-                onClick={() => {
-                  setState('search')
-                }}
-              ></div>
-            )} */}
-            {/* {['initial', 'menu'].includes(state) && (
-            <div className={'cursor-pointer'}>
-              {state === 'initial' && (
-                <MenuIcon
 
-                className={' text-red-300 p-2 border border-red-300 text-md rounded-full font-medium rounded-sm shadow-sm text-red-300 hover:text-black bg-gray-900 hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'}
-                  onClick={() => {
-                    setState('menu')
-                  }}
-                />
-              )}
-              {state === 'menu' && (
-                <XIcon
-                className={'h-5 w-5 text-white '}
-
-                  onClick={() => {
-                    setState('initial')
-                  }}
-                />
-              )}
-            </div>
-          )} */}
             <Menu as="div" className="ml-3 relative z-20">
               {({ open }) => (
                 <>
                   <div>
-                    <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                    <Menu.Button className="bg-gray-800 flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                       <span className="sr-only">Open user menu</span>
                       {/* <img
                             className="h-8 w-8 rounded-full"
@@ -101,7 +71,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                           /> */}
                       <MenuIcon
                         className={
-                          ' text-red-300 h-8 w-8 p-2 border border-red-300 text-md rounded-full font-medium rounded-sm shadow-sm text-red-300 hover:text-black bg-gray-900 hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
+                          ' text-red-300 h-8 w-8 p-2 border border-red-300 text-md font-medium rounded-sm shadow-lg hover:shadow-sm text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
                         }
                       />
                     </Menu.Button>
@@ -164,6 +134,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                 </>
               )}
             </Menu>
+
           </div>
         </div>
         {/* {state === 'menu' && (

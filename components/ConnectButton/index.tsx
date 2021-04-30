@@ -40,7 +40,7 @@ export default function index() {
       <div className={'mr-2'}>
         <button 
           onClick={(chainId !== 137 && !!account) ? () => switchToPolygon() : () => setOpen(true)}
-          className="px-6 w-full py-2 border border-red-300 text-sm rounded-full font-medium rounded-sm shadow-sm text-red-300 hover:text-black bg-gray-900 hover:bg-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          className="px-6 w-full py-2 border border-red-400 hover:bg-gray-800 text-sm shadow-lg font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
         >
           {(chainId !== 137 && !!account) ? "Switch to Polygon" : (!account ? "Connect" : shortenAddress(account))}
         </button>
