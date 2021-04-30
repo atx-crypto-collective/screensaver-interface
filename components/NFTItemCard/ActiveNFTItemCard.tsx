@@ -73,7 +73,7 @@ const NFTItemCard: React.FC<IProps> = ({
     >
 
       
-      <div className={'flex flex-col space-y-4 px-5 overflow-hidden h-24'}>
+      <div className={'flex flex-col space-y-3 px-5 overflow-hidden h-24'}>
         <h1 className={'font-semibold text-2xl'}>{nft.name}</h1>
           <h2 className={'font-medium text-md'}>{!!creator && shortenAddress(creator)}</h2>
       </div>
