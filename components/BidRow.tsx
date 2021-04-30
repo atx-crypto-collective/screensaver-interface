@@ -141,7 +141,7 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
             <div className="sm:flex sm:items-start">
               <div className="mt-3 sm:mt-0 sm:ml-4">
                 <h3 className="text-lg leading-6 font-medium">
-                  {bid} ETH
+                  {bid} MATIC
                 </h3>
                 <div className="mt-1 text-sm  sm:flex sm:items-center">
                   <div>{!!bidder && shortenAddress(bidder)}</div>

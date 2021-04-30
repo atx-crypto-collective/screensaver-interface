@@ -56,15 +56,7 @@ const SetSalePrice: React.VFC<IProps> = ({ onUpdate, tokenId, sale = true }) => 
     let overrides = {
       // To convert Ether to Wei:
       value: utils.parseEther(value) // ether in this case MUST be a string
-  
-      // Or you can use Wei directly if you have that:
-      // value: someBigNumber
-      // value: 1234   // Note that using JavaScript numbers requires they are less than Number.MAX_SAFE_INTEGER
-      // value: "1234567890"
-      // value: "0x1234"
-  
-      // Or, promises are also supported:
-      // value: provider.getBalance(addr)
+
   };
   
   // Pass in the overrides as the 3rd parameter to your 2-parameter function:
@@ -72,27 +64,12 @@ const SetSalePrice: React.VFC<IProps> = ({ onUpdate, tokenId, sale = true }) => 
   const tx = await contract.bid(tokenId.toString(), overrides)
   
     setLoading(true)
-      // let filter = {
-      //   address: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      //   topics: [transferTopic],
-      // }
-
 
       setTimeout(() => {
         onUpdate()
         setLoading(false)
       }, 10000)
     
-      // getNetworkLibrary().on(filter, (result) => {
-      //   console.log('APPROVED LISTENER', result.transactionHash, tx.hash)
-      //   if (result.transactionHash === tx.hash) {
-      //     onUpdate()
-      //     setLoading(false)
-      //     // getApproved()
-      //     // getNetworkLibrary().off(filter, (offResult) => {console.log("OFF", offResult)})
-      //     // setApprovalLoading(false)
-      //   }
-      // })
   }
 
   return (
@@ -120,7 +97,7 @@ const SetSalePrice: React.VFC<IProps> = ({ onUpdate, tokenId, sale = true }) => 
               onChange={e => setValue(e.target.value)}
             />
             <span className="inline-flex items-center px-6 rounded-r-sm border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
-              ETH
+              MATIC
             </span>
           </div>
         </div>
