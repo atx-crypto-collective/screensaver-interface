@@ -53,10 +53,22 @@ export default function Home() {
 
         <a
           target={'_blank'}
-          href={'https://drive.google.com/drive/folders/1Z5AWkN0kHH1gYkTCB-OvgdJlubQxtumQ'}
+          href={
+            'https://drive.google.com/drive/folders/1Z5AWkN0kHH1gYkTCB-OvgdJlubQxtumQ'
+          }
           className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
         >
           Check out the DAO Resources
+        </a>
+
+        <h1 className={'text-xl font-bold mt-6 mb-3'}>💻 Code</h1>
+
+        <a
+          target={'_blank'}
+          href={'https://github.com/domhaobaobao/gallery'}
+          className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+        >
+          Code
         </a>
       </div>
     </Layout>
