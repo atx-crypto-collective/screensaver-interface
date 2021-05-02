@@ -35,8 +35,6 @@ export default function index() {
 
   return (
     <>
-      <Modal status={"connect"} open={open} setOpen={setOpen} />
-
       <div className={'mr-2'}>
         <button 
           onClick={(chainId !== 137 && !!account) ? () => switchToPolygon() : () => setOpen(true)}

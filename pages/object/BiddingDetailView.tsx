@@ -46,7 +46,7 @@ const BiddingDetailView = (
     const [ownerOf, setOwnerOf] = useState<boolean>(false)
     const [approvalLoading, setApprovalLoading] = useState<boolean>(false)
     const [bidLoading, setBidLoading] = useState<boolean>(false)
-    const [ newBid, setNewBid] = useState<boolean>(false)
+    const [ nftOwner, setNFTOwner] = useState<string>('')
     const [ loading, setLoading] = useState<boolean>(false)
 
     let approvalTopic = ethers.utils.id('Approval(address,address,uint256)')
@@ -80,6 +80,8 @@ const BiddingDetailView = (
           getNetworkLibrary(),
         )
         var ownerOf = await contract.ownerOf(tokenId)
+
+        setNFTOwner(ownerOf)
     
         console.log('Owner of', ownerOf)
 
@@ -175,8 +177,12 @@ const BiddingDetailView = (
 
   return (
     <div className={'flex flex-col space-y-12'}>
-      <div className={'flex flex-col space-y-8 mt-12'}>
+      <div className={'flex flex-col space-y-8'}>
         {/** if approved for sale */}
+
+                  <div className={'text-sm p-3'}><strong>Collector: </strong> {nftOwner}</div>
+
+                  <div className={'mt-12'}/>
 
         { !approvalStatus ?
 

@@ -1,2 +1,2 @@
 export { default as ActionButton } from './ActionButton'
-export { default } from './ImageWithActions'
+export { default } from './ImageWithActions.jsx'

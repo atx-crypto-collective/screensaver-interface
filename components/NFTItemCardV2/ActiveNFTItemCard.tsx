@@ -31,6 +31,7 @@ const NFTItemCard: React.FC<IProps> = ({
   endDateTime,
   amountCollected,
 }) => {
+  
   return (
     // <ImageCard
     //   srcUrl={coverImageSrc}
