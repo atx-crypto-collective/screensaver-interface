@@ -1,6 +1,9 @@
 // TODO: Lazy image loading?
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import NFT from '../types'
+import VideoPlayer from './MediaViewer/VideoPlayer'
+import AudioPlayer from './MediaViewer/AudioPlayer'
+import PdfViewer from './MediaViewer/PdfViewer'
 
 // export interface IProps {
 //   nft?: NFT
@@ -10,6 +13,16 @@ import NFT from '../types'
 // }
 
 const ImageCard  = ({ srcUrl, nft, altText, footer, children }) => {
+
+  const [type, setType] = useState('')
+
+  useEffect(() => {
+    if (!nft?.media?.mimeType) return 
+    const typeArray = nft?.media?.mimeType.split('/')
+    console.log("TYPE", typeArray[0])
+    setType(typeArray[0])
+  }, [])
+
   return (
     <div
       className={
@@ -21,7 +34,38 @@ const ImageCard  = ({ srcUrl, nft, altText, footer, children }) => {
           className={'flex flex-col w-full mx-auto space-y-3'}
         >
           <div className={'rounded-t-2xl overflow-hidden h-96'}>
-            { !!nft?.image ? 
+
+      { type === 'image' && (
+        <img src={nft.image} alt={altText} className={'w-full'}/>
+      )}
+      {type === 'video' && (
+        <VideoPlayer fileUrl={nft.animation_url} />
+      )}
+      {type === 'audio' && (
+        <AudioPlayer fileUrl={nft.animation_url} />
+      )}
+
+      {type === 'model' && (
+        <model-viewer
+        style={{width: '100%', height: '100%'}}
+        id={nft?.tokenId}
+        alt={nft?.name + nft?.tokenId}
+        src={nft?.animation_url}
+        auto-rotate
+        camera-controls
+        ar
+        ar-modes="quick-look"
+        ar-scale="auto"
+        // ios-src={}
+      />
+      )}
+
+      {type === 'application' && (
+        <PdfViewer fileUrl={nft.animation_url} />
+      )}
+
+
+            {/* { !!nft?.image ? 
             <img src={nft.image} alt={altText} className={'w-full'}/>
             :
             <model-viewer
@@ -36,7 +80,7 @@ const ImageCard  = ({ srcUrl, nft, altText, footer, children }) => {
               ar-scale="auto"
               // ios-src={}
             />
-            }
+            } */}
           </div>
           {children && <div>{children}</div>}
         </div>

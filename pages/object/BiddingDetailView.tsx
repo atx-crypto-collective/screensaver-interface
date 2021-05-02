@@ -81,6 +81,16 @@ const BiddingDetailView = (
         )
         var ownerOf = await contract.ownerOf(tokenId)
 
+        let filter = {
+          address: process.env.NEXT_PUBLIC_CONTRACT_ID,
+          topics: [transferTopic],
+        }
+
+        const transfers = await contract.queryFilter(filter, 13905194, 13906194)
+
+        console.log("TRANSFERS", transfers)
+  
+
         setNFTOwner(ownerOf)
     
         console.log('Owner of', ownerOf)
@@ -88,7 +98,7 @@ const BiddingDetailView = (
         if (ownerOf !== account) return;
 
         setOwnerOf(true)
-  
+
       }
 
           // approve sales
