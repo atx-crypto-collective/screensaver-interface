@@ -89,13 +89,7 @@ const ItemDetailPage: React.VFC = () => {
   
   return (
     <>
-          <Head>
-        <meta name="twitter:card" content={metadata.name} />
-        <meta name="twitter:site" content="@screensaverDAO" />
-        <meta name="twitter:title" content={metadata.name} />
-        <meta name="twitter:description" content="Screensaver DAO" />
-        <meta name="twitter:image" content={!!metadata.image ? metadata.image : metadata.animation_url} />
-      </Head>
+
     <Layout>
       <div className={'md:mt-12 pb-8 w-11/12 mx-auto'}>
         <div

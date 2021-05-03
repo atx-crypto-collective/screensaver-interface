@@ -42,6 +42,7 @@ export default function Mint() {
   const router = useRouter()
 
   useEffect(() => {
+    if (!media) return;
     console.log('PEACE NODE LOOK HERE -> ', media, media.type, size)
   }, [media])
 
