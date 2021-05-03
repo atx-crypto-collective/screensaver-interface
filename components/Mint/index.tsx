@@ -13,7 +13,7 @@ import { useRouter } from 'next/router'
 const parseTags = (tags: string): string[] => {
   var tagString = tags.replace(/\s/g, '')
   var tagArray = tagString.split(',')
-  console.log(tagArray)
+  // console.log(tagArray)
   return tagArray
 }
 
@@ -68,10 +68,10 @@ export default function Mint() {
     try {
       // 1. upload image
       const mediaUrl = await uploadFile(media)
-      console.log('HERER', mediaUrl)
+      // console.log('HERER', mediaUrl)
       // 2. send metadata
       const uri = await postMetadata(mediaUrl)
-      console.log('URI', uri)
+      // console.log('URI', uri)
 
       const hash = uri.split('/')
 
@@ -93,7 +93,7 @@ export default function Mint() {
     var uri = 'https://us-central1-broccoli-df8cd.cloudfunctions.net/api/mint'
 
     var parsedTags = parseTags(tags)
-    console.log('imageUrl', imageUrl, mimeType, size, date)
+    console.log('MIME TYPE', mimeType, size)
 
     // setDate(media.lastModified)
     // setSize(media.size)
@@ -114,7 +114,7 @@ export default function Mint() {
       creator: account
     }
 
-    console.log('METADATA', metadata)
+    // console.log('METADATA', metadata)
 
     // post request
 
@@ -147,23 +147,23 @@ export default function Mint() {
   const submit = (evt) => {
     setError(false)
     evt.preventDefault()
-    console.log('HELLO', media)
+    // console.log('HELLO', media)
 
-    console.log(
-      'METADTA MEDIA',
-      'DATE',
-      date,
-      media.lastModified,
-      'SIZE',
-      size,
-      media.size,
-      'TYPE',
-      mimeType,
-      media.type,
-    )
+    // console.log(
+    //   'METADTA MEDIA',
+    //   'DATE',
+    //   date,
+    //   media.lastModified,
+    //   'SIZE',
+    //   size,
+    //   media.size,
+    //   'TYPE',
+    //   mimeType,
+    //   media.type,
+    // )
     if (chainId !== 137) {
       setOpen(true)
-      console.log('HEHEHER')
+      // console.log('HEHEHER')
     } else {
       mintNFT()
     }
