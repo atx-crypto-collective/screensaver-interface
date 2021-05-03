@@ -34,7 +34,7 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
         <AudioPlayer fileUrl={nft.animation_url} />
       )}
 
-{type === 'model' || type === '' && (
+{(type === 'model' || type === '') && (
       <div className={'h-96'}>
 
         <model-viewer
