@@ -18,12 +18,12 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
   useEffect(() => {
     if (!nft?.media?.mimeType) return 
     const typeArray = nft?.media?.mimeType.split('/')
-    console.log("TYPE", typeArray[0])
+    console.log("TYPEm", typeArray[0])
     setType(typeArray[0])
   }, [])
   console.log("NFT", nft)
   return (
-    <div className={'relative'}>
+    <div className={'relative h-96'}>
        { type === 'image' && (
         <img src={nft.image} className={'w-full'}/>
       )}
@@ -34,7 +34,7 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
         <AudioPlayer fileUrl={nft.animation_url} />
       )}
 
-      {type === 'model' && (
+{type === 'model' && (
         <model-viewer
         style={{width: '100%', height: '100%'}}
         id={nft?.tokenId}
