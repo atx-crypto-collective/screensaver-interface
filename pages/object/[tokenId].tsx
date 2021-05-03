@@ -77,7 +77,7 @@ const ItemDetailPage: React.VFC = () => {
       setIsPreview(true)
     } else {
       console.log("HERE")
-      // getUri()
+      getUri()
       // console.log("PREVIEW 3", preview)
 
     }
