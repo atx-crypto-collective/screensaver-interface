@@ -23,7 +23,7 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
   }, [])
   console.log("NFT", nft)
   return (
-    <div className={'relative h-96'}>
+    <div className={''}>
        { type === 'image' && (
         <img src={nft.image} className={'w-full'}/>
       )}
@@ -35,6 +35,8 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
       )}
 
 {type === 'model' || type === '' && (
+      <div className={'h-96'}>
+
         <model-viewer
         style={{width: '100%', height: '100%'}}
         id={nft?.tokenId}
@@ -47,6 +49,7 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
         ar-scale="auto"
         // ios-src={}
       />
+      </div>
       )}
 
       {type === 'application' && (

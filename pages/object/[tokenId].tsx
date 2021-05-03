@@ -32,7 +32,7 @@ const ItemDetailPage: React.VFC = () => {
   const [uri , setUri] = useState< undefined | string >()
   const [loading , setLoading] = useState< boolean >(true)
   const [metadata , setMetadata] = useState< NFT | undefined >()
-
+  const [isPreview, setIsPreview] = useState(false)
   async function getMetadata() {
     var meta = await axios.get(uri)
     console.log("METADDDAATA", meta)
@@ -53,7 +53,7 @@ const ItemDetailPage: React.VFC = () => {
 
   useEffect(() => {
     if (!uri) return;
-    console.log(uri)
+    console.log("URI", uri)
     getMetadata()
   }, [uri])
 
@@ -66,14 +66,20 @@ const ItemDetailPage: React.VFC = () => {
 
   useEffect(() => {
 
+    console.log("PREVIEW", preview)
     if (!tokenId) return;
 
     if (!!preview) {
+      console.log("PREVIEW 2", preview)
+
       // add footer 
       setUri("https://ipfs.io/ipfs/" + preview.toString())
+      setIsPreview(true)
     } else {
       console.log("HERE")
-      getUri()
+      // getUri()
+      // console.log("PREVIEW 3", preview)
+
     }
 
   }, [tokenId, preview])
@@ -88,7 +94,7 @@ const ItemDetailPage: React.VFC = () => {
             'md:p-3 md:border md:border-solid md:border-gray-700 md:rounded max-w-xl mx-auto'
           }
         >
-          <ItemDetailView userIsAuthenticated itemListingState={'past'} metadata={metadata} preview={!!preview} hash={preview?.toString()}/>
+          <ItemDetailView userIsAuthenticated itemListingState={'past'} metadata={metadata} preview={isPreview} hash={preview?.toString()}/>
 
           {!!tokenId && <BiddingDetailView tokenId={tokenId}/>}
 
