@@ -25,7 +25,7 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
   return (
     <div className={'relative'}>
        { type === 'image' && (
-        <img src={nft.image} alt={altText} className={'w-full'}/>
+        <img src={nft.image} className={'w-full'}/>
       )}
       {type === 'video' && (
         <VideoPlayer fileUrl={nft.animation_url} />

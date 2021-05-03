@@ -12,7 +12,7 @@ import PdfViewer from './MediaViewer/PdfViewer'
 //   footer?: React.ReactElement
 // }
 
-const ImageCard  = ({ srcUrl, nft, altText, footer, children }) => {
+const ImageCard  = ({ srcUrl, nft, footer, children }) => {
 
   const [type, setType] = useState('')
 
@@ -36,7 +36,7 @@ const ImageCard  = ({ srcUrl, nft, altText, footer, children }) => {
           <div className={'rounded-t-2xl overflow-hidden h-96'}>
 
       { type === 'image' && (
-        <img src={nft.image} alt={altText} className={'w-full'}/>
+        <img src={nft.image} className={'w-full'}/>
       )}
       {type === 'video' && (
         <VideoPlayer fileUrl={nft.animation_url} />
