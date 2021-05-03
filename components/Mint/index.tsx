@@ -18,6 +18,7 @@ const parseTags = (tags: string): string[] => {
 }
 
 export default function Mint() {
+  const [error, setError] = useState(false)
   const [loading, setLoading] = useState(false)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -62,6 +63,7 @@ export default function Mint() {
   }
 
   async function mintNFT() {
+  
     setLoading(true)
     try {
       // 1. upload image
@@ -96,6 +98,8 @@ export default function Mint() {
     // setDate(media.lastModified)
     // setSize(media.size)
     // setType(media.type)
+
+    if (media.type === '' || media.type === undefined || media.type === null) return setError(true);
 
     const metadata = {
       name: title,
@@ -141,6 +145,7 @@ export default function Mint() {
   }
 
   const submit = (evt) => {
+    setError(false)
     evt.preventDefault()
     console.log('HELLO', media)
 
@@ -342,8 +347,8 @@ export default function Mint() {
               )}
             </button>
             <div className={'text-white'}>
-              {mintSuccess &&
-                `https://opensea.io/assets/matic/0x91A5b869bF327A3E0A2ffb4aF5Ca138749fb7851/${totalSupply}`}
+              {error &&
+                `There is an issue with your file`}
             </div>
           </div>
         </div>
