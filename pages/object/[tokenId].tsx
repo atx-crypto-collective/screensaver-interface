@@ -12,6 +12,7 @@ import NFT from '../../types'
 import SetSalePrice from '../../components/SetSalePrice'
 import BidRow from '../../components/BidRow'
 import BiddingDetailView from './BiddingDetailView'
+import Head from 'next/head'
 
 const ItemDetailPage: React.VFC = () => {
   // TODO: Pull item by slug from router
@@ -87,6 +88,14 @@ const ItemDetailPage: React.VFC = () => {
   if (loading) return <Layout><div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>Loading...</div></Layout>
   
   return (
+    <>
+          <Head>
+        <meta name="twitter:card" content={metadata.name} />
+        <meta name="twitter:site" content="@screensaverDAO" />
+        <meta name="twitter:title" content={metadata.name} />
+        <meta name="twitter:description" content="Screensaver DAO" />
+        <meta name="twitter:image" content={!!metadata.image ? metadata.image : metadata.animation_url} />
+      </Head>
     <Layout>
       <div className={'md:mt-12 pb-8 w-11/12 mx-auto'}>
         <div
@@ -101,6 +110,7 @@ const ItemDetailPage: React.VFC = () => {
         </div>
       </div>
     </Layout>
+    </>
   )
 }
 
