@@ -41,6 +41,10 @@ export default function Mint() {
   const [totalSupply, setTotalSupply] = useState(0)
   const router = useRouter()
 
+  useEffect(() => {
+    console.log('PEACE NODE LOOK HERE -> ', media, media.type, size)
+  }, [media])
+
   async function createToken(uri: string) {
     const contract = new ethers.Contract(    
       process.env.NEXT_PUBLIC_CONTRACT_ID,
@@ -93,7 +97,7 @@ export default function Mint() {
     var uri = 'https://us-central1-broccoli-df8cd.cloudfunctions.net/api/mint'
 
     var parsedTags = parseTags(tags)
-    console.log('MIME TYPE', mimeType, size)
+    // console.log('PEACE NODE LOOK HERE -> ', media, media.type, size)
 
     // setDate(media.lastModified)
     // setSize(media.size)
@@ -147,7 +151,7 @@ export default function Mint() {
   const submit = (evt) => {
     setError(false)
     evt.preventDefault()
-    // console.log('HELLO', media)
+    console.log('MEDIA', media)
 
     // console.log(
     //   'METADTA MEDIA',
