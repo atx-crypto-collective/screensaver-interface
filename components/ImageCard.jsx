@@ -45,7 +45,7 @@ const ImageCard  = ({ srcUrl, nft, footer, children }) => {
         <AudioPlayer fileUrl={nft.animation_url} />
       )}
 
-      {(type === 'model' || type === '') && (
+      {(type === 'model' || type === '' || nft?.media?.mimeType === 'application/octet-stream') && (
         <model-viewer
         autoplay 
         style={{width: '100%', height: '100%'}}
