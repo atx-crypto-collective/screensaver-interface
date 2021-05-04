@@ -28,8 +28,6 @@ const index: React.FC<IProps> = ({ hash }) => {
 
   const router = useRouter()
 
-
-
   const { chainId, account, library } = useWeb3React<Web3Provider>()
 
   async function createToken(uri: string) {

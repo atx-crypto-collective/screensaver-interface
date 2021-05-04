@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
+import Waveform from "./Waveform";
 
 interface IProps {
   fileUrl: string
@@ -11,8 +12,10 @@ const AudioPlayer: React.VFC<IProps> = ({
   mimeType,
   coverImageUrl,
 }) => {
+
   return (
     <div className={'relative w-full'}>
+      {/* <Waveform url={fileUrl} /> */}
       <img
         className={'object-fill w-full h-64'}
         src={coverImageUrl}

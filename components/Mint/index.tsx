@@ -42,8 +42,7 @@ export default function Mint() {
   const router = useRouter()
 
   useEffect(() => {
-    if (!media) return;
-    console.log('PEACE NODE LOOK HERE -> ', media, media.type, size)
+    console.log('PEACE NODE LOOK HERE -> ', media, media?.type)
   }, [media])
 
   async function createToken(uri: string) {
@@ -67,15 +66,34 @@ export default function Mint() {
     setTotalSupply(supply + 1)
   }
 
-  async function mintNFT() {
-  
+  useEffect(() => {
+    if (!mimeType) return;
+    console.log("TYPE", mimeType)
+    upload()
+  }, [mimeType])
+
+
+  async function upload() {
     setLoading(true)
     try {
       // 1. upload image
       const mediaUrl = await uploadFile(media)
+      mintNFT(mediaUrl)
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+    }
+  }
+
+
+  async function mintNFT(url) {
+  
+    try {
+      // 1. upload image
+      // const mediaUrl = await uploadFile(media)
       // console.log('HERER', mediaUrl)
       // 2. send metadata
-      const uri = await postMetadata(mediaUrl)
+      const uri = await postMetadata(url)
       // console.log('URI', uri)
 
       const hash = uri.split('/')
@@ -104,7 +122,7 @@ export default function Mint() {
     // setSize(media.size)
     // setType(media.type)
 
-    if (media.type === '' || media.type === undefined || media.type === null) return setError(true);
+    // if (media.type === '' || media.type === undefined || media.type === null) return setError(true);
 
     const metadata = {
       name: title,
@@ -112,7 +130,7 @@ export default function Mint() {
       uri: imageUrl,
       description: description,
       media: {
-        mimeType: media.type,
+        mimeType: mimeType,
         size: media.size,
       },
       tags: parsedTags,
@@ -146,6 +164,12 @@ export default function Mint() {
     await fileRef.put(file)
     var downloadUrl = await fileRef.getDownloadURL()
 
+    // Get metadata properties
+    const metadata = await fileRef.getMetadata()
+    console.log("GET METADATA", metadata)
+
+    setType(metadata.contentType)
+
     return downloadUrl
   }
 
@@ -170,7 +194,7 @@ export default function Mint() {
       setOpen(true)
       // console.log('HEHEHER')
     } else {
-      mintNFT()
+      upload()
     }
   }
 

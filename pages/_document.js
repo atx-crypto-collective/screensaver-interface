@@ -10,6 +10,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
+          
           <script
             type="module"
             src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
@@ -18,12 +19,11 @@ class MyDocument extends Document {
             noModule
             src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"
           />
-
-        <meta name="twitter:card" content="Screensaver DAO" />
+        {/* <meta name="twitter:card" content="Screensaver DAO" />
         <meta name="twitter:site" content="@screensaverDAO" />
         <meta name="twitter:title" content="Screensaver DAO" />
         <meta name="twitter:description" content="Screensaver DAO" />
-        <meta name="twitter:image" content="www.screensaver.world" />
+        <meta name="twitter:image" content="www.screensaver.world" /> */}
         </Head>
         <body>
           <Main />
