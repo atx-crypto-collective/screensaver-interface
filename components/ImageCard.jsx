@@ -51,7 +51,7 @@ const ImageCard  = ({ srcUrl, nft, footer, children }) => {
         style={{width: '100%', height: '100%'}}
         id={nft?.tokenId}
         alt={nft?.name + nft?.tokenId}
-        src={"https://ipfs.io/ipfs/QmQcqt2QnoX6c7QgoHMxyAoF3voVD6yy6hdpsyekaTwyfy"}
+        src={nft?.animation_url}
         auto-rotate
         camera-controls
         ar
