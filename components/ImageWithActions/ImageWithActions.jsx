@@ -38,6 +38,7 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
       <div className={'h-96'}>
 
         <model-viewer
+        autoplay
         style={{width: '100%', height: '100%'}}
         id={nft?.tokenId}
         alt={nft?.name + nft?.tokenId}
