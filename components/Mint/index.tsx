@@ -211,7 +211,7 @@ export default function Mint() {
                 Mint
               </h3>
               <p className="mt-1 max-w-2xl text-xs text-gray-00 font-light">
-                All creators receive 15% royalties on any resale of their NFTs.
+                All creators receive 15% royalties on any resale of their work.
               </p>
             </div>
 
@@ -258,7 +258,7 @@ export default function Mint() {
                     onChange={(e) => setDescription(e.target.value)}
                   />
                   <p className="mt-2 text-sm text-gray-300">
-                    Write a few sentences about your NFT.
+                    Write a few sentences about your work.
                   </p>
                 </div>
               </div>
@@ -292,7 +292,7 @@ export default function Mint() {
                   htmlFor="cover_photo"
                   className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
                 >
-                  Upload NFT
+                  Upload
                 </label>
                 <div className="mt-1 sm:mt-0 sm:col-span-2">
                   <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed">
@@ -351,7 +351,7 @@ export default function Mint() {
               disabled={!media}
               // onClick={() => setOpen(true)}
             >
-              Preview NFT
+              Preview
               {loading && (
                 <svg
                   className="animate-spin -mr-1 ml-3 h-5 w-5 text-white"
