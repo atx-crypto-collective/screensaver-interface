@@ -27,7 +27,7 @@ const NFTItemCard: React.FC<IProps> = ({
   amountCollected,
 }) => {
   const [bid, setBid] = useState<number | undefined>()
-  const [forSale, setForSale] = useState<number | undefined>()
+  const [forSale, setForSale] = useState(false)
 
    // get current bids
    async function currentBids() {
@@ -51,7 +51,22 @@ const NFTItemCard: React.FC<IProps> = ({
     }
   }
 
+  // get approved
+  async function getApproved() {
+    const contract = new ethers.Contract(
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      GALLERY_ABI,
+      getNetworkLibrary(),
+    )
+    var approvedAddress = await contract.getApproved(nft?.tokenId)
+
+    console.log('Approved Address', approvedAddress)
+
+    setForSale(approvedAddress === process.env.NEXT_PUBLIC_CONTRACT_ID)
+  }
+
   useEffect(() => {
+    getApproved()
     currentBids()
   }, [])
 
@@ -65,7 +80,7 @@ const NFTItemCard: React.FC<IProps> = ({
           <div className={'flex flex-col h-16 justify-center'}>
             <div className={'text-xl font-medium'}>CURRENT BID</div>
              
-            <div className={'text-3xl font-light'}>{!!bid ? bid : (forSale ? '-- --': "Not for sale")} MATIC</div>
+            <div className={'text-3xl font-light'}>{!!bid ? `${bid} MATIC` : (forSale ? 'No bids yet': "Not for sale")}</div>
 
             {/* <button className={'button button--gradient'}>$5 Edition</button> */}
           </div>
