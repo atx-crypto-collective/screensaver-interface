@@ -61,9 +61,9 @@ const ImageCard  = ({ srcUrl, nft, footer, children }) => {
       />
       )}
 
-      {type === 'application' && (
+      {/* {type === 'application' && (
         <PdfViewer fileUrl={nft.animation_url} />
-      )}
+      )} */}
 
 
             {/* { !!nft?.image ? 

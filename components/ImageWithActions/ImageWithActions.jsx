@@ -53,9 +53,9 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
       </div>
       )}
 
-      {type === 'application' && (
+      {/* {type === 'application' && (
         <PdfViewer fileUrl={nft.animation_url}/>
-      )}
+      )} */}
       <div className={'absolute top-2 right-2 flex pt-100%'}>
         
       </div>

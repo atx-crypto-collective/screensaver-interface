@@ -27,6 +27,7 @@ const NFTItemCard: React.FC<IProps> = ({
   amountCollected,
 }) => {
   const [bid, setBid] = useState<number | undefined>()
+  const [forSale, setForSale] = useState<number | undefined>()
 
    // get current bids
    async function currentBids() {
@@ -64,7 +65,7 @@ const NFTItemCard: React.FC<IProps> = ({
           <div className={'flex flex-col h-16 justify-center'}>
             <div className={'text-xl font-medium'}>CURRENT BID</div>
              
-            <div className={'text-3xl font-light'}>{!!bid ? bid : '-- --'} MATIC</div>
+            <div className={'text-3xl font-light'}>{!!bid ? bid : (forSale ? '-- --': "Not for sale")} MATIC</div>
 
             {/* <button className={'button button--gradient'}>$5 Edition</button> */}
           </div>
