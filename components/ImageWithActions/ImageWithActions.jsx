@@ -46,7 +46,7 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
         auto-rotate
         camera-controls
         ar
-        ar-modes="quick-look"
+        ar-modes="webxr scene-viewer quick-look"
         ar-scale="auto"
         // ios-src={}
       />
