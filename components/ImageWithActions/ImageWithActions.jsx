@@ -20,7 +20,8 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
     const typeArray = nft?.media?.mimeType.split('/')
     console.log("TYPEm", typeArray[0])
     setType(typeArray[0])
-  }, [])
+  }, [nft])
+
   console.log("NFT", nft)
   return (
     <div className={''}>
