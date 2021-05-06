@@ -6,7 +6,7 @@
 
 [[redirects]]
   from = "/collection/:collection"
-  to = "/collection/[collection].html?collection=:collection"
+  to = "/collection/:collection"
   status = 200
 
 [[redirects]]

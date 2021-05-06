@@ -10,7 +10,11 @@ import { GALLERY_ABI } from '../constants/gallery'
 import { getNetworkLibrary } from '../connectors'
 import NFT from '../types'
 
-const ExploreView: React.VFC = () => {
+interface IProps {
+  collection: boolean
+}
+
+const ExploreView: React.VFC<IProps> = ({collection}) => {
   const [openTab, setOpenTab] = useState<'active' | 'completed'>('active')
   const [nfts, setNfts] = useState< NFT[] >([])
     // TODO: Pull item by slug from router
@@ -107,6 +111,8 @@ const ExploreView: React.VFC = () => {
       GALLERY_ABI,
       getNetworkLibrary()
     )
+
+    var collectedNFTs = [];
   
     var allMetadata = await Promise.all(
       range.map(async (id) => {
@@ -114,12 +120,28 @@ const ExploreView: React.VFC = () => {
         var metadata = await axios.get(uri)
         metadata.data.tokenId = id
         console.log(metadata)
+
+        if (collection) {
+          var ownerOf = await contract.ownerOf(id)
+
+          if (ownerOf === account) {
+            collectedNFTs.push(metadata.data)
+          }
+        }
         return metadata.data 
       })
     )
 
+    if (collection) {
+      setNfts([...nfts, ...collectedNFTs.reverse()])
+    } else {
+      setNfts([...nfts, ...allMetadata.reverse()])
+    }
 
-    setNfts([...nfts, ...allMetadata.reverse()])
+    if (collection && collectedNFTs.length < 10 && !noMore) {
+      loadTokens()
+    }
+
 
   }
 
