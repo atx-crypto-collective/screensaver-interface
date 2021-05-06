@@ -36,6 +36,7 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
   const [loading , setLoading] = useState< boolean >(true)
   const [metadata , setMetadata] = useState< NFT | undefined >()
   const [offset, setOffset] = useState< number >(0)
+  const [count, setCount] = useState< number >(collection ? 100 : 20)
   const [noMore, setNoMore] = useState< boolean >(false)
 
   async function getMetadata() {
@@ -62,7 +63,7 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
 
     var total = totalSupply.toNumber() 
 
-    if (total <= 20) {
+    if (total <= count) {
       setNoMore(true)
     }
 
@@ -71,7 +72,7 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
     var result;
 
     if (offset === 0) {
-      lowRange = total - 20
+      lowRange = total - count
 
       lowRange = lowRange <= 0 ? 0 : lowRange
 
@@ -79,7 +80,7 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
 
       result = new Array(range).fill(true).map((e, i) => i + 1 + lowRange);
     } else {
-      lowRange = offset - 20 
+      lowRange = offset - count 
 
       range = offset - lowRange 
 
@@ -138,8 +139,9 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
       setNfts([...nfts, ...allMetadata.reverse()])
     }
 
-    if (collection && (nfts.length < 20 || !noMore)) {
-      loadTokens()
+    if (collection && (nfts.length < count || !noMore)) {
+      console.log()
+      // loadTokens()
     }
 
   }
@@ -163,8 +165,8 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
                 title={item?.name}
                 coverImageSrc={item?.image}
                 creator={item?.creator}
-                endDateTime={new Date('1/1/2000')}
-                amountCollected={100}
+                endDateTime={new Date('1/1/count00')}
+                amountCollected={count}
                 tokenId={item?.tokenId}
               />
             </div>
