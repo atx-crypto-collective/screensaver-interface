@@ -45,12 +45,16 @@ const index: React.FC<IProps> = ({ hash }) => {
 
     let filter = {
       address: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      topics: [topic],
+      topics: [
+        topic,
+        null,
+        ethers.utils.hexZeroPad(account, 32)
+      ],
     }
   
 
     getNetworkLibrary().on(filter, (result) => {
-      console.log('HEREWEARE', result.transactionHash, tx.hash)
+      console.log('MINTAGE', result, tx.hash)
       if (result.transactionHash === tx.hash) {
       goToNFT()
       getNetworkLibrary().off(filter, (offResult) => {console.log("OFF", offResult)})

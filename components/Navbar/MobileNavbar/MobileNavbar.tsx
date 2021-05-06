@@ -104,7 +104,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                           </a>
                         )}
                       </Menu.Item>
-                      <Menu.Item>
+                      {!!account && <Menu.Item>
                         {({ active }) => (
                           <a
                             href="/collection"
@@ -116,7 +116,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                             Collection
                           </a>
                         )}
-                      </Menu.Item>
+                      </Menu.Item>}
                       <Menu.Item>
                         {({ active }) => (
                           <a
