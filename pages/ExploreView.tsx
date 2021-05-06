@@ -138,7 +138,7 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
       setNfts([...nfts, ...allMetadata.reverse()])
     }
 
-    if (collection && collectedNFTs.length < 10 && noMore !== true) {
+    if (collection && (nfts.length < 20 || !noMore)) {
       loadTokens()
     }
 
