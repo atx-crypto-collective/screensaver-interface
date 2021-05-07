@@ -12,6 +12,8 @@ import { useRouter } from 'next/router'
 import { shortenAddress } from '../utils'
 import { getNetworkLibrary } from '../connectors'
 import SetSalePrice from './SetSalePrice'
+import AccountId from './AccountId'
+
 var utils = require('ethers').utils
 
 const parseTags = (tags: string): string[] => {
@@ -144,7 +146,7 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
                   {bid} MATIC
                 </h3>
                 <div className="mt-1 text-sm  sm:flex sm:items-center">
-                  <div>{!!bidder && shortenAddress(bidder)}</div>
+                  <div><AccountId address={bidder}/></div>
                 </div>
               </div>
             </div>
