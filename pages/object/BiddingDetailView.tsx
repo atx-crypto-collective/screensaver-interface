@@ -177,6 +177,7 @@ const BiddingDetailView = (
         {/** if approved for sale */}
 
                   <div className={'text-sm p-3'}><strong>Collector: </strong><AccountId address={nftOwner}/></div>
+                  <h2 className={'font-light text-md text-white'}>Token Id: {tokenId}</h2>
 
                   <div className={'mt-12'}/>
 
