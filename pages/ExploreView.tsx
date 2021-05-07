@@ -118,6 +118,9 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
     var allMetadata = await Promise.all(
       range.map(async (id) => {
         var uri = await contract.tokenURI(id)
+        console.log("URI HEERER", uri)
+
+        if (uri.includes(undefined)) return null;
         var metadata = await axios.get(uri)
         metadata.data.tokenId = id
         console.log(metadata)
@@ -133,15 +136,13 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
       })
     )
 
-    if (collection) {
-      setNfts([...nfts, ...collectedNFTs.reverse()])
-    } else {
-      setNfts([...nfts, ...allMetadata.reverse()])
-    }
+    const filteredMeta = allMetadata.filter(i => i !== null)
+    const filteredCollected = collectedNFTs.filter(i => i !== null)
 
-    if (collection && (nfts.length < count || !noMore)) {
-      console.log()
-      // loadTokens()
+    if (collection) {
+      setNfts([...nfts, ...filteredCollected.reverse()])
+    } else {
+      setNfts([...nfts, ...filteredMeta.reverse()])
     }
 
   }
