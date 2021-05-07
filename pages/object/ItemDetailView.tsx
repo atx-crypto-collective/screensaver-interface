@@ -7,6 +7,7 @@ import {
 } from '../../components'
 import NFT from '../../types'
 import MintButton from '../../components/MintButton'
+import AccountId from '../../components/AccountId'
 
 interface IProps {
   itemListingState: 'past' | 'active'
@@ -62,7 +63,7 @@ const ItemDetailView: React.VFC<IProps> = ({
         <div className={'text-2xl font-bold py-3'} >Name: {metadata.name}</div>
 
         <div className={'text-sm text-lg py-3'} ><strong>Description: </strong>{metadata.description}</div>
-          <div className={'text-sm py-3'}><strong>Creator: </strong> {metadata.creator}</div>
+          <div className={'text-sm py-3'}><strong>Creator: </strong> <AccountId addres={metadata.creator}/></div>
           <div className={'text-sm py-3'}>{metadata.creationDate}</div>
           <div className={'text-sm py-3'}><strong>MimeType: </strong> {metadata.media.mimeType}</div>
 

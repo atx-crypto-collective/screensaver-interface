@@ -17,6 +17,8 @@ import { injected } from '../../connectors'
 import { useRouter } from 'next/router'
 import { shortenAddress } from '../../utils'
 import { getNetworkLibrary } from '../../connectors'
+import AccountId from '../AccountId'
+
 var utils = require('ethers').utils
 
 const NFTItemCard: React.FC<IProps> = ({
@@ -91,7 +93,7 @@ const NFTItemCard: React.FC<IProps> = ({
       
       <div className={'flex flex-col space-y-3 px-5 overflow-hidden h-24'}>
         <h1 className={'font-bold text-2xl text-white'}>{nft.name}</h1>
-          <h2 className={'font-medium text-md text-white'}>{!!creator && shortenAddress(creator)}</h2>
+          <h2 className={'font-medium text-md text-white'}><AccountId address={creator}/></h2>
       </div>
     </ImageCard>
   )
