@@ -29,6 +29,15 @@ module.exports = {
       serif: ['ui-serif', 'Georgia']
     },
     extend: {
+      keyframes: {
+        roll: {
+          '0%, 100%': { transform: 'translateX(0) rotate(10deg)' },
+          '50%': { transform: 'translateX(100vw) rotate(385deg)' }
+        }
+      },
+      animation: {
+        roll: 'roll 60s ease-in-out infinite'
+      },
       colors: {
         gray: {
           50: '#f9f9f9',

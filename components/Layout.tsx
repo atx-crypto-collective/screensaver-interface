@@ -4,6 +4,7 @@ import Modal from './Modal'
 import { useWeb3React } from "@web3-react/core";
 import { useEffect } from 'react'
 import classNames from 'classnames'
+import { url } from 'node:inspector';
 
 const Layout: React.FC = ({ children }) => {
   const [open, setOpen] = useState(false)
@@ -17,6 +18,9 @@ const Layout: React.FC = ({ children }) => {
     <div 
     className={'mt-32 space-y-4 lg:pb-20 bg-black h-full'}
     >
+        <div className="animate-roll absolute ">
+    <img src={require('../assets/neo.png')} className={'w-40 h-64'}/>
+  </div>
       <Navbar />
       <div>{children}</div>
     </div>
