@@ -1,31 +1,17 @@
 import React from 'react'
-import {
-  ImageWithActions,
-  ActionButton,
-  NFTItemDescription,
-  TransactionHistoryTable,
-} from '../../components'
-import NFT from '../../types'
-import MintButton from '../../components/MintButton'
+import AccountId from '../../components/AccountId'
 import BidRow from '../../components/BidRow'
-
-interface IProps {
-  tokenId: string
-}
 import { useState, useEffect } from 'react'
-// import { storage } from '../config/firebase'
 import axios from 'axios'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../../constants/gallery'
-// import Modal from '../components/Modal'
-// import classNames from 'classnames'
-// import { injected } from '../connectors'
-// import { useRouter } from 'next/router'
-// import { shortenAddress } from '../utils'
 import { getNetworkLibrary } from '../../connectors'
-// import SetSalePrice from './SetSalePrice'
+
+interface IProps {
+  tokenId: string
+}
 
 const BiddingDetailView = (
   {
@@ -190,7 +176,7 @@ const BiddingDetailView = (
       <div className={'flex flex-col space-y-8'}>
         {/** if approved for sale */}
 
-                  <div className={'text-sm p-3'}><strong>Collector: </strong> {nftOwner}</div>
+                  <div className={'text-sm p-3'}><strong>Collector: </strong><AccountId address={nftOwner}/></div>
 
                   <div className={'mt-12'}/>
 
