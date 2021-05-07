@@ -103,7 +103,7 @@ const index: React.FC<IProps> = ({ hash }) => {
 
       <div className={'mr-2'}>
         <button
-        disabled
+        disabled={loading}
           onClick={
             !account || chainId !== 137
               ? () => setOpen(true)
@@ -111,7 +111,7 @@ const index: React.FC<IProps> = ({ hash }) => {
           }
           className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
         >
-          Mint temporarily disabled srrryyy you broke it!!!
+          Mint
           {loading && (
             <svg
               className="animate-spin -mr-1 ml-3 h-5 w-5 text-white"
