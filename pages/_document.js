@@ -19,11 +19,11 @@ class MyDocument extends Document {
             noModule
             src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"
           />
-        {/* <meta name="twitter:card" content="Screensaver DAO" />
-        <meta name="twitter:site" content="@screensaverDAO" />
+  <meta name="twitter:card" content="Screensaver DAO" />
+        <meta name="twitter:site" content="@screensaverdao" />
         <meta name="twitter:title" content="Screensaver DAO" />
         <meta name="twitter:description" content="Screensaver DAO" />
-        <meta name="twitter:image" content="www.screensaver.world" /> */}
+        <meta name="twitter:image" content="https://wwww.screensaver.world" />
         </Head>
         <body>
           <Main />
