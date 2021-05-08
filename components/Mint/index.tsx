@@ -348,7 +348,7 @@ export default function Mint() {
               // className="ml-6 inline-flex items-center px-4 py-2 border border-red-300 text-xs rounded-full font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
 
               className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              disabled={!media}
+              disabled={!media || loading}
               // onClick={() => setOpen(true)}
             >
               Preview

@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import ActionButton from './ActionButton'
 import NFT from '../../types'
 import VideoPlayer from '../MediaViewer/VideoPlayer'
@@ -16,7 +16,7 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
   const [type, setType] = useState('')
 
   useEffect(() => {
-    if (!nft?.media?.mimeType) return 
+    if (!nft?.media?.mimeType) return
     const typeArray = nft?.media?.mimeType.split('/')
     console.log("TYPEm", typeArray[0])
     setType(typeArray[0])
@@ -25,8 +25,9 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
   console.log("NFT", nft)
   return (
     <div className={''}>
-       { type === 'image' && (
-        <img src={nft.image} className={'w-full'}/>
+      { type === '' && <div>Loading...</div>}
+      { type === 'image' && (
+        <img src={nft.image} className={'w-full'} />
       )}
       {type === 'video' && (
         <VideoPlayer fileUrl={nft.animation_url} />
@@ -34,31 +35,31 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
       {type === 'audio' && (
         <AudioPlayer fileUrl={nft.animation_url} />
       )}
-{(type === 'model' || type === '' || nft?.media?.mimeType === 'application/octet-stream') && (
+      {(type === 'model' || nft?.media?.mimeType === 'application/octet-stream') && (
 
-      <div className={'h-96'}>
+        <div className={'h-96'}>
 
-        <model-viewer
-        autoplay
-        style={{width: '100%', height: '100%'}}
-        id={nft?.tokenId}
-        alt={nft?.name + nft?.tokenId}
-        src={nft?.animation_url}
-        auto-rotate
-        camera-controls
-        ar
-        ar-modes="webxr scene-viewer quick-look"
-        ar-scale="auto"
-        // ios-src={}
-      />
-      </div>
+          <model-viewer
+            autoplay
+            style={{ width: '100%', height: '100%' }}
+            id={nft?.tokenId}
+            alt={nft?.name + nft?.tokenId}
+            src={nft?.animation_url}
+            auto-rotate
+            camera-controls
+            ar
+            ar-modes="webxr scene-viewer quick-look"
+            ar-scale="auto"
+          // ios-src={}
+          />
+        </div>
       )}
 
       {/* {type === 'application' && (
         <PdfViewer fileUrl={nft.animation_url}/>
       )} */}
       <div className={'absolute top-2 right-2 flex pt-100%'}>
-        
+
       </div>
     </div>
   )
