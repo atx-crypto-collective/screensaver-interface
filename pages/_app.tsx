@@ -1,6 +1,7 @@
 import 'tailwindcss/tailwind.css'
 import dynamic from 'next/dynamic'
 import '../styles/global.css'
+import { FirebaseTrackingProvider } from "../config/firebase";
 
 const Provider = dynamic(() => import("../state/StoreProvider"), {
   ssr: false,
@@ -9,9 +10,12 @@ const Provider = dynamic(() => import("../state/StoreProvider"), {
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Provider>
-      <Component {...pageProps} />
-    </Provider>
+    <FirebaseTrackingProvider>
+      <Provider>
+        <Component {...pageProps} />
+      </Provider>
+    </FirebaseTrackingProvider>
+
   )
 }
 

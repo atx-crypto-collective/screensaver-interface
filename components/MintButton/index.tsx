@@ -45,19 +45,16 @@ const index: React.FC<IProps> = ({ hash }) => {
 
     let filter = {
       address: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      topics: [
-        topic,
-        null,
-        ethers.utils.hexZeroPad(account, 32)
-      ],
+      topics: [topic, null, ethers.utils.hexZeroPad(account, 32)],
     }
-  
 
     getNetworkLibrary().on(filter, (result) => {
       console.log('MINTAGE', result, tx.hash)
       if (result.transactionHash === tx.hash) {
-      goToNFT()
-      getNetworkLibrary().off(filter, (offResult) => {console.log("OFF", offResult)})
+        goToNFT()
+        getNetworkLibrary().off(filter, (offResult) => {
+          console.log('OFF', offResult)
+        })
       }
     })
 
@@ -79,17 +76,17 @@ const index: React.FC<IProps> = ({ hash }) => {
   }
 
   useEffect(() => {
-
     let topic = ethers.utils.id('Transfer(address,address,uint256)')
 
     let filter = {
       address: process.env.NEXT_PUBLIC_CONTRACT_ID,
       topics: [topic],
     }
-  
 
     return () => {
-      getNetworkLibrary().off(filter, (offResult) => {console.log("OFF", offResult)})
+      getNetworkLibrary().off(filter, (offResult) => {
+        console.log('OFF', offResult)
+      })
     }
   }, [])
 
@@ -103,7 +100,7 @@ const index: React.FC<IProps> = ({ hash }) => {
 
       <div className={'mr-2'}>
         <button
-        disabled={loading}
+          disabled={loading}
           onClick={
             !account || chainId !== 137
               ? () => setOpen(true)
