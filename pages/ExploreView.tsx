@@ -117,6 +117,8 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
   
     var allMetadata = await Promise.all(
       range.map(async (id) => {
+
+        if (id === 122) return null;
         var uri = await contract.tokenURI(id)
         console.log("URI HEERER", uri)
 
