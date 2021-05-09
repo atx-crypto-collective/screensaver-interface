@@ -107,7 +107,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                       {!!account && <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="/collection"
+                            href={`/collection/${account}`}
                             className={classNames(
                               active ? 'bg-gray-100' : '',
                               'block px-4 py-2 text-sm text-gray-700',

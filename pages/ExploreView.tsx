@@ -21,17 +21,17 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
 
   // state : preview & not preview 
 
-  const {
-    chainId,
-    account,
-    activate,
-    active,
-    deactivate,
-    library,
-  } = useWeb3React<Web3Provider>()
+  // const {
+  //   chainId,
+  //   account,
+  //   activate,
+  //   active,
+  //   deactivate,
+  //   library,
+  // } = useWeb3React<Web3Provider>()
 
   const router = useRouter()
-  const { tokenId , preview } = router.query
+  const { account } = router.query
   const [uri , setUri] = useState< undefined | string >()
   const [loading , setLoading] = useState< boolean >(true)
   const [metadata , setMetadata] = useState< NFT | undefined >()
@@ -129,6 +129,7 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
 
         if (collection) {
           var ownerOf = await contract.ownerOf(id)
+          console.log("COLLECTED THIS", account, ownerOf)
 
           if (ownerOf === account) {
             collectedNFTs.push(metadata.data)
@@ -150,8 +151,10 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
   }
 
   useEffect(() => {
+    console.log("ACCOUNT is here", account)
+    if (!account && !!collection) return;
     loadTokens()
-  }, [])
+  }, [account, collection])
 
   if (loading) return <Layout><div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>Loading...</div></Layout>
 
