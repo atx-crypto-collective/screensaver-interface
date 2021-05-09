@@ -19,7 +19,7 @@ const Layout: React.FC = ({ children }) => {
     className={'mt-32 space-y-4 lg:pb-20 bg-black h-full'}
     >
         <div className="animate-roll absolute ">
-    <img src={require('../assets/neo.png')} className={'w-40 h-64'}/>
+    <img src={require('../assets/elon.png')} className={'w-40 h-50'}/>
   </div>
       <Navbar />
       <div>{children}</div>
