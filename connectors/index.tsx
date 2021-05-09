@@ -27,7 +27,7 @@ export function getNetworkLibrary(): Web3Provider {
   return (networkLibrary = networkLibrary ?? new Web3Provider(network.provider as any))
 }
 
-export const injected = new InjectedConnector({ supportedChainIds: [1, 2, 3, 4, 5, 137, 42] }) // MetaMask
+export const injected = new InjectedConnector({ supportedChainIds: [137] }) // MetaMask
 
 export const network = new NetworkConnector({
   urls: { 1: process.env.NEXT_PUBLIC_RPC_URL_1},
