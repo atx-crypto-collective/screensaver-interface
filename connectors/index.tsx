@@ -15,11 +15,7 @@ if (typeof NETWORK_URL === 'undefined') {
 
 const POLLING_INTERVAL = 12000
 const RPC_URLS: { [chainId: number]: string } = {
-  1: process.env.NEXT_PUBLIC_RPC_URL_1 as string,
-  // 2: process.env.RPC_URL_2 as string,
-  4: process.env.NEXT_PUBLIC_RPC_URL_4 as string,
-  // 5: process.env.RPC_URL_5 as string,
-  // 42: process.env.RPC_URL_42 as string,
+  137: process.env.NEXT_PUBLIC_RPC_URL_1 as string,
 }
 
 let networkLibrary: Web3Provider | undefined
@@ -30,18 +26,6 @@ export function getNetworkLibrary(): Web3Provider {
 export const injected = new InjectedConnector({ supportedChainIds: [137] }) // MetaMask
 
 export const network = new NetworkConnector({
-  urls: { 1: process.env.NEXT_PUBLIC_RPC_URL_1},
-  defaultChainId: 1,
+  urls: { 137: process.env.NEXT_PUBLIC_RPC_URL_1},
+  defaultChainId: 137,
 })
-
-// export const walletconnect = new WalletConnectConnector({
-//   rpc: { 1: "http://localhost:3000" },
-//   bridge: 'https://bridge.walletconnect.org',
-//   qrcode: true,
-//   pollingInterval: POLLING_INTERVAL,
-// })
-
-// export const fortmatic = new FortmaticConnector({
-//   apiKey: process.env.FORTMATIC_API_KEY as string,
-//   chainId: 4,
-// })

@@ -42,7 +42,11 @@ export default function index() {
           onClick={(chainId !== 137 && !!account) ? () => switchToPolygon() : () => setOpen(true)}
           className="px-6 w-full py-2 border border-red-300 hover:bg-gray-800 text-sm shadow-lg font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
         >
-          {(chainId !== 137 && !!account) ? "Switch to Polygon" : (!account ? "Connect" : shortenAddress(account))}
+
+            {(chainId !== 137) && "Switch to Polygon" }
+            {(chainId === 137 && !account) && "Connect"}
+            {(chainId === 137 && !!account) && shortenAddress(account)}
+            
         </button>
       </div>
     </>

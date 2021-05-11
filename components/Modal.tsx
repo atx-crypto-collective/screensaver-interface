@@ -137,7 +137,7 @@ function ModalViews({ status, setOpen }) {
   }
 
 const Modal: React.VFC<IProps> = ({ status, open, setOpen }) => {
-    const { account } = useWeb3React<Web3Provider>()
+    const { account, chainId } = useWeb3React<Web3Provider>()
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -178,8 +178,10 @@ const Modal: React.VFC<IProps> = ({ status, open, setOpen }) => {
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <div className="inline-block align-bottom bg-white rounded-sm px-4 pt-5 pb-4 text-center overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
-             
-            <ModalViews status={!account ? "connect" : status} setOpen={setOpen} />
+            
+            {chainId !== 137 && <ModalViews status={"switch-network"} setOpen={setOpen} /> }
+            {(chainId === 137 && !account) && <ModalViews status={"connect"} setOpen={setOpen} />}
+            {(chainId === 137 && !!account) && <ModalViews status={status} setOpen={setOpen} />}
             
             </div>
           </Transition.Child>
