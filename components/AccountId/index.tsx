@@ -16,7 +16,7 @@ export default function AccountId({address}) {
       if (!data) return <p>Error!</p>
 
       return (
-        <div>
+        <div className={'font-bold text-md text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-red-300 '}>
           @{data.twitterId}
         </div>
       )

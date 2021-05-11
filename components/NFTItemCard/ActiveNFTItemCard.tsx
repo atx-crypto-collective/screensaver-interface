@@ -31,10 +31,9 @@ const NFTItemCard: React.FC<IProps> = ({
   const [bid, setBid] = useState<number | undefined>()
   const [forSale, setForSale] = useState(false)
 
-   // get current bids
-   async function currentBids() {
-
-    if (!nft?.tokenId) return;
+  // get current bids
+  async function currentBids() {
+    if (!nft?.tokenId) return
 
     const contract = new ethers.Contract(
       process.env.NEXT_PUBLIC_CONTRACT_ID,
@@ -42,10 +41,9 @@ const NFTItemCard: React.FC<IProps> = ({
       getNetworkLibrary(),
     )
 
-
     var currentBid = await contract.currentBidDetailsOfToken(nft.tokenId)
 
-    console.log("BID", utils.formatEther(currentBid[0]))
+    console.log('BID', utils.formatEther(currentBid[0]))
     if (utils.formatEther(currentBid[0]) === '0.0') {
       setBid(undefined)
     } else {
@@ -79,22 +77,32 @@ const NFTItemCard: React.FC<IProps> = ({
       // altText={`${nft.name} cover image`}
       footer={
         <div className={'py-3 bg-white bg-opacity-5 font-medium px-5'}>
-          <div className={'flex flex-col h-16 justify-center'}>
+          <div className={'flex flex-col h-20 justify-center'}>
             <div className={'text-xl font-medium'}>CURRENT BID</div>
-             
-            <div className={'text-3xl font-light'}>{!!bid ? `${bid} MATIC` : (forSale ? 'No bids yet': "Not for sale")}</div>
 
-            {/* <button className={'button button--gradient'}>$5 Edition</button> */}
+            <div className={'text-3xl font-light'}>
+              {!!bid
+                ? `${bid} MATIC`
+                : forSale
+                ? 'No bids yet'
+                : 'Not for sale'}
+            </div>
           </div>
         </div>
       }
     >
-
-      
-      <div className={'flex flex-col space-y-3 px-5 overflow-hidden min-h-24'}>
-        <h1 className={'font-bold text-2xl text-white'}>{nft.name}</h1>
-          <h2 className={'font-medium text-md text-white'}><AccountId address={creator}/></h2>
-          <h2 className={'font-light text-md text-white overflow-visible'}>Token Id: {nft.tokenId}</h2>
+      <div
+        className={
+          'flex flex-col justify-start space-y-2 px-5 overflow-hidden h-28'
+        }
+      >
+        <h1 className={'font-bold text-2xl text-white mt-1'}>{nft.name}</h1>
+        <h2 className={'font-medium text-l'}>
+          <AccountId address={creator} />
+        </h2>
+        <h2 className={'font-medium text-md text-gray-300 overflow-visible'}>
+          {nft.tokenId}
+        </h2>
       </div>
     </ImageCard>
   )
