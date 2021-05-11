@@ -48,6 +48,12 @@ export function getEtherscanLink(
   }
 }
 
+export function parseTags(tags: string): string[] {
+  var tagString = tags.replace(/\s/g, '')
+  var tagArray = tagString.split(',')
+  return tagArray
+}
+
 export function shortenAddress(address: string, chars = 4): string {
   const parsed = isAddress(address)
   if (!parsed) {

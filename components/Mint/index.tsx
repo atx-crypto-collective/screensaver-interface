@@ -3,126 +3,38 @@ import { storage } from '../../config/firebase'
 import axios from 'axios'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
-import { ethers } from 'ethers'
-import { GALLERY_ABI } from '../../constants/gallery'
 import Modal from '../../components/Modal'
-import classNames from 'classnames'
-import { injected } from '../../connectors'
 import { useRouter } from 'next/router'
-
-const parseTags = (tags: string): string[] => {
-  var tagString = tags.replace(/\s/g, '')
-  var tagArray = tagString.split(',')
-  // console.log(tagArray)
-  return tagArray
-}
+import {parseTags} from '../../utils'
+var uri = 'https://us-central1-broccoli-df8cd.cloudfunctions.net/api/mint'
 
 export default function Mint() {
+
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(false)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [tags, setTags] = useState('')
   const [media, setMedia] = useState<File>()
-  const [date, setDate] = useState(0)
-  const [size, setSize] = useState(0)
-  const [mimeType, setType] = useState('')
-  const {
-    chainId,
-    account,
-    activate,
-    active,
-    deactivate,
-    library,
-  } = useWeb3React<Web3Provider>()
-  const [mintSuccess, setMintSuccess] = useState(false);
-  const [id, setId] = useState('')
   const [open, setOpen] = useState(false)
-  const [totalSupply, setTotalSupply] = useState(0)
   const router = useRouter()
+  const { chainId , account } = useWeb3React<Web3Provider>()
 
-  useEffect(() => {
-    console.log('PEACE NODE LOOK HERE -> ', media, media?.type)
-  }, [media])
-
-  async function createToken(uri: string) {
-    const contract = new ethers.Contract(    
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
-      GALLERY_ABI,
-      library.getSigner(account),
-    )
-
-    getBalance()
-    await contract.createToken(uri)
-  }
-
-  async function getBalance() {
-    const contract = new ethers.Contract(    
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
-      GALLERY_ABI,
-      library.getSigner(account),
-    )
-    var supply = await contract.totalSupply()
-    setTotalSupply(supply + 1)
-  }
-
-  useEffect(() => {
-    if (!mimeType) return;
-    console.log("TYPE", mimeType)
-    upload()
-  }, [mimeType])
-
-
-  async function upload() {
-    setLoading(true)
-    try {
-      // 1. upload image
-      const mediaUrl = await uploadFile(media)
-      mintNFT(mediaUrl)
-    } catch (error) {
-      console.log(error)
-      setLoading(false)
+  // on preview button submit 
+  const submit = (evt) => {
+    setError(false)
+    evt.preventDefault()
+    if (chainId !== 137) {
+      setOpen(true)
+    } else {
+      tempFileUpload()
     }
   }
 
-
-  async function mintNFT(url) {
-  
-    try {
-      // 1. upload image
-      // const mediaUrl = await uploadFile(media)
-      // console.log('HERER', mediaUrl)
-      // 2. send metadata
-      const uri = await postMetadata(url)
-      // console.log('URI', uri)
-
-      const hash = uri.split('/')
-
-      // 3. call createToken
-      // await createToken(uri)
-      router.push(`/object/1?preview=${hash[hash.length - 1]}`)
-
-      // setMintSuccess(true)
-      
-
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-      setLoading(false)
-    }
-  }
-
-  async function postMetadata(imageUrl: string) {
-    var uri = 'https://us-central1-broccoli-df8cd.cloudfunctions.net/api/mint'
+  // post metadata to server then to ipfs 
+  async function postMetadata(imageUrl: string, mimeType: string) {
 
     var parsedTags = parseTags(tags)
-    // console.log('PEACE NODE LOOK HERE -> ', media, media.type, size)
-
-    // setDate(media.lastModified)
-    // setSize(media.size)
-    // setType(media.type)
-
-    // if (media.type === '' || media.type === undefined || media.type === null) return setError(true);
 
     const metadata = {
       name: title,
@@ -137,65 +49,56 @@ export default function Mint() {
       creator: account
     }
 
-    // console.log('METADATA', metadata)
-
-    // post request
+    console.log("META", metadata)
 
     try {
       const metadataUri = await axios.post(uri, metadata)
 
-      console.log('URIII', metadataUri)
       return metadataUri.data.uri
     } catch (error) {
+      console.log("ERROR", error)
       throw new Error('error posting to ipfs')
     }
 
-    // await
   }
 
-  async function uploadFile(file: File) {
-    // Create a root reference
-    var storageRef = storage().ref()
-    var name = file.name
+  async function tempFileUpload() {
 
-    // Create a reference to 'mountains.jpg'
-    var fileRef = storageRef.child(name.split(' ').join('_'))
+    setLoading(true)
 
-    await fileRef.put(file)
-    var downloadUrl = await fileRef.getDownloadURL()
+    try {
+        // Create a root reference
+        var storageRef = storage().ref()
+        var name = media.name
 
-    // Get metadata properties
-    const metadata = await fileRef.getMetadata()
-    console.log("GET METADATA", metadata)
+        // Create a reference to 'mountains.jpg'
+        var fileRef = storageRef.child(name.split(' ').join('_'))
 
-    setType(metadata.contentType)
+        // upload file to temp storage 
+        await fileRef.put(media)
 
-    return downloadUrl
-  }
+        // get download url 
+        var downloadUrl = await fileRef.getDownloadURL()
 
-  const submit = (evt) => {
-    setError(false)
-    evt.preventDefault()
-    console.log('MEDIA', media)
+        // get metadata of file to get file type 
+        const metadata = await fileRef.getMetadata()
 
-    // console.log(
-    //   'METADTA MEDIA',
-    //   'DATE',
-    //   date,
-    //   media.lastModified,
-    //   'SIZE',
-    //   size,
-    //   media.size,
-    //   'TYPE',
-    //   mimeType,
-    //   media.type,
-    // )
-    if (chainId !== 137) {
-      setOpen(true)
-      // console.log('HEHEHER')
-    } else {
-      upload()
+        // post metadata to server which will post to IPFS
+        const uri = await postMetadata(downloadUrl, metadata.contentType)
+
+        // get hash from returned URI 
+        const hash = uri.split('/')
+
+        // push to item page in preview mode with IPFS hash 
+        router.push(`/object/1?preview=${hash[hash.length - 1]}`)
+
+        // return { mediaUrl: downloadUrl, mimeType: metadata.contentType } 
+    } catch (error) {
+      console.log("ERROR", error)
     }
+
+    setLoading(false)
+   
   }
 
   return (
@@ -225,9 +128,6 @@ export default function Mint() {
                 </label>
                 <div className="mt-1 sm:mt-0 sm:col-span-2">
                   <div className="max-w-lg flex shadow-sm">
-                    {/* <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
-                        workcation.com/
-                      </span> */}
                     <input
                       type="text"
                       name="title"
@@ -325,7 +225,6 @@ export default function Mint() {
                               name="file-upload"
                               type="file"
                               className="sr-only"
-                              //   value={media}
                               onChange={(e) => setMedia(e.target.files[0])}
                             />
                           </label>
@@ -344,12 +243,11 @@ export default function Mint() {
             </div>
 
             <button
-              type="submit"
-              // className="ml-6 inline-flex items-center px-4 py-2 border border-red-300 text-xs rounded-full font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
 
+              type="submit"
               className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              disabled={!media || loading}
-              // onClick={() => setOpen(true)}
+              disabled={!media || loading || error}
+
             >
               Preview
               {loading && (
@@ -377,7 +275,7 @@ export default function Mint() {
             </button>
             <div className={'text-white'}>
               {error &&
-                `There is an issue with your file`}
+                `There was an issue. Please try again.`}
             </div>
           </div>
         </div>
