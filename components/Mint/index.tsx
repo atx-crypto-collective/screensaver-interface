@@ -23,7 +23,7 @@ export default function Mint() {
   // check if file size is too large
   useEffect(() => {
     console.log("MEDIA", media)
-    if (media?.size > 400000) {
+    if (media?.size > 40000000) {
       return setError(true)
     }
 
@@ -94,7 +94,7 @@ export default function Mint() {
 
         console.log("META", metadata, )
 
-        if (metadata.size > 400000) {
+        if (metadata.size > 40000000) {
           return setError(true)
         }
 

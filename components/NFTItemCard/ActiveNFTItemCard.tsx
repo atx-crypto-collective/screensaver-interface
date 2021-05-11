@@ -27,6 +27,7 @@ const NFTItemCard: React.FC<IProps> = ({
   creator,
   endDateTime,
   amountCollected,
+  loading
 }) => {
   const [bid, setBid] = useState<number | undefined>()
   const [forSale, setForSale] = useState(false)
@@ -66,11 +67,13 @@ const NFTItemCard: React.FC<IProps> = ({
   }
 
   useEffect(() => {
+    if (loading) return;
     getApproved()
     currentBids()
   }, [])
 
   return (
+    loading ? <div style={{width: '345px', height: '618px'}} ><div className={'animate-pulse w-full rounded-xl h-full'}><div className={'animation-pulse w-full rounded-xl h-full bg-gray-800'}/></div></div> :
     <ImageCard
       nft={nft}
       srcUrl={nft.image}
