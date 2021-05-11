@@ -83,8 +83,9 @@ const NFTItemCard: React.FC<IProps> = ({
               {!!bid
                 ? `${bid} MATIC`
                 : forSale
-                ? 'No bids yet'
-                : 'Not for sale'}
+                ? <div className={'text-xl font-light mt-2 text-gray-100'}>No bids yet</div>
+                : <div className={'text-xl font-light mt-2 text-gray-100'}>Not for sale</div>
+                }
             </div>
           </div>
         </div>
@@ -92,15 +93,12 @@ const NFTItemCard: React.FC<IProps> = ({
     >
       <div
         className={
-          'flex flex-col justify-start space-y-2 px-5 overflow-hidden h-28'
+          'flex flex-col justify-start space-y-2 px-5 overflow-hidden h-24'
         }
       >
         <h1 className={'font-bold text-2xl text-white mt-1'}>{nft.name}</h1>
         <h2 className={'font-medium text-l'}>
           <AccountId address={creator} />
-        </h2>
-        <h2 className={'font-medium text-md text-gray-300 overflow-visible'}>
-          {nft.tokenId}
         </h2>
       </div>
     </ImageCard>

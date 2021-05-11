@@ -1,6 +1,5 @@
 export { default as Navbar } from './Navbar'
 export { default as ActiveNFTItemCard } from './NFTItemCard/ActiveNFTItemCard'
-export { default as ExpiredNFTItemCard } from './NFTItemCard/ExpiredNFTItemCard'
 export { default as ImageCard } from './ImageCard'
 export { default as ImageWithActions, ActionButton } from './ImageWithActions'
 export { default as AuctionCountdownTextRow } from './AuctionCountdownTextRow'

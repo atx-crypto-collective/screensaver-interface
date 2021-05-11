@@ -22,9 +22,8 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
     setType(typeArray[0])
   }, [nft])
 
-  console.log("NFT", nft)
   return (
-    <div className={''}>
+    <div className={'min-h-96'}>
       { type === '' && <div>Loading...</div>}
       { type === 'image' && (
         <img src={nft.image} className={'w-full'} />
@@ -58,6 +57,7 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
       {/* {type === 'application' && (
         <PdfViewer fileUrl={nft.animation_url}/>
       )} */}
+
       <div className={'absolute top-2 right-2 flex pt-100%'}>
 
       </div>

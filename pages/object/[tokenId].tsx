@@ -94,7 +94,7 @@ const ItemDetailPage: React.VFC = () => {
       <div className={'md:mt-12 pb-8 w-11/12 mx-auto'}>
         <div
           className={
-            'md:p-3 md:border md:border-solid md:border-gray-700 md:rounded max-w-xl mx-auto'
+            'md:p-3 max-w-xl mx-auto min-h-screen'
           }
         >
           <ItemDetailView userIsAuthenticated itemListingState={'past'} metadata={metadata} preview={isPreview} hash={preview?.toString()}/>

@@ -23,7 +23,7 @@ const ImageCard = ({ srcUrl, nft, footer, children }) => {
         <div
           className={'flex flex-col w-full mx-auto space-y-3'}
         >
-          <div className={'rounded-t-2xl overflow-hidden h-96'}>
+          <div className={'rounded-t-2xl overflow-hidden h-96 bg-gray-900'}>
 
             {type === 'image' && (
               <img src={nft.image} className={'w-full'} />
