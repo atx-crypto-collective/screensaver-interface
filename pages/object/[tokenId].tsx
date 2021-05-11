@@ -91,19 +91,7 @@ const ItemDetailPage: React.VFC = () => {
 
   return (
     <>
-      <Layout>
-        <Head>
-          {/* Twitter */}
-          <meta name="twitter:card" content="summary" key="twcard" />
-          <meta name="twitter:creator" content={'@screensaverdao'} key="twhandle" />
-
-          {/* Open Graph */}
-          <meta property="og:url" content={'https://www.screensaver.world'} key="ogurl" />
-          <meta property="og:image" content={!!metadata.image ? metadata.image : metadata.animation_url} key="ogimage" />
-          <meta property="og:site_name" content={'Screensaver Dao'} key="ogsitename" />
-          <meta property="og:title" content={'Screensaver'} key="ogtitle" />
-          <meta property="og:description" content={'Screensaver Dao Auction'} key="ogdesc" />
-        </Head>
+      <Layout url={`https://www.screensaver.world/object/${tokenId}`} image={!!metadata.image ? metadata.image : metadata.animation_url}>
         <div className={'md:mt-12 pb-8 w-11/12 mx-auto'}>
           <div className={'md:p-3 max-w-xl mx-auto min-h-screen'}>
             <ItemDetailView

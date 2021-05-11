@@ -4,9 +4,14 @@ import Modal from './Modal'
 import { useWeb3React } from "@web3-react/core";
 import { useEffect } from 'react'
 import classNames from 'classnames'
-import { url } from 'node:inspector';
+import Head from 'next/head';
 
-const Layout: React.FC = ({ children }) => {
+interface IProps {
+  url?: string
+  image?: string 
+}
+
+const Layout: React.FC<IProps> = ({ children, url, image }) => {
   const [open, setOpen] = useState(false)
   const { account, chainId } = useWeb3React();
 
@@ -18,9 +23,18 @@ const Layout: React.FC = ({ children }) => {
     <div 
     className={'mt-32 pace-y-4 lg:pb-20 bg-black h-full'}
     >
-        {/* <div className="animate-roll absolute ">
-    <img src={require('../assets/elon.png')} className={'w-40 h-50'}/>
-  </div> */}
+        <Head>
+          {/* Twitter */}
+          <meta name="twitter:summary_large_image" content="summary" key="twcard" />
+          <meta name="twitter:creator" content={'@screensaverdao'} key="twhandle" />
+
+          {/* Open Graph */}
+          <meta property="og:url" content={url} key="ogurl" />
+          <meta property="og:image" content={image} key="ogimage" />
+          <meta property="og:site_name" content={'Screensaver Dao'} key="ogsitename" />
+          <meta property="og:title" content={'Screensaver'} key="ogtitle" />
+          <meta property="og:description" content={'Screensaver Dao Auction'} key="ogdesc" />
+        </Head>
       <Navbar />
       <div>{children}</div>
     </div>
