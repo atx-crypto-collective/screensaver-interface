@@ -16,11 +16,7 @@ interface IProps {
 const BiddingDetailView = ({ tokenId }) => {
   const [value, setValue] = useState<string>()
   const {
-    chainId,
     account,
-    activate,
-    active,
-    deactivate,
     library,
   } = useWeb3React<Web3Provider>()
   const [bid, setBid] = useState<number | undefined>()
@@ -33,12 +29,6 @@ const BiddingDetailView = ({ tokenId }) => {
 
   let approvalTopic = ethers.utils.id('Approval(address,address,uint256)')
   let transferTopic = ethers.utils.id('Transfer(address,address,uint256)')
-
-  const handleSubmit = (evt) => {
-    evt.preventDefault()
-    // contract call
-    console.log('VALUE', value)
-  }
 
   // get approved
   async function getApproved() {
@@ -122,33 +112,6 @@ const BiddingDetailView = ({ tokenId }) => {
       library.getSigner(account),
     )
     const tx = await contract.acceptBid()
-
-    let filter = {
-      address: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      topics: [transferTopic],
-    }
-
-    getNetworkLibrary().on(filter, (result) => {
-      console.log('APPROVED LISTENER', result.transactionHash, tx.hash)
-      if (result.transactionHash === tx.hash) {
-        getApproved()
-        getNetworkLibrary().off(filter, (offResult) => {
-          console.log('OFF', offResult)
-        })
-        setApprovalLoading(false)
-      }
-    })
-  }
-
-  // cancel active bid
-  async function cancelBid() {
-    const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
-      GALLERY_ABI,
-      library.getSigner(account),
-    )
-
-    const tx = await contract.cancelBid()
 
     let filter = {
       address: process.env.NEXT_PUBLIC_CONTRACT_ID,

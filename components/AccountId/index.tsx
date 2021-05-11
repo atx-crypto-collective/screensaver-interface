@@ -17,7 +17,7 @@ export default function AccountId({address}) {
 
       return (
         <div className={'font-bold text-md text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-red-300 '}>
-          @{data.twitterId}
+          <a href={`/collection/${address}`}>@{data.twitterId}</a>
         </div>
       )
 }

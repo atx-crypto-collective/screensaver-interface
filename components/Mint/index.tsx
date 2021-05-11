@@ -20,6 +20,15 @@ export default function Mint() {
   const router = useRouter()
   const { chainId , account } = useWeb3React<Web3Provider>()
 
+  // check if file size is too large
+  useEffect(() => {
+    console.log("MEDIA", media)
+    if (media?.size > 400000) {
+      return setError(true)
+    }
+
+  }, [media])
+
   // on preview button submit 
   const submit = (evt) => {
     setError(false)
@@ -83,6 +92,12 @@ export default function Mint() {
         // get metadata of file to get file type 
         const metadata = await fileRef.getMetadata()
 
+        console.log("META", metadata, )
+
+        if (metadata.size > 400000) {
+          return setError(true)
+        }
+
         // post metadata to server which will post to IPFS
         const uri = await postMetadata(downloadUrl, metadata.contentType)
 
@@ -109,17 +124,73 @@ export default function Mint() {
       <form className="space-y-8 divide-y divide-gray-200" onSubmit={submit}>
         <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
           <div>
+
+            
             <div>
-              <h3 className="mt-1 max-w-3xl text-3xl text-white font-bold">
+              <h3 className="mt-4 max-w-3xl text-3xl text-white font-bold">
                 Mint
               </h3>
-              <p className="mt-1 max-w-2xl text-xs text-gray-00 font-light">
-                All creators receive 15% royalties on any resale of their work.
+              <p className="mt-1 max-w-2xl text-md text-gray-100 font-medium">
+                Creators will receive 15% royalties on all secondary sales with zero marketplace fees. 
               </p>
             </div>
 
             <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
-              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
+                <label
+                  htmlFor="cover_photo"
+                  className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
+                >
+                  Upload
+                </label>
+                <div className="mt-1 sm:mt-0 sm:col-span-2">
+                  <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-700 border-dashed">
+                    {media ? (
+                      <div>{media.name} ready!</div>
+                    ) : (
+                      <div className="space-y-1 text-center">
+                        <svg
+                          className="mx-auto h-12 w-12 text-gray-400"
+                          stroke="currentColor"
+                          fill="none"
+                          viewBox="0 0 48 48"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                        <div className="flex text-sm text-gray-600">
+                          <label
+                            htmlFor="file-upload"
+                            className="mt-4 w-full justify-center inline-flex items-center px-2 py-2 mb-2 border border-red-300 shadow-sm text-red-300 text-sm font-medium rounded-full text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                          >
+                            <span>Upload a file</span>
+                            <input
+                              id="file-upload"
+                              name="file-upload"
+                              type="file"
+                              className="sr-only"
+                              onChange={(e) => setMedia(e.target.files[0])}
+                            />
+                          </label>
+                        </div>
+                        <p className="text-lg text-gray-500">
+                          Upload .png, .jpg, .glb, .mp3, .mp4, .gif <strong className={'text-xl'}>up to 40MB.</strong>
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className={'text-white text-md font-regular mt-3'}>
+              {error &&
+                `File size too large! Keep in under 40MB please :).`}
+            </div>
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
                 <label
                   htmlFor="username"
                   className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
@@ -140,7 +211,7 @@ export default function Mint() {
                 </div>
               </div>
 
-              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
                 <label
                   htmlFor="about"
                   className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
@@ -163,7 +234,7 @@ export default function Mint() {
                 </div>
               </div>
 
-              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
                 <label
                   htmlFor="about"
                   className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
@@ -176,7 +247,7 @@ export default function Mint() {
                     name="about"
                     rows={3}
                     placeholder={'music, experimental, jazz'}
-                    className="max-w-lg shadow-sm block w-full focus:ring-red-500 focus:border-red-500 sm:text-sm border-gray-700 bg-gray-900"
+                    className="max-w-lg h-12 shadow-sm block w-full focus:ring-red-500 focus:border-red-500 sm:text-sm border-gray-700 bg-gray-900"
                     defaultValue={''}
                     value={tags}
                     onChange={(e) => setTags(e.target.value)}
@@ -187,59 +258,6 @@ export default function Mint() {
                 </div>
               </div>
 
-              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                <label
-                  htmlFor="cover_photo"
-                  className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
-                >
-                  Upload
-                </label>
-                <div className="mt-1 sm:mt-0 sm:col-span-2">
-                  <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed">
-                    {media ? (
-                      <div>{media.name} ready!</div>
-                    ) : (
-                      <div className="space-y-1 text-center">
-                        <svg
-                          className="mx-auto h-12 w-12 text-gray-400"
-                          stroke="currentColor"
-                          fill="none"
-                          viewBox="0 0 48 48"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                        <div className="flex text-sm text-gray-600">
-                          <label
-                            htmlFor="file-upload"
-                            className="mt-4 w-full justify-center inline-flex items-center px-2 py-2 border border-red-300 shadow-sm text-red-300 text-sm font-medium rounded-full text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                          >
-                            <span>Upload a file</span>
-                            <input
-                              id="file-upload"
-                              name="file-upload"
-                              type="file"
-                              className="sr-only"
-                              onChange={(e) => setMedia(e.target.files[0])}
-                            />
-                          </label>
-                        </div>
-                        <p className="pl-1 text-sm text-gray-300">
-                          or drag and drop
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          Upload .png, .jpg, .glb, .mp3, .mp4, .gif up to 40MB.
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
             </div>
 
             <button
@@ -273,9 +291,9 @@ export default function Mint() {
                 </svg>
               )}
             </button>
-            <div className={'text-white'}>
+            <div className={'text-white text-md font-regular mt-3'}>
               {error &&
-                `There was an issue. Please try again.`}
+                `Error occured.`}
             </div>
           </div>
         </div>
