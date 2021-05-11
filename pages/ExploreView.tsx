@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import NFTItemCard from '../components/NFTItemCard'
-import { Layout, Navbar } from '../components'
+import { Layout } from '../components'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import { Web3Provider } from '@ethersproject/providers'
-import { useWeb3React } from '@web3-react/core'
 import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../constants/gallery'
 import { getNetworkLibrary } from '../connectors'
 import NFT from '../types'
+import SearchBar from '../components/SearchBar'
 
 interface IProps {
   collection: boolean
@@ -17,19 +16,7 @@ interface IProps {
 const ExploreView: React.VFC<IProps> = ({collection}) => {
   const [openTab, setOpenTab] = useState<'active' | 'completed'>('active')
   const [nfts, setNfts] = useState< NFT[] >([])
-    // TODO: Pull item by slug from router
-
-  // state : preview & not preview 
-
-  // const {
-  //   chainId,
-  //   account,
-  //   activate,
-  //   active,
-  //   deactivate,
-  //   library,
-  // } = useWeb3React<Web3Provider>()
-
+  const [filteredNfts, setFilteredNfts] = useState< NFT[] >([])
   const router = useRouter()
   const { account } = router.query
   const [uri , setUri] = useState< undefined | string >()
@@ -38,6 +25,7 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
   const [offset, setOffset] = useState< number >(0)
   const [count, setCount] = useState< number >(collection ? 99 : 12)
   const [noMore, setNoMore] = useState< boolean >(false)
+  const [input, setInput] = useState('');
 
   async function getMetadata() {
     var meta = await axios.get(uri)
@@ -151,6 +139,23 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
   }
 
   useEffect(() => {
+    updateInput(input)
+  }, [nfts])
+
+  const updateInput = async (input) => {
+
+    if (input === '') {
+      setFilteredNfts(nfts)
+    }
+
+    const filtered = nfts.filter(nft => {
+     return JSON.stringify(nft).toLowerCase().includes(input.toLowerCase())
+    })
+    setInput(input);
+    setFilteredNfts(filtered);
+ }
+
+  useEffect(() => {
     console.log("ACCOUNT is here", account)
     if (!account && !!collection) return;
     loadTokens()
@@ -160,11 +165,14 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
 
   return (
     <div className={'flex flex-col space-y-4'}>
-   
+      <SearchBar 
+       input={input} 
+       onChange={updateInput}
+      />      
       <div className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto'}>
     
         {
-          nfts.map((item, key) => (
+          filteredNfts.map((item, key) => (
             <div key={key}>
               <NFTItemCard
                 nft={item}
