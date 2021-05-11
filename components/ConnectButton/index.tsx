@@ -37,7 +37,7 @@ export default function index() {
     <>
       <Modal status={"connect"} open={open} setOpen={setOpen} />
 
-      <div className={'mr-2'}>
+      <div className={'mr-2 hidden md:inline'}>
         <button 
           onClick={(chainId !== 137 && !!account) ? () => switchToPolygon() : () => setOpen(true)}
           className="px-6 w-full py-2 border border-red-300 hover:bg-gray-800 text-sm shadow-lg font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
