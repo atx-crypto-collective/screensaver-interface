@@ -11,7 +11,7 @@ export default function AccountId({address}) {
           console.log("DATA", data)
       }, [data])
     
-      if (loading || !data?.twitterId) return <>{!!address && shortenAddress(address)}</>
+      if (loading || !data?.twitterId) return <a href={`/collection/${address}`}>{!!address && shortenAddress(address)}</a>
       if (error) return <p>Error!</p>
       if (!data) return <p>Error!</p>
 
