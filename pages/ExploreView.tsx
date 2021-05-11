@@ -8,6 +8,8 @@ import { GALLERY_ABI } from '../constants/gallery'
 import { getNetworkLibrary } from '../connectors'
 import NFT from '../types'
 import SearchBar from '../components/SearchBar'
+import { shortenAddress } from "../utils";
+import AccountId from '../components/AccountId'
 
 interface IProps {
   collection: boolean
@@ -167,10 +169,12 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
     <div className={'flex flex-col space-y-4 '}>
 
       <div className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto mt-24 '}> 
-      <SearchBar
+      {!collection ? <SearchBar
        input={input} 
        onChange={updateInput}
-      />  
+      /> :
+        <div className={'absolute -mt-16 text-3xl font-bold'}><AccountId address={account.toString()}/></div>
+      }
         {
           filteredNfts.map((item, key) => (
             <div key={key}>
