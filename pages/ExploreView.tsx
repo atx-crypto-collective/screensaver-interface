@@ -164,13 +164,13 @@ const ExploreView: React.VFC<IProps> = ({collection}) => {
   if (loading) return <Layout><div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>Loading...</div></Layout>
 
   return (
-    <div className={'flex flex-col space-y-4'}>
-      <SearchBar 
+    <div className={'flex flex-col space-y-4 '}>
+
+      <div className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto mt-24 '}> 
+      <SearchBar
        input={input} 
        onChange={updateInput}
-      />      
-      <div className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto'}>
-    
+      />  
         {
           filteredNfts.map((item, key) => (
             <div key={key}>

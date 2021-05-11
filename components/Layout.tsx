@@ -16,7 +16,7 @@ const Layout: React.FC = ({ children }) => {
   
   return (
     <div 
-    className={'mt-32 space-y-4 lg:pb-20 bg-black h-full'}
+    className={'mt-32 pace-y-4 lg:pb-20 bg-black h-full'}
     >
         {/* <div className="animate-roll absolute ">
     <img src={require('../assets/elon.png')} className={'w-40 h-50'}/>
