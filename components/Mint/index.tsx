@@ -233,7 +233,7 @@ export default function Mint() {
                           or drag and drop
                         </p>
                         <p className="text-xs text-gray-500">
-                          Upload .png, .jpg, .glb, .mp3, .mp4, .gif up to 10MB.
+                          Upload .png, .jpg, .glb, .mp3, .mp4, .gif up to 40MB.
                         </p>
                       </div>
                     )}
