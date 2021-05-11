@@ -74,7 +74,6 @@ const NFTItemCard: React.FC<IProps> = ({
     <ImageCard
       nft={nft}
       srcUrl={nft.image}
-      // altText={`${nft.name} cover image`}
       footer={
         <div className={'py-3 bg-white bg-opacity-5 font-medium px-5'}>
           <div className={'flex flex-col h-20 justify-center'}>

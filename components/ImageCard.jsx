@@ -1,23 +1,13 @@
-// TODO: Lazy image loading?
-import React, {useState, useEffect} from 'react'
-import NFT from '../types'
+import React, { useState, useEffect } from 'react'
 import VideoPlayer from './MediaViewer/VideoPlayer'
 import AudioPlayer from './MediaViewer/AudioPlayer'
-import PdfViewer from './MediaViewer/PdfViewer'
 
-// export interface IProps {
-//   nft?: NFT
-//   srcUrl?: string
-//   altText: string
-//   footer?: React.ReactElement
-// }
-
-const ImageCard  = ({ srcUrl, nft, footer, children }) => {
+const ImageCard = ({ srcUrl, nft, footer, children }) => {
 
   const [type, setType] = useState('')
 
   useEffect(() => {
-    if (!nft?.media?.mimeType) return 
+    if (!nft?.media?.mimeType) return
     const typeArray = nft?.media?.mimeType.split('/')
     console.log("TYPE", typeArray[0])
     setType(typeArray[0])
@@ -26,7 +16,7 @@ const ImageCard  = ({ srcUrl, nft, footer, children }) => {
   return (
     <div
       className={
-        'border-white border-solid border border-gray-800 shadow-white max-w-sm text-white rounded-2xl '
+        'w-full border-white border-solid border border-gray-800 shadow-white max-w-sm text-white rounded-2xl '
       }
     >
       <div className={'flex flex-col mx-auto'}>
@@ -35,33 +25,33 @@ const ImageCard  = ({ srcUrl, nft, footer, children }) => {
         >
           <div className={'rounded-t-2xl overflow-hidden h-96'}>
 
-      { type === 'image' && (
-        <img src={nft.image} className={'w-full'}/>
-      )}
-      {type === 'video' && (
-        <VideoPlayer fileUrl={nft.animation_url} />
-      )}
-      {type === 'audio' && (
-        <AudioPlayer fileUrl={nft.animation_url} />
-      )}
+            {type === 'image' && (
+              <img src={nft.image} className={'w-full'} />
+            )}
+            {type === 'video' && (
+              <VideoPlayer fileUrl={nft.animation_url} controls={false}/>
+            )}
+            {type === 'audio' && (
+              <AudioPlayer fileUrl={nft.animation_url} />
+            )}
 
-      {(type === 'model' || type === '' || nft?.media?.mimeType === 'application/octet-stream') && (
-        <model-viewer
-        autoplay 
-        style={{width: '100%', height: '100%'}}
-        id={nft?.tokenId}
-        alt={nft?.name + nft?.tokenId}
-        src={nft?.animation_url}
-        auto-rotate
-        camera-controls
-        ar
-        ar-modes="webxr scene-viewer quick-look"
-        ar-scale="auto"
-        // ios-src={}
-      />
-      )}
+            {(type === 'model' || type === '' || nft?.media?.mimeType === 'application/octet-stream') && (
+              <model-viewer
+                autoplay
+                style={{ width: '100%', height: '100%' }}
+                id={nft?.tokenId}
+                alt={nft?.name + nft?.tokenId}
+                src={nft?.animation_url}
+                auto-rotate
+                camera-controls
+                ar
+                ar-modes="webxr scene-viewer quick-look"
+                ar-scale="auto"
+              // ios-src={}
+              />
+            )}
 
-      {/* {type === 'application' && (
+            {/* {type === 'application' && (
         <PdfViewer fileUrl={nft.animation_url} />
       )} */}
 

@@ -1,27 +1,14 @@
 import { useState, useEffect } from 'react'
-import { storage } from '../config/firebase'
-import axios from 'axios'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../constants/gallery'
 import Modal from '../components/Modal'
-import classNames from 'classnames'
-import { injected } from '../connectors'
-import { useRouter } from 'next/router'
-import { shortenAddress } from '../utils'
 import { getNetworkLibrary } from '../connectors'
 import SetSalePrice from './SetSalePrice'
 import AccountId from './AccountId'
 
 var utils = require('ethers').utils
-
-const parseTags = (tags: string): string[] => {
-  var tagString = tags.replace(/\s/g, '')
-  var tagArray = tagString.split(',')
-  console.log(tagArray)
-  return tagArray
-}
 
 // TODO: setQuantity
 interface IProps {
@@ -33,9 +20,6 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
   const {
     chainId,
     account,
-    activate,
-    active,
-    deactivate,
     library,
   } = useWeb3React<Web3Provider>()
   const [bid, setBid] = useState<number | undefined>()
@@ -43,12 +27,6 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
   const [ownerOf, setOwnerOf] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [open, setOpen] = useState<boolean>(false)
-
-  const handleSubmit = (evt) => {
-    evt.preventDefault()
-    // contract call
-    console.log('VALUE', value)
-  }
 
   // ownerOf
   async function checkOwnerOf() {
