@@ -23,7 +23,18 @@ const Layout: React.FC<IProps> = ({ children, url, image }) => {
     <div 
     className={'mt-32 pace-y-4 lg:pb-20 bg-black h-full'}
     >
+        <Head>
+          {/* Twitter */}
+          <meta name="twitter:card" content="summary" key="twcard" />
+          <meta name="twitter:creator" content={'@screensaverdao'} key="twhandle" />
 
+          {/* Open Graph */}
+          <meta property="og:url" content={url} key="ogurl" />
+          <meta property="og:image" content={image} key="ogimage" />
+          <meta property="og:site_name" content={'Screensaver Dao'} key="ogsitename" />
+          <meta property="og:title" content={'Screensaver'} key="ogtitle" />
+          <meta property="og:description" content={'Screensaver Dao Auction'} key="ogdesc" />
+        </Head>
       <Navbar />
       <div>{children}</div>
     </div>
