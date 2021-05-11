@@ -14,16 +14,16 @@ interface IProps {
 }
 
 const BiddingDetailView = ({ tokenId }) => {
-  const [value, setValue] = useState<string>()
+  // const [value, setValue] = useState<string>()
   const {
     account,
     library,
   } = useWeb3React<Web3Provider>()
-  const [bid, setBid] = useState<number | undefined>()
+  // const [bid, setBid] = useState<number | undefined>()
   const [approvalStatus, setApprovalStatus] = useState<boolean | undefined>()
   const [ownerOf, setOwnerOf] = useState<boolean>(false)
   const [approvalLoading, setApprovalLoading] = useState<boolean>(false)
-  const [bidLoading, setBidLoading] = useState<boolean>(false)
+  // const [bidLoading, setBidLoading] = useState<boolean>(false)
   const [nftOwner, setNFTOwner] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -46,11 +46,13 @@ const BiddingDetailView = ({ tokenId }) => {
 
   // ownerOf
   async function checkOwnerOf() {
+
     const contract = new ethers.Contract(
       process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )
+
     var ownerOf = await contract.ownerOf(tokenId)
 
     let filter = {
@@ -73,21 +75,27 @@ const BiddingDetailView = ({ tokenId }) => {
 
   // approve sales
   async function approve() {
+
+    // if (!account) return;
+
     setApprovalLoading(true)
+
     const contract = new ethers.Contract(
       process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       library.getSigner(account),
     )
+
     const tx = await contract.approve(
       process.env.NEXT_PUBLIC_CONTRACT_ID,
-      tokenId,
+      tokenId
     )
+
     setLoading(true)
 
     let filter = {
       address: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      topics: [approvalTopic],
+      topics: [approvalTopic]
     }
 
     getNetworkLibrary().on(filter, (result) => {
@@ -101,34 +109,35 @@ const BiddingDetailView = ({ tokenId }) => {
         setApprovalLoading(false)
       }
     })
+
   }
 
   // accept active bid
-  async function acceptBid() {
-    setBidLoading(true)
-    const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
-      GALLERY_ABI,
-      library.getSigner(account),
-    )
-    const tx = await contract.acceptBid()
+  // async function acceptBid() {
+  //   setBidLoading(true)
+  //   const contract = new ethers.Contract(
+  //     process.env.NEXT_PUBLIC_CONTRACT_ID,
+  //     GALLERY_ABI,
+  //     library.getSigner(account),
+  //   )
+  //   const tx = await contract.acceptBid()
 
-    let filter = {
-      address: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      topics: [transferTopic],
-    }
+  //   let filter = {
+  //     address: process.env.NEXT_PUBLIC_CONTRACT_ID,
+  //     topics: [transferTopic],
+  //   }
 
-    getNetworkLibrary().on(filter, (result) => {
-      console.log('APPROVED LISTENER', result.transactionHash, tx.hash)
-      if (result.transactionHash === tx.hash) {
-        getApproved()
-        getNetworkLibrary().off(filter, (offResult) => {
-          console.log('OFF', offResult)
-        })
-        setApprovalLoading(false)
-      }
-    })
-  }
+  //   getNetworkLibrary().on(filter, (result) => {
+  //     console.log('APPROVED LISTENER', result.transactionHash, tx.hash)
+  //     if (result.transactionHash === tx.hash) {
+  //       getApproved()
+  //       getNetworkLibrary().off(filter, (offResult) => {
+  //         console.log('OFF', offResult)
+  //       })
+  //       setApprovalLoading(false)
+  //     }
+  //   })
+  // }
 
   // component mount - check ownerOf and approval status
 

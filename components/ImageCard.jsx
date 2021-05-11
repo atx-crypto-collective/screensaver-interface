@@ -50,28 +50,6 @@ const ImageCard = ({ srcUrl, nft, footer, children }) => {
               // ios-src={}
               />
             )}
-
-            {/* {type === 'application' && (
-        <PdfViewer fileUrl={nft.animation_url} />
-      )} */}
-
-
-            {/* { !!nft?.image ? 
-            <img src={nft.image} alt={altText} className={'w-full'}/>
-            :
-            <model-viewer
-              style={{width: '100%', height: '100%'}}
-              id={nft?.tokenId}
-              alt={nft?.name + nft?.tokenId}
-              src={nft?.animation_url}
-              auto-rotate
-              camera-controls
-              ar
-              ar-modes="quick-look"
-              ar-scale="auto"
-              // ios-src={}
-            />
-            } */}
           </div>
           {children && <div>{children}</div>}
         </div>

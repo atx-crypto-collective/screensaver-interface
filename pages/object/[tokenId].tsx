@@ -17,7 +17,7 @@ import Head from 'next/head'
 const ItemDetailPage: React.VFC = () => {
   // TODO: Pull item by slug from router
 
-  // state : preview & not preview 
+  // state : preview & not preview
 
   const {
     chainId,
@@ -29,81 +29,95 @@ const ItemDetailPage: React.VFC = () => {
   } = useWeb3React<Web3Provider>()
 
   const router = useRouter()
-  const { tokenId , preview } = router.query
-  const [uri , setUri] = useState< undefined | string >()
-  const [loading , setLoading] = useState< boolean >(true)
-  const [metadata , setMetadata] = useState< NFT | undefined >()
+  const { tokenId, preview } = router.query
+  const [uri, setUri] = useState<undefined | string>()
+  const [loading, setLoading] = useState<boolean>(true)
+  const [metadata, setMetadata] = useState<NFT | undefined>()
   const [isPreview, setIsPreview] = useState(false)
   async function getMetadata() {
     var meta = await axios.get(uri)
-    console.log("METADDDAATA", meta)
+    console.log('METADDDAATA', meta)
     var tempMetadata = meta.data
     tempMetadata.creationDate = new Date(meta.data.creationDate).toString()
     setMetadata(tempMetadata)
   }
 
   async function getUri() {
-    const contract = new ethers.Contract(    
+    const contract = new ethers.Contract(
       process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
-      getNetworkLibrary()
+      getNetworkLibrary(),
     )
     var tokenUri = await contract.tokenURI(tokenId)
     setUri(tokenUri)
   }
 
   useEffect(() => {
-    if (!uri) return;
-    console.log("URI", uri)
+    if (!uri) return
+    console.log('URI', uri)
     getMetadata()
   }, [uri])
 
   useEffect(() => {
     console.log(metadata)
-    if (!metadata) return;
-    console.log("METADATA", metadata)
+    if (!metadata) return
+    console.log('METADATA', metadata)
     setLoading(false)
   }, [metadata])
 
   useEffect(() => {
-
-    console.log("PREVIEW", preview)
-    if (!tokenId) return;
+    console.log('PREVIEW', preview)
+    if (!tokenId) return
 
     if (!!preview) {
-      console.log("PREVIEW 2", preview)
+      console.log('PREVIEW 2', preview)
 
-      // add footer 
-      setUri("https://ipfs.io/ipfs/" + preview.toString())
+      // add footer
+      setUri('https://ipfs.io/ipfs/' + preview.toString())
       setIsPreview(true)
     } else {
-      console.log("HERE")
+      console.log('HERE')
       getUri()
       // console.log("PREVIEW 3", preview)
-
     }
-
   }, [tokenId, preview])
 
-  if (loading) return <Layout><div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>Loading...</div></Layout>
-  
+  if (loading)
+    return (
+      <Layout>
+        <div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>Loading...</div>
+      </Layout>
+    )
+
   return (
     <>
+      <Layout>
+        <Head>
+          {/* Twitter */}
+          <meta name="twitter:card" content="summary" key="twcard" />
+          <meta name="twitter:creator" content={'@screensaverdao'} key="twhandle" />
 
-    <Layout>
-      <div className={'md:mt-12 pb-8 w-11/12 mx-auto'}>
-        <div
-          className={
-            'md:p-3 max-w-xl mx-auto min-h-screen'
-          }
-        >
-          <ItemDetailView userIsAuthenticated itemListingState={'past'} metadata={metadata} preview={isPreview} hash={preview?.toString()}/>
+          {/* Open Graph */}
+          <meta property="og:url" content={'https://www.screensaver.world'} key="ogurl" />
+          <meta property="og:image" content={!!metadata.image ? metadata.image : metadata.animation_url} key="ogimage" />
+          <meta property="og:site_name" content={'Screensaver Dao'} key="ogsitename" />
+          <meta property="og:title" content={'Screensaver'} key="ogtitle" />
+          <meta property="og:description" content={'Screensaver Dao Auction'} key="ogdesc" />
+        </Head>
+        <div className={'md:mt-12 pb-8 w-11/12 mx-auto'}>
+          <div className={'md:p-3 max-w-xl mx-auto min-h-screen'}>
+            <ItemDetailView
+              userIsAuthenticated
+              itemListingState={'past'}
+              metadata={metadata}
+              preview={isPreview}
+              hash={preview?.toString()}
+            />
 
-          {!!tokenId && <BiddingDetailView tokenId={tokenId}/>}
-
+            {!!tokenId && <BiddingDetailView tokenId={tokenId} />}
+          </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
     </>
   )
 }
