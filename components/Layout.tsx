@@ -25,7 +25,7 @@ const Layout: React.FC<IProps> = ({ children, url, image }) => {
     >
         <Head>
           {/* Twitter */}
-          <meta name="twitter:summary_large_image" content="summary" key="twcard" />
+          <meta name="twitter:card" content="summary_large_image" key="twcard" />
           <meta name="twitter:creator" content={'@screensaverdao'} key="twhandle" />
 
           {/* Open Graph */}
