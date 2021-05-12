@@ -26,9 +26,9 @@ class MyDocument extends Document {
           {/* Open Graph */}
           {/* <meta property="og:url" content={`https://www.screensaver.world/gallery`} key="ogurl" /> */}
           {/* <meta property="og:image" content={''} key="ogimage" />
-          <meta property="og:site_name" content={'Screensaver Dao'} key="ogsitename" />
+          <meta property="og:site_name" content={'Screensaver Dao'} key="ogsitename" /> */}
           <meta property="og:title" content={'Screensaver Dao'} key="ogtitle" />
-          <meta property="og:description" content={'Screensaver Dao Auction'} key="ogdesc" /> */}
+          {/* <meta property="og:description" content={'Screensaver Dao Auction'} key="ogdesc" /> */}
         </Head>
         <body>
           <Main />

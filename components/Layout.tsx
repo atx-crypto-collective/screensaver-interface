@@ -3,15 +3,16 @@ import { Navbar } from '.'
 import Modal from './Modal'
 import { useWeb3React } from "@web3-react/core";
 import { useEffect } from 'react'
-import classNames from 'classnames'
+import NFT from '../types'
 import Head from 'next/head';
 
 interface IProps {
   url?: string
-  image?: string 
+  image?: string
+  metadata?: NFT
 }
 
-const Layout: React.FC<IProps> = ({ children, url, image }) => {
+const Layout: React.FC<IProps> = ({ children, metadata, image, url }) => {
   const [open, setOpen] = useState(false)
   const { account, chainId } = useWeb3React();
 
@@ -33,7 +34,7 @@ const Layout: React.FC<IProps> = ({ children, url, image }) => {
           <meta property="og:image" content={image} key="ogimage" />
           <meta property="og:site_name" content={'Screensaver Dao'} key="ogsitename" />
           <meta property="og:title" content={'Screensaver'} key="ogtitle" />
-          <meta property="og:description" content={'Screensaver Dao Auction'} key="ogdesc" />
+          <meta property="og:description" content={metadata.description} key="ogdesc" />
         </Head>
       <Navbar />
       <div>{children}</div>
