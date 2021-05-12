@@ -20,12 +20,12 @@ class MyDocument extends Document {
           />
 
           {/* Twitter */}
-          {/* <meta name="twitter:card" content="summary" key="twcard" />
-          <meta name="twitter:creator" content={'@screensaverdao'} key="twhandle" /> */}
+          <meta name="twitter:card" content="summary" key="twcard" />
+          <meta name="twitter:creator" content={'@screensaverdao'} key="twhandle" />
 
           {/* Open Graph */}
-          {/* <meta property="og:url" content={`https://www.screensaver.world/gallery`} key="ogurl" />
-          <meta property="og:image" content={''} key="ogimage" />
+          {/* <meta property="og:url" content={`https://www.screensaver.world/gallery`} key="ogurl" /> */}
+          {/* <meta property="og:image" content={''} key="ogimage" />
           <meta property="og:site_name" content={'Screensaver Dao'} key="ogsitename" />
           <meta property="og:title" content={'Screensaver Dao'} key="ogtitle" />
           <meta property="og:description" content={'Screensaver Dao Auction'} key="ogdesc" /> */}
