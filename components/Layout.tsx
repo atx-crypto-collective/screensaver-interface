@@ -26,8 +26,8 @@ const Layout: React.FC<IProps> = ({ children, metadata, image, url }) => {
     >
         <Head>
           {/* Twitter */}
-          <meta name="twitter:card" content="summary" key="twcard" />
-          <meta name="twitter:creator" content={'@screensaverdao'} key="twhandle" />
+          {/* <meta name="twitter:card" content="summary" key="twcard" />
+          <meta name="twitter:creator" content={'@screensaverdao'} key="twhandle" /> */}
 
           {/* Open Graph */}
           <meta property="og:url" content={url} key="ogurl" />
