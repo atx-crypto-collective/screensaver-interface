@@ -91,7 +91,7 @@ const ItemDetailPage: React.VFC = () => {
 
   return (
     <>
-      <Layout url={`https://www.screensaver.world/object/${tokenId}`} image={!!metadata.image ? metadata.image : metadata.animation_url} metadata={metadata}>
+      <Layout >
         <div className={'md:mt-12 pb-8 w-11/12 mx-auto'}>
           <div className={'md:p-3 max-w-xl mx-auto min-h-screen'}>
             <ItemDetailView

@@ -12,7 +12,7 @@ interface IProps {
   metadata?: NFT
 }
 
-const Layout: React.FC<IProps> = ({ children, metadata, image, url }) => {
+const Layout: React.FC<IProps> = ({ children }) => {
   const [open, setOpen] = useState(false)
   const { account, chainId } = useWeb3React();
 
@@ -24,18 +24,6 @@ const Layout: React.FC<IProps> = ({ children, metadata, image, url }) => {
     <div 
     className={'mt-32 pace-y-4 lg:pb-20 bg-black h-full'}
     >
-        <Head>
-          {/* Twitter */}
-          {/* <meta name="twitter:card" content="summary" key="twcard" />
-          <meta name="twitter:creator" content={'@screensaverdao'} key="twhandle" /> */}
-
-          {/* Open Graph */}
-          <meta property="og:url" content={url} key="ogurl" />
-          <meta property="og:image" content={image} key="ogimage" />
-          <meta property="og:site_name" content={'Screensaver Dao'} key="ogsitename" />
-          <meta property="og:title" content={'Screensaver'} key="ogtitle" />
-          <meta property="og:description" content={metadata.description} key="ogdesc" />
-        </Head>
       <Navbar />
       <div>{children}</div>
     </div>
