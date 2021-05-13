@@ -22,6 +22,10 @@ import { useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import logoImage from "./SCREENSAVER.png";
+import { Token, TokenAmount } from '@uniswap/sdk'
+import { ethers } from 'ethers'
+import { ERC20_ABI } from '../../../constants/abis/erc20'
+var utils = require('ethers').utils;
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -31,7 +35,31 @@ type State = 'initial' | 'search' | 'menu'
 
 const MobileNavbar: React.FC<IProps> = () => {
   const [state, setState] = useState<State>('initial')
-  const { account, chainId } = useWeb3React()
+  const [tokenBalance, setTokenBalance] = useState<number>(0)
+  const { account, chainId, library } = useWeb3React()
+
+  async function balanceOf() {
+
+    const contract = new ethers.Contract(
+      '0x580127f3F17516A945785b9485048ad22f036142',
+      ERC20_ABI,
+      library.getSigner(account),
+    )
+
+    var balance = await contract.balanceOf(account)
+    // var intBalance = balance.toString()
+    var intBalance = utils.formatEther(balance)
+    setTokenBalance(intBalance)
+    console.log("TOKEN BALANCE",  intBalance)
+
+  }
+
+  useEffect(() => {
+    if (!account) return; 
+    balanceOf()
+  }, [account])
+
+
 
   return (
     <div
@@ -57,6 +85,8 @@ const MobileNavbar: React.FC<IProps> = () => {
               </a>
           </div>          
           <div className={'flex space-x-3 items-center'}>
+            <div className="px-6 w-full py-2 border border-red-300 text-sm shadow-lg font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 focus:outline-none "
+ >{tokenBalance} SSD</div>
             <ConnectButton />
 
             <Menu as="div" className="ml-3 relative z-20">
@@ -151,24 +181,6 @@ const MobileNavbar: React.FC<IProps> = () => {
 
           </div>
         </div>
-        {/* {state === 'menu' && (
-          <div
-            className={
-              'absolute left-0 bg-black border-t-2 border-white border-opacity-10 w-full z-10 text-white py-6 overflow-scroll'
-            }
-          >
-            <div style={{ maxWidth: '80%' }} className={'mx-auto w-screen'}>
-            <NavigationLinks />
-            </div>
-            <div
-            className={
-              'py-6 mt-12 border-t border-white border-opacity-10 w-full text-center'
-            }
-          >
-            <button>Login</button>
-          </div>
-          </div>
-        )} */}
       </div>
 
       <Banner />
