@@ -84,9 +84,9 @@ const MobileNavbar: React.FC<IProps> = () => {
             </a>
           </div>
           <div className={'flex space-x-3 items-center'}>
-            {/* <div className="px-6 w-full py-2 border border-red-300 text-sm shadow-lg font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 focus:outline-none ">
+            <div className="px-6 w-full py-2 border border-red-300 text-sm shadow-lg font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 focus:outline-none ">
               {tokenBalance} SSD
-            </div> */}
+            </div>
             <ConnectButton />
 
             <Menu as="div" className="ml-3 relative z-20">
