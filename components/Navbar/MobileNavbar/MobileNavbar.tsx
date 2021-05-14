@@ -85,7 +85,7 @@ const MobileNavbar: React.FC<IProps> = () => {
           </div>
           <div className={'flex space-x-3 items-center'}>
             <div className="px-6 w-full py-2 border border-red-300 text-sm shadow-lg font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 focus:outline-none ">
-              {tokenBalance.toFixed(2)} SSD
+              {tokenBalance} SSD
             </div>
             <ConnectButton />
 
