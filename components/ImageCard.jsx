@@ -24,12 +24,13 @@ const ImageCard = ({ srcUrl, nft, footer, children }) => {
           className={'flex flex-col w-full mx-auto space-y-3'}
         >
           <div className={'rounded-t-2xl overflow-hidden h-96 bg-gray-900'}>
+            {type && <iframe className={'w-full h-96 '} src={nft.animation_url}></iframe>}
 
             {type === 'image' && (
               <img src={nft.image} className={'w-full'} />
             )}
             {type === 'video' && (
-              <VideoPlayer fileUrl={nft.animation_url} controls={false}/>
+              <VideoPlayer fileUrl={nft.animation_url} controls={false} />
             )}
             {type === 'audio' && (
               <AudioPlayer fileUrl={nft.animation_url} />

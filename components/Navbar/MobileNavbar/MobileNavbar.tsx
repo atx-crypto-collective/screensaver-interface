@@ -21,11 +21,11 @@ import { Web3Provider } from '@ethersproject/providers'
 import { useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-import logoImage from "./SCREENSAVER.png";
+import logoImage from './SCREENSAVER.png'
 import { Token, TokenAmount } from '@uniswap/sdk'
 import { ethers } from 'ethers'
 import { ERC20_ABI } from '../../../constants/abis/erc20'
-var utils = require('ethers').utils;
+var utils = require('ethers').utils
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -39,7 +39,6 @@ const MobileNavbar: React.FC<IProps> = () => {
   const { account, chainId, library } = useWeb3React()
 
   async function balanceOf() {
-
     const contract = new ethers.Contract(
       '0x580127f3F17516A945785b9485048ad22f036142',
       ERC20_ABI,
@@ -50,16 +49,13 @@ const MobileNavbar: React.FC<IProps> = () => {
     // var intBalance = balance.toString()
     var intBalance = utils.formatEther(balance)
     setTokenBalance(intBalance)
-    console.log("TOKEN BALANCE",  intBalance)
-
+    console.log('TOKEN BALANCE', intBalance)
   }
 
   useEffect(() => {
-    if (!account) return; 
+    if (!account) return
     balanceOf()
   }, [account])
-
-
 
   return (
     <div
@@ -75,18 +71,22 @@ const MobileNavbar: React.FC<IProps> = () => {
         >
           <div className={'flex'}>
             {/* <span className={'inline text-2xl mr-2'}>💊</span> */}
-              <a className={'font-serif text-2xl text-red-400 font-bold'} href={'/gallery'}>
-                <img
+            <a
+              className={'font-serif text-2xl text-red-400 font-bold'}
+              href={'/gallery'}
+            >
+              <img
                 src={logoImage}
                 alt={'Screen Saver'}
                 className={'cursor-pointer'}
                 width={200}
               />
-              </a>
-          </div>          
+            </a>
+          </div>
           <div className={'flex space-x-3 items-center'}>
-            <div className="px-6 w-full py-2 border border-red-300 text-sm shadow-lg font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 focus:outline-none "
- >{tokenBalance} SSD</div>
+            {/* <div className="px-6 w-full py-2 border border-red-300 text-sm shadow-lg font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 focus:outline-none ">
+              {tokenBalance} SSD
+            </div> */}
             <ConnectButton />
 
             <Menu as="div" className="ml-3 relative z-20">
@@ -134,19 +134,21 @@ const MobileNavbar: React.FC<IProps> = () => {
                           </a>
                         )}
                       </Menu.Item>
-                      {!!account && <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href={`/collection/${account}`}
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700',
-                            )}
-                          >
-                            Collection
-                          </a>
-                        )}
-                      </Menu.Item>}
+                      {!!account && (
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href={`/collection/${account}`}
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'block px-4 py-2 text-sm text-gray-700',
+                              )}
+                            >
+                              Collection
+                            </a>
+                          )}
+                        </Menu.Item>
+                      )}
                       <Menu.Item>
                         {({ active }) => (
                           <a
@@ -178,7 +180,6 @@ const MobileNavbar: React.FC<IProps> = () => {
                 </>
               )}
             </Menu>
-
           </div>
         </div>
       </div>
