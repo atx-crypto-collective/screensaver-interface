@@ -25,7 +25,7 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
   return (
     <div className={'min-h-96'}>
       { type === '' && <div>Loading...</div>}
-      { type && <iframe className={'w-full h-96 '} src={nft.animation_url}></iframe>}
+      {/* { type && <iframe className={'w-full h-96 '} src={nft.animation_url}></iframe>} */}
       { type === 'image' && (
         <img src={nft.image} className={'w-full'} />
       )}
