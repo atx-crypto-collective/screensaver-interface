@@ -44,10 +44,10 @@ export default function Mint() {
   async function postMetadata(imageUrl: string, mimeType: string) {
 
     var parsedTags = parseTags(tags)
-
+    var creationDate = new Date();
     const metadata = {
       name: title,
-      creationDate: media.lastModified,
+      creationDate: new Date(),
       uri: imageUrl,
       description: description,
       media: {
