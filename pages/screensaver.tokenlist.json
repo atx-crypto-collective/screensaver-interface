@@ -1,0 +1,30 @@
+
+{
+  "name": "Screensaver DAO",
+  "logoURI": "https://preview.redd.it/ws935ycrrs611.jpg?width=960&crop=smart&auto=webp&s=842608317cdbede07fe9a5d06fad03867d28c38e",
+  "keywords": [
+    "dap",
+    "governance"
+  ],
+  "tags": {
+  },
+  "timestamp": "2021-05-12T00:00:00+00:00",
+  "tokens": [
+    {
+      "chainId": 137,
+      "address": "0x580127f3f17516a945785b9485048ad22f036142",
+      "symbol": "SSD",
+      "name": "SSD Coin",
+      "decimals": 18,
+      "logoURI": "https://preview.redd.it/ws935ycrrs611.jpg?width=960&crop=smart&auto=webp&s=842608317cdbede07fe9a5d06fad03867d28c38e",
+      "tags": [
+        "governance"
+      ]
+    }
+  ],
+  "version": {
+    "major": 1,
+    "minor": 0,
+    "patch": 0
+  }
+}
