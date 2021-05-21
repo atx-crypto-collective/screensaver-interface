@@ -10,10 +10,31 @@ import NFT from '../types'
 import SearchBar from '../components/SearchBar'
 import { shortenAddress } from '../utils'
 import AccountId from '../components/AccountId'
+import { useQuery } from 'graphql-hooks'
 
 interface IProps {
   collection: boolean
 }
+
+
+
+const GALLERY_QUERY = `query HomePage($limit: Int) {
+  artworks(first: 20 skip: 0 orderBy:created orderDirection:desc) {
+    id
+    tags
+    descriptorUri
+    tokenId
+    description
+    name
+    imageUri
+    creator {
+      id
+    }
+    owner {
+      id
+    }
+  }
+}`
 
 const ExploreView: React.VFC<IProps> = ({ collection }) => {
   const [openTab, setOpenTab] = useState<'active' | 'completed'>('active')
@@ -22,12 +43,23 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
   const router = useRouter()
   const { account } = router.query
   const [uri, setUri] = useState<undefined | string>()
-  const [loading, setLoading] = useState<boolean>(true)
+  // const [loading, setLoading] = useState<boolean>(true)
   const [metadata, setMetadata] = useState<NFT | undefined>()
   const [offset, setOffset] = useState<number>(0)
   const [count, setCount] = useState<number>(collection ? 99 : 12)
   const [noMore, setNoMore] = useState<boolean>(false)
   const [input, setInput] = useState('')
+
+  const { loading, error, data } = useQuery(GALLERY_QUERY, {
+    variables: {
+      limit: 10
+    }
+  })
+
+  useEffect(() => {
+    console.log("DATA HERE IS", data)
+  }, [data])
+
 
   async function getMetadata() {
     var meta = await axios.get(uri)
@@ -39,7 +71,7 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
 
   async function loadTokens() {
     if (offset === 0) {
-      setLoading(true)
+      // setLoading(true)
     }
 
     const contract = new ethers.Contract(
@@ -90,7 +122,7 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
 
     // set new offset
     setOffset(lowRange)
-    setLoading(false)
+    // setLoading(false)
   }
 
   const getNFTs = async (range: number[]) => {
@@ -157,7 +189,9 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
     loadTokens()
   }, [account, collection])
 
-  // if (loading) return <Layout><div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>Loading...</div></Layout>
+  if (loading) return <Layout><div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>Loading...</div></Layout>
+  // if (loading) return 'Loading...'
+  // if (error) return 'Something Bad Happened'
 
   return (
     <div className={'flex flex-col space-y-4 '}>

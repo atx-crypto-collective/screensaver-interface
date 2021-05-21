@@ -30,6 +30,7 @@
     "classnames": "^2.2.6",
     "ethers": "^5.1.2",
     "firebase": "^8.4.1",
+    "graphql-hooks": "^5.1.1",
     "graphql-request": "^3.4.0",
     "moment": "^2.29.1",
     "next": "^10.1.3",

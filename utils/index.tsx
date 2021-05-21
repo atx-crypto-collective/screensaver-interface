@@ -2,11 +2,7 @@ import { getAddress } from '@ethersproject/address'
 import { AddressZero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
-import { ChainId } from '@uniswap/sdk'
 import { BigNumber } from 'ethers'
-
-import { POOL_ADDRESS } from '../constants'
-// import { PRIZE_POOL_INTERFACE } from '../constants/abis/prize-pool'
 
 export function isAddress(value: any): string | false {
   try {

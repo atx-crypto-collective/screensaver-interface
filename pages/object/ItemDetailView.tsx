@@ -1,9 +1,6 @@
 import React from 'react'
 import {
-  ImageWithActions,
-  ActionButton,
-  NFTItemDescription,
-  TransactionHistoryTable,
+  ImageWithActions
 } from '../../components'
 import NFT from '../../types'
 import MintButton from '../../components/MintButton'

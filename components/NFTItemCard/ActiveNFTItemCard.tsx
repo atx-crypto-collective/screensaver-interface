@@ -1,7 +1,6 @@
 import React from 'react'
 
 import ImageCard from '../ImageCard'
-import AuctionCountdownTextRow from '../AuctionCountdownTextRow'
 
 import { IProps } from './types'
 import { useState, useEffect } from 'react'
