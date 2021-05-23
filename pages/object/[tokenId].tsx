@@ -94,16 +94,14 @@ const ItemDetailPage: React.VFC = () => {
       <Layout >
         <Head>
           <title>Screensaver.world | Object #{}</title>
-          <meta name="description" content={metadata.description} />
           <meta property="og:title" content={metadata.name} key="title" />
+          <meta name="description" content={metadata.description} />
           <meta property="og:image" content={metadata.image} key="image" />
 
 
           <meta property="og:type" content="card" />
           <meta property="og:url" content={`https://screensaver.world/object/${tokenId}`} />
-          <meta property="og:title" content={metadata.name} />
           <meta property="og:description" content={metadata.description} />
-          <meta property="og:image" content={metadata.image} />
 
           <meta property="twitter:card" content="summary_large_image" />
           <meta property="twitter:url" content={`https://screensaver.world/object/${tokenId}`} />
