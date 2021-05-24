@@ -94,20 +94,16 @@ const ItemDetailPage: React.VFC = () => {
       <Layout >
         <Head>
           <title>Screensaver.world | Object #{}</title>
-          <meta property="og:title" content={metadata.name} key="title" />
+          <meta name="title" content={metadata.name} />
           <meta name="description" content={metadata.description} />
-          <meta property="og:image" content={metadata.image} key="image" />
 
-
-          <meta property="og:type" content="card" />
-          <meta property="og:url" content={`https://screensaver.world/object/${tokenId}`} />
+          <meta property="og:title" content={metadata.name} />
+          <meta property="og:image" content={metadata.image.replace('ipfs.io', 'cloudflare-ipfs.com')} />
           <meta property="og:description" content={metadata.description} />
+          <meta property="og:url" content={`https://www.screensaver.world/object/${tokenId}`} />
+          <meta property="og:type" content="website" />
 
-          <meta property="twitter:card" content="summary_large_image" />
-          <meta property="twitter:url" content={`https://screensaver.world/object/${tokenId}`} />
-          <meta property="twitter:title" content={metadata.name} />
-          <meta property="twitter:description" content={metadata.description} />
-          <meta property="twitter:image" content={metadata.image} />
+          <meta name="twitter:card" content="summary_large_image" />
         </Head>
 
         <div className={'md:mt-12 pb-8 w-11/12 mx-auto'}>
