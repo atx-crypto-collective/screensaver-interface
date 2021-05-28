@@ -19,14 +19,13 @@ interface IProps {
 
 
 const GALLERY_QUERY = `query HomePage($limit: Int) {
-  artworks(first: 20 skip: 0 orderBy:created orderDirection:desc) {
+  artworks(first: 20 skip: 0 orderBy:creationDate) {
     id
     tags
-    descriptorUri
     tokenId
     description
     name
-    imageUri
+    mediaUri
     creator {
       id
     }

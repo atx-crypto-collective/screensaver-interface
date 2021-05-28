@@ -9,7 +9,7 @@ const Provider = dynamic(() => import("../state/StoreProvider"), {
 });
 
 const client = new GraphQLClient({
-  url: 'https://api.thegraph.com/subgraphs/name/jsmellz/screensaver'
+  url: 'https://api.thegraph.com/subgraphs/name/jsmellz/screensaversub'
 })
 
 
