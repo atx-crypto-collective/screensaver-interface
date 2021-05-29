@@ -42,7 +42,7 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
   const { account } = router.query
   const [uri] = useState<undefined | string>()
   const [loading, setLoading] = useState<boolean>(true)
-  const [ setMetadata] = useState<NFT | undefined>()
+  const [metadata, setMetadata] = useState<NFT | undefined>()
   const [offset, setOffset] = useState<number>(0)
   const [count] = useState<number>(collection ? 99 : 12)
   const [noMore, setNoMore] = useState<boolean>(false)
