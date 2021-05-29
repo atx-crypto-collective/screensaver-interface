@@ -42,22 +42,22 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
   const router = useRouter()
   const { account } = router.query
   const [uri, setUri] = useState<undefined | string>()
-  // const [loading, setLoading] = useState<boolean>(true)
+  const [loading, setLoading] = useState<boolean>(true)
   const [metadata, setMetadata] = useState<NFT | undefined>()
   const [offset, setOffset] = useState<number>(0)
   const [count, setCount] = useState<number>(collection ? 99 : 12)
   const [noMore, setNoMore] = useState<boolean>(false)
   const [input, setInput] = useState('')
 
-  const { loading, error, data } = useQuery(GALLERY_QUERY, {
-    variables: {
-      limit: 10
-    }
-  })
+  // const { loading, error, data } = useQuery(GALLERY_QUERY, {
+  //   variables: {
+  //     limit: 10
+  //   }
+  // })
 
-  useEffect(() => {
-    console.log("DATA HERE IS", data)
-  }, [data])
+  // useEffect(() => {
+  //   console.log("DATA HERE IS", data)
+  // }, [data])
 
 
   async function getMetadata() {
@@ -121,7 +121,7 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
 
     // set new offset
     setOffset(lowRange)
-    // setLoading(false)
+    setLoading(false)
   }
 
   const getNFTs = async (range: number[]) => {
@@ -143,11 +143,13 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
         var metadata = await axios.get(uri)
         metadata.data.tokenId = id
         console.log(metadata)
+        var ownerOf = await contract.ownerOf(id)
+        console.log('COLLECTED THIS', account, ownerOf)
 
+        if (ownerOf === "0x000000000000000000000000000000000000dEaD") return null
+        
         if (collection) {
-          var ownerOf = await contract.ownerOf(id)
-          console.log('COLLECTED THIS', account, ownerOf)
-
+          
           if (ownerOf === account) {
             collectedNFTs.push(metadata.data)
           }
@@ -164,6 +166,7 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
     } else {
       setNfts([...nfts, ...filteredMeta.reverse()])
     }
+
   }
 
   useEffect(() => {
