@@ -58,6 +58,7 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
   //   console.log("DATA HERE IS", data)
   // }, [data])
 
+  console.log("ENV bRANCH", process.env.BRANCH)
 
   async function getMetadata() {
     var meta = await axios.get(uri)

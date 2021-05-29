@@ -18,3 +18,8 @@
   from = "/gallery/:gallery"
   to = "/gallery/:gallery"
   status = 200
+
+# you can also target a specific branch
+[context.v0.environment]
+  V0_ADDRESS = "address"
+  BRANCH = "v0" # TEST: should be deploy or something other than production
