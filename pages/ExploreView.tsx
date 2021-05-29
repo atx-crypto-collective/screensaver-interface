@@ -10,23 +10,25 @@ import NFT from '../types'
 import SearchBar from '../components/SearchBar'
 import { shortenAddress } from '../utils'
 import AccountId from '../components/AccountId'
-import { useQuery } from 'graphql-hooks'
+import { gql, useQuery , FetchPolicy } from "@apollo/client";
+import { GraphQLObjectType, GraphQLList, GraphQLID } from "graphql";
+
 
 interface IProps {
   collection: boolean
 }
 
-
-
-const GALLERY_QUERY = `query HomePage($limit: Int) {
-  artworks(first: 20 skip: 0 orderBy:created orderDirection:desc) {
+const GALLERY_QUERY = gql`query HomePage($skip: Int) {
+  artworks(first: 20 skip: $skip orderBy: creationDate orderDirection: desc) {
     id
     tags
-    descriptorUri
+    mimeType
+    size
+    mediaUri
     tokenId
     description
     name
-    imageUri
+    creationDate
     creator {
       id
     }
@@ -35,6 +37,14 @@ const GALLERY_QUERY = `query HomePage($limit: Int) {
     }
   }
 }`
+
+// const eventsType = new GraphQLObjectType({
+//   name: 'events',
+//   type: ,
+//   args: {
+//     containsId: new GraphQLList(GraphQLID)
+//   }
+// });
 
 const ExploreView: React.VFC<IProps> = ({ collection }) => {
   const [openTab, setOpenTab] = useState<'active' | 'completed'>('active')
@@ -50,9 +60,9 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
   const [noMore, setNoMore] = useState<boolean>(false)
   const [input, setInput] = useState('')
 
-  const { loading, error, data } = useQuery(GALLERY_QUERY, {
+  const { loading, error, data, fetchMore } = useQuery(GALLERY_QUERY, {
     variables: {
-      limit: 10
+      skip: 0
     }
   })
 
@@ -69,60 +79,88 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
     setMetadata(tempMetadata)
   }
 
+  const updateQuery = (previousResult, { fetchMoreResult }) => {
+    if (!fetchMoreResult) {
+        return previousResult;
+    }
+
+    console.log("FAetHY", fetchMoreResult)
+    const previousEdges = previousResult.edges;
+    const fetchMoreEdges = fetchMoreResult.edges;
+
+    fetchMoreResult.edges = [...previousEdges, ...fetchMoreEdges];
+
+    return { ...fetchMoreResult }
+}
+
   async function loadTokens() {
-    if (offset === 0) {
-      // setLoading(true)
-    }
 
-    const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
-      GALLERY_ABI,
-      getNetworkLibrary(),
-    )
+    console.log("FETCH MORE")
+    // if (fetchMore === undefined) return;
 
-    var totalSupply = await contract.totalSupply()
+    await fetchMore(
+      
+      {
+        variables: {
+      skip: 20
+    },
+    updateQuery
+    
+  })
+    
+    // if (offset === 0) {
+    //   // setLoading(true)
+    // }
 
-    var total = totalSupply.toNumber()
+    // const contract = new ethers.Contract(
+    //   process.env.NEXT_PUBLIC_CONTRACT_ID,
+    //   GALLERY_ABI,
+    //   getNetworkLibrary(),
+    // )
 
-    if (total <= count) {
-      setNoMore(true)
-    }
+    // var totalSupply = await contract.totalSupply()
 
-    var lowRange
-    var range
-    var result
+    // var total = totalSupply.toNumber()
 
-    if (offset === 0) {
-      lowRange = total - count
+    // if (total <= count) {
+    //   setNoMore(true)
+    // }
 
-      lowRange = lowRange <= 0 ? 0 : lowRange
+    // var lowRange
+    // var range
+    // var result
 
-      range = total - lowRange
+    // if (offset === 0) {
+    //   lowRange = total - count
 
-      result = new Array(range).fill(true).map((e, i) => i + 1 + lowRange)
-    } else {
-      lowRange = offset - count
+    //   lowRange = lowRange <= 0 ? 0 : lowRange
 
-      range = offset - lowRange
+    //   range = total - lowRange
 
-      result = new Array(range).fill(true).map((e, i) => i + 1 + lowRange)
-    }
+    //   result = new Array(range).fill(true).map((e, i) => i + 1 + lowRange)
+    // } else {
+    //   lowRange = offset - count
 
-    console.log(total, result)
+    //   range = offset - lowRange
 
-    if (result.filter((i) => i <= 0).length > 1) {
-      setNoMore(true)
-    }
+    //   result = new Array(range).fill(true).map((e, i) => i + 1 + lowRange)
+    // }
 
-    const filteredResults = result.filter((i) => i > 0)
+    // console.log(total, result)
 
-    console.log(total, filteredResults)
+    // if (result.filter((i) => i <= 0).length > 1) {
+    //   setNoMore(true)
+    // }
 
-    await getNFTs(filteredResults)
+    // const filteredResults = result.filter((i) => i > 0)
 
-    // set new offset
-    setOffset(lowRange)
-    // setLoading(false)
+    // console.log(total, filteredResults)
+
+    // await getNFTs(filteredResults)
+
+    // // set new offset
+    // setOffset(lowRange)
+    // // setLoading(false)
   }
 
   const getNFTs = async (range: number[]) => {
@@ -186,7 +224,7 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
   useEffect(() => {
     console.log('ACCOUNT is here', account)
     if (!account && !!collection) return
-    loadTokens()
+    // loadTokens()
   }, [account, collection])
 
   if (loading) return <Layout><div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>Loading...</div></Layout>
@@ -206,7 +244,7 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
           </div>
         )}
         {!loading
-          ? filteredNfts.map((item, key) => (
+          ? data.artworks.map((item, key) => (
               <div key={key}>
                 <NFTItemCard
                   nft={item}

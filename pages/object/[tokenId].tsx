@@ -98,7 +98,7 @@ const ItemDetailPage: React.VFC = () => {
           <meta name="description" content={metadata.description} />
 
           <meta property="og:title" content={metadata.name} />
-          <meta property="og:image" content={metadata.image.replace('ipfs.io', 'cloudflare-ipfs.com')} />
+          <meta property="og:image" content={metadata.media.mimeType.includes("image") && metadata.mediaUri} />
           <meta property="og:description" content={metadata.description} />
           <meta property="og:url" content={`https://www.screensaver.world/object/${tokenId}`} />
           <meta property="og:type" content="website" />

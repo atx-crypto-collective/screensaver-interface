@@ -8,7 +8,7 @@ export default function AccountId({address}) {
       )
 
       useEffect(() => {
-          console.log("DATA", data)
+          console.log("ADDRESS", address)
       }, [data])
     
       if (loading || !data?.twitterId) return <a href={`/collection/${address}`} className={'hover:bg-gray-800 p-2 -ml-2 rounded-md'}>{!!address && shortenAddress(address)}</a>

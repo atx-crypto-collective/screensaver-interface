@@ -11,6 +11,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.19",
     "@ethersproject/contracts": "^5.1.0",
     "@ethersproject/providers": "^5.1.0",
     "@ethersproject/solidity": "^5.1.0",
@@ -30,6 +31,7 @@
     "classnames": "^2.2.6",
     "ethers": "^5.1.2",
     "firebase": "^8.4.1",
+    "graphql": "^15.5.0",
     "graphql-hooks": "^5.1.1",
     "graphql-request": "^3.4.0",
     "moment": "^2.29.1",

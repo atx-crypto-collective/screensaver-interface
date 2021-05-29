@@ -75,7 +75,7 @@ const NFTItemCard: React.FC<IProps> = ({
     loading ? <div style={{width: '345px', height: '618px'}} ><div className={'animate-pulse w-full rounded-xl h-full'}><div className={'animation-pulse w-full rounded-xl h-full bg-gray-800'}/></div></div> :
     <ImageCard
       nft={nft}
-      srcUrl={nft.image}
+      srcUrl={nft.mediaUri}
       footer={
         <div className={'py-3 bg-white bg-opacity-5 font-medium px-5'}>
           <div className={'flex flex-col h-20 justify-center'}>
@@ -100,7 +100,7 @@ const NFTItemCard: React.FC<IProps> = ({
       >
         <h1 className={'font-bold text-2xl text-white mt-1'}>{nft.name}</h1>
         <h2 className={'font-medium text-l'}>
-          <AccountId address={creator} />
+          <AccountId address={nft.creator.id} />
         </h2>
       </div>
     </ImageCard>
