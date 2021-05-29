@@ -9,7 +9,7 @@ const ImageCard = ({ srcUrl, nft, footer, children }) => {
   useEffect(() => {
     if (!nft?.media?.mimeType) return
     const typeArray = nft?.media?.mimeType.split('/')
-    console.log("TYPE", typeArray[0])
+    // console.log("TYPE", typeArray[0])
     setType(typeArray[0])
   }, [])
 

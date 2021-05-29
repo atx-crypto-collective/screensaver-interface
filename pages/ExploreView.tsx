@@ -8,28 +8,25 @@ import { GALLERY_ABI } from '../constants/gallery'
 import { getNetworkLibrary } from '../connectors'
 import NFT from '../types'
 import SearchBar from '../components/SearchBar'
-import { shortenAddress } from '../utils'
 import AccountId from '../components/AccountId'
-import { useQuery } from 'graphql-hooks'
+import ReactPaginate from 'react-paginate-next';
+import { useWeb3React } from '@web3-react/core'
+import { Web3Provider } from '@ethersproject/providers'
+import { gql, useLazyQuery } from "@apollo/client";
 
 interface IProps {
   collection: boolean
 }
 
-
-
-const GALLERY_QUERY = `query HomePage($limit: Int) {
-  artworks(first: 20 skip: 0 orderBy:creationDate) {
+const GALLERY_QUERY = gql`query HomePage($account: String) {
+  account(id: $account) {
     id
-    tags
-    tokenId
-    description
-    name
-    mediaUri
-    creator {
+    address
+    isWhitelisted
+    created {
       id
     }
-    owner {
+    items {
       id
     }
   }
@@ -39,90 +36,85 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
   const [nfts, setNfts] = useState<NFT[]>([])
   const [filteredNfts, setFilteredNfts] = useState<NFT[]>([])
   const router = useRouter()
-  const { account } = router.query
+  const { account, page } = router.query
   const [uri] = useState<undefined | string>()
-  const [loading, setLoading] = useState<boolean>(true)
+  const [loadingState, setLoadingState] = useState<boolean>(true)
   const [metadata, setMetadata] = useState<NFT | undefined>()
   const [offset, setOffset] = useState<number>(0)
-  const [count] = useState<number>(collection ? 99 : 12)
+  const [count] = useState<number>(12)
   const [noMore, setNoMore] = useState<boolean>(false)
   const [input, setInput] = useState('')
+  const [pageNumber, setPageNumber] = useState(1)
+  const [pageCount, setPageCount] = useState(0)
+  const [totalSupply, setTotalSupply] = useState(0)
 
-  // const { loading, error, data } = useQuery(GALLERY_QUERY, {
-  //   variables: {
-  //     limit: 10
-  //   }
-  // })
+  const [loadCollection, { called, loading, data }] = useLazyQuery(
+    GALLERY_QUERY,
+    { variables: { account: account } }
+  );
 
-  // useEffect(() => {
-  //   console.log("DATA HERE IS", data)
-  // }, [data])
-
-  console.log("ENV bRANCH", process.env.BRANCH)
-
-  async function getMetadata() {
-    var meta = await axios.get(uri)
-    console.log(meta)
-    var tempMetadata = meta.data
-    tempMetadata.creationDate = new Date(meta.data.creationDate).toString()
-    setMetadata(tempMetadata)
+  const handlePageClick = (newPage: { selected: number }) => {
+    router.push(`/gallery?page=${newPage.selected + 1}`)
   }
 
-  async function loadTokens() {
-    if (offset === 0) {
-      // setLoading(true)
-    }
+  useEffect(() => {
+    if (!collection || !account) return
+    console.log("DATA", data)
+  }, [data])
 
+  useEffect(() => {
+    if (!collection || !account) return
+    loadCollection()
+  }, [account])
+
+  useEffect(() => {
+    console.log("PAGE", page)
+    if (collection) return;
+    if (!account && !!collection || pageCount === 0) return
+    loadTokens(!page ? 1 : (parseInt(page.toString())))
+  }, [pageCount, account, collection, pageNumber, page])
+
+  useEffect(() => {
+    if (collection) return;
+    getPageCount()
+  }, [])
+
+  async function getPageCount() {
     const contract = new ethers.Contract(
       process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )
 
-    //
-    var totalSupply = await contract.totalSupply()
+    var supply = await contract.totalSupply()
 
-    var total = totalSupply.toNumber()
+    var total_supply = supply.toNumber()
 
-    if (total <= count) {
-      setNoMore(true)
+    var page_count = Math.floor(total_supply/count)
+
+    setTotalSupply(total_supply)
+    setPageCount(page_count)
+  }
+
+  async function loadTokens(pageNumber) {
+
+    setLoadingState(true)
+
+    let lowRange = totalSupply - (count * pageNumber)
+
+    if (lowRange < 0) {
+      lowRange = 0 
     }
 
-    var lowRange
-    var range
-    var result
-
-    if (offset === 0) {
-      lowRange = total - count
-
-      lowRange = lowRange <= 0 ? 0 : lowRange
-
-      range = total - lowRange
-
-      result = new Array(range).fill(true).map((e, i) => i + 1 + lowRange)
-    } else {
-      lowRange = offset - count
-
-      range = offset - lowRange
-
-      result = new Array(range).fill(true).map((e, i) => i + 1 + lowRange)
-    }
-
-    console.log(total, result)
-
-    if (result.filter((i) => i <= 0).length > 1) {
-      setNoMore(true)
-    }
+    const result = new Array(count).fill(true).map((e, i) => i + 1 + lowRange)
 
     const filteredResults = result.filter((i) => i > 0)
 
-    console.log(total, filteredResults)
+    console.log("SUPPLIES", filteredResults)
 
     await getNFTs(filteredResults)
 
-    // set new offset
-    setOffset(lowRange)
-    setLoading(false)
+    setLoadingState(false)
   }
 
   const getNFTs = async (range: number[]) => {
@@ -138,14 +130,14 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
       range.map(async (id) => {
         if (id === 122) return null
         var uri = await contract.tokenURI(id)
-        console.log('URI HEERER', uri)
+        // console.log('URI HEERER', uri)
 
         if (uri.includes(undefined)) return null
         var metadata = await axios.get(uri)
         metadata.data.tokenId = id
-        console.log(metadata)
+        // console.log(metadata)
         var ownerOf = await contract.ownerOf(id)
-        console.log('COLLECTED THIS', account, ownerOf)
+        // console.log('COLLECTED THIS', account, ownerOf)
 
         if (ownerOf === "0x000000000000000000000000000000000000dEaD") return null
         
@@ -163,9 +155,9 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
     const filteredCollected = collectedNFTs.filter((i) => i !== null)
 
     if (collection) {
-      setNfts([...nfts, ...filteredCollected.reverse()])
+      setNfts(filteredCollected.reverse())
     } else {
-      setNfts([...nfts, ...filteredMeta.reverse()])
+      setNfts(filteredMeta.reverse())
     }
 
   }
@@ -186,14 +178,9 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
     setFilteredNfts(filtered)
   }
 
-  useEffect(() => {
-    console.log('ACCOUNT is here', account)
-    if (!account && !!collection) return
-    loadTokens()
-  }, [account, collection])
 
-  if (loading) return <Layout><div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>Loading...</div></Layout>
-  // if (loading) return 'Loading...'
+  if (loadingState) return <Layout><div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>loadingState...</div></Layout>
+  // if (loadingState) return 'loadingState...'
   // if (error) return 'Something Bad Happened'
 
   return (
@@ -208,7 +195,7 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
             <AccountId address={account.toString()} />
           </div>
         )}
-        {!loading
+        {!loadingState
           ? filteredNfts.map((item, key) => (
               <div key={key}>
                 <NFTItemCard
@@ -224,14 +211,20 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
             ))
           : <NFTItemCard loading={true} /> }
       </div>
-      {!noMore && (
-        <button
-          onClick={() => loadTokens()}
-          className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-        >
-          Load More
-        </button>
-      )}
+
+      {(!collection && pageCount > 1) && <ReactPaginate
+          previousLabel={'< previous'}
+          nextLabel={'next >'}
+          breakLabel={'...'}
+          breakClassName={'break-me'}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName={'flex w-full bg-red-400 justify-center items-center h-10'}
+          pageClassName={'flex justify-center items-center w-10 bg-white text-red-400 m-2'}
+          activeClassName={'active'}
+        />}
     </div>
   )
 }

@@ -43,7 +43,7 @@ const NFTItemCard: React.FC<IProps> = ({
 
     var currentBid = await contract.currentBidDetailsOfToken(nft.tokenId)
 
-    console.log('BID', utils.formatEther(currentBid[0]))
+    // console.log('BID', utils.formatEther(currentBid[0]))
     if (utils.formatEther(currentBid[0]) === '0.0') {
       setBid(undefined)
     } else {
@@ -60,7 +60,7 @@ const NFTItemCard: React.FC<IProps> = ({
     )
     var approvedAddress = await contract.getApproved(nft?.tokenId)
 
-    console.log('Approved Address', approvedAddress)
+    // console.log('Approved Address', approvedAddress)
 
     setForSale(approvedAddress === process.env.NEXT_PUBLIC_CONTRACT_ID)
   }
