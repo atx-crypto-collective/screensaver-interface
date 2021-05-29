@@ -36,14 +36,13 @@ const GALLERY_QUERY = `query HomePage($limit: Int) {
 }`
 
 const ExploreView: React.VFC<IProps> = ({ collection }) => {
-  const [openTab, setOpenTab] = useState<'active' | 'completed'>('active')
   const [nfts, setNfts] = useState<NFT[]>([])
   const [filteredNfts, setFilteredNfts] = useState<NFT[]>([])
   const router = useRouter()
   const { account } = router.query
-  const [uri, setUri] = useState<undefined | string>()
+  const [uri] = useState<undefined | string>()
   const [loading, setLoading] = useState<boolean>(true)
-  const [metadata, setMetadata] = useState<NFT | undefined>()
+  const [ setMetadata] = useState<NFT | undefined>()
   const [offset, setOffset] = useState<number>(0)
   const [count] = useState<number>(collection ? 99 : 12)
   const [noMore, setNoMore] = useState<boolean>(false)
