@@ -18,8 +18,8 @@ interface IProps {
   collection: boolean
 }
 
-const GALLERY_QUERY = gql`query HomePage($account: String) {
-  account(id: $account) {
+const GALLERY_QUERY = gql`query HomePage($id: String) {
+  account(id: $id) {
     id
     address
     isWhitelisted
@@ -50,7 +50,7 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
 
   const [loadCollection, { called, loading, data }] = useLazyQuery(
     GALLERY_QUERY,
-    { variables: { account: account } }
+    { variables: { id: account.toString().toLowerCase() } }
   );
 
   const handlePageClick = (newPage: { selected: number }) => {
@@ -60,6 +60,7 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
   useEffect(() => {
     if (!collection || !account) return
     console.log("DATA", data)
+    getCollectionIds(data)
   }, [data])
 
   useEffect(() => {
@@ -95,6 +96,19 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
     setTotalSupply(total_supply)
     setPageCount(page_count)
   }
+
+  async function getCollectionIds(data) {
+
+    //combine items and created arrays 
+    let ids = data.account.items.map(i => i.id).concat(data.account.created.map(i => i.id))
+    console.log("IDS", ids)
+    let filteredIds = ids.filter((v,i) => ids.indexOf(v) === i)
+
+    getNFTs(filteredIds)
+  }
+
+
+
 
   async function loadTokens(pageNumber) {
 
@@ -179,7 +193,7 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
   }
 
 
-  if (loadingState) return <Layout><div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>loadingState...</div></Layout>
+  if (loadingState) return <Layout><div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>loading...</div></Layout>
   // if (loadingState) return 'loadingState...'
   // if (error) return 'Something Bad Happened'
 

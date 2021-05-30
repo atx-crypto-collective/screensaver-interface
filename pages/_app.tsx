@@ -2,24 +2,25 @@ import 'tailwindcss/tailwind.css'
 import dynamic from 'next/dynamic'
 import '../styles/global.css'
 import { FirebaseTrackingProvider } from "../config/firebase";
-import { GraphQLClient, ClientContext } from 'graphql-hooks'
+import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
 const Provider = dynamic(() => import("../state/StoreProvider"), {
   ssr: false,
 });
 
-const client = new GraphQLClient({
-  url: 'https://api.thegraph.com/subgraphs/name/jsmellz/screensaversub'
-})
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  uri: "https://api.thegraph.com/subgraphs/name/jsmellz/screensaversub"
+});
 
 
 function MyApp({ Component, pageProps }) {
   return (
     <FirebaseTrackingProvider>
       <Provider>
-        <ClientContext.Provider value={client}>
+        <ApolloProvider client={client}>
           <Component {...pageProps} />
-        </ClientContext.Provider>
+        </ApolloProvider>
       </Provider>
     </FirebaseTrackingProvider>
 
