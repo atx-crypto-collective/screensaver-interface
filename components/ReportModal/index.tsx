@@ -1,7 +1,5 @@
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { Web3Provider } from '@ethersproject/providers'
-import { useWeb3React } from '@web3-react/core'
 import { useRouter } from 'next/router'
 import { db } from '../../config/firebase'
 
