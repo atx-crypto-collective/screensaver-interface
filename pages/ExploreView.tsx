@@ -65,7 +65,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
 
   useEffect(() => {
     if (!!created || !!owned) return;
-    if (!account || pageCount === 0) return
+    if (pageCount === 0) return
     loadTokens(!page ? 1 : (parseInt(page.toString())))
   }, [pageCount, account, pageNumber, page])
 
@@ -232,8 +232,8 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
       </div>
 
       {(!created && !owned && pageCount > 1) && <ReactPaginate
-          previousLabel={'< previous'}
-          nextLabel={'next >'}
+          previousLabel={''}
+          nextLabel={''}
           breakLabel={'...'}
           breakClassName={'break-me'}
           pageCount={pageCount}
