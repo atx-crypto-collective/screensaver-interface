@@ -46,7 +46,7 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
 
   const [loadCollection, { called, loading, data }] = useLazyQuery(
     GALLERY_QUERY,
-    { variables: { id: account.toString().toLowerCase() } }
+    { variables: { id: account?.toString()?.toLowerCase() } }
   );
 
   const handlePageClick = (newPage: { selected: number }) => {
