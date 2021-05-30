@@ -37,14 +37,10 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
   const [filteredNfts, setFilteredNfts] = useState<NFT[]>([])
   const router = useRouter()
   const { account, page } = router.query
-  const [uri] = useState<undefined | string>()
   const [loadingState, setLoadingState] = useState<boolean>(true)
-  const [metadata, setMetadata] = useState<NFT | undefined>()
-  const [offset, setOffset] = useState<number>(0)
   const [count] = useState<number>(12)
-  const [noMore, setNoMore] = useState<boolean>(false)
   const [input, setInput] = useState('')
-  const [pageNumber, setPageNumber] = useState(1)
+  const [pageNumber, ] = useState(1)
   const [pageCount, setPageCount] = useState(0)
   const [totalSupply, setTotalSupply] = useState(0)
 
@@ -106,9 +102,6 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
 
     getNFTs(filteredIds)
   }
-
-
-
 
   async function loadTokens(pageNumber) {
 
