@@ -100,7 +100,10 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
     console.log("IDS", ids)
     let filteredIds = ids.filter((v,i) => ids.indexOf(v) === i)
 
-    getNFTs(filteredIds)
+    await getNFTs(filteredIds)
+
+    setLoadingState(false)
+
   }
 
   async function loadTokens(pageNumber) {
