@@ -78,7 +78,7 @@ const ReportModal: React.VFC<IProps> = ({ open, setOpen }) => {
                       as="h3"
                       className="text-xl leading-6 font-bold text-gray-900 mb-6"
                     >
-                      Does this content violate or Terms of Service?
+                      Reported content will be removed immediately but blocked status can be voted on in Snapshot.
                     </Dialog.Title>
                   </div>
                 </div>
