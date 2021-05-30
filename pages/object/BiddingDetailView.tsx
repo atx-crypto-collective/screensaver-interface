@@ -39,7 +39,7 @@ const BiddingDetailView = ({ tokenId }) => {
     )
     var approvedAddress = await contract.getApproved(tokenId)
 
-    console.log('Approved Address', approvedAddress)
+    // console.log('Approved Address', approvedAddress)
 
     setApprovalStatus(approvedAddress === process.env.NEXT_PUBLIC_CONTRACT_ID)
   }
