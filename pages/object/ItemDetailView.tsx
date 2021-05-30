@@ -8,16 +8,12 @@ import AccountId from '../../components/AccountId'
 import moment from 'moment'
 
 interface IProps {
-  itemListingState: 'past' | 'active'
-  userIsAuthenticated: boolean
   metadata: NFT
   preview: boolean
   hash?: string
 }
 
 const ItemDetailView: React.VFC<IProps> = ({
-  userIsAuthenticated,
-  itemListingState,
   metadata,
   preview,
   hash,
@@ -25,6 +21,7 @@ const ItemDetailView: React.VFC<IProps> = ({
   return (
     <div className={'flex flex-col space-y-12'}>
       <div className={'flex flex-col space-y-8'}>
+
         <div className={'space-y-3 mt-3'}>
           <ImageWithActions 
             src={metadata.image}
@@ -35,7 +32,7 @@ const ItemDetailView: React.VFC<IProps> = ({
         </div>
 
         <div className={'px-3'}>
-        <div className={'absolute right-0 w-full border-t border-gray-800'} />
+        <div className={'absolute right-0 w-full border-t border-gray-800 '} />
 
           {preview && <MintButton hash={hash} />}
 

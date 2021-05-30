@@ -1,8 +1,8 @@
 import React from 'react'
 import AccountId from '../../components/AccountId'
 import BidRow from '../../components/BidRow'
+import ReportButton from '../../components/ReportButton'
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import { ethers } from 'ethers'
@@ -14,16 +14,13 @@ interface IProps {
 }
 
 const BiddingDetailView = ({ tokenId }) => {
-  // const [value, setValue] = useState<string>()
   const {
     account,
     library,
   } = useWeb3React<Web3Provider>()
-  // const [bid, setBid] = useState<number | undefined>()
   const [approvalStatus, setApprovalStatus] = useState<boolean | undefined>()
   const [ownerOf, setOwnerOf] = useState<boolean>(false)
   const [approvalLoading, setApprovalLoading] = useState<boolean>(false)
-  // const [bidLoading, setBidLoading] = useState<boolean>(false)
   const [nftOwner, setNFTOwner] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -38,8 +35,6 @@ const BiddingDetailView = ({ tokenId }) => {
       getNetworkLibrary(),
     )
     var approvedAddress = await contract.getApproved(tokenId)
-
-    // console.log('Approved Address', approvedAddress)
 
     setApprovalStatus(approvedAddress === process.env.NEXT_PUBLIC_CONTRACT_ID)
   }
@@ -76,8 +71,6 @@ const BiddingDetailView = ({ tokenId }) => {
   // approve sales
   async function approve() {
 
-    // if (!account) return;
-
     setApprovalLoading(true)
 
     const contract = new ethers.Contract(
@@ -112,35 +105,6 @@ const BiddingDetailView = ({ tokenId }) => {
 
   }
 
-  // accept active bid
-  // async function acceptBid() {
-  //   setBidLoading(true)
-  //   const contract = new ethers.Contract(
-  //     process.env.NEXT_PUBLIC_CONTRACT_ID,
-  //     GALLERY_ABI,
-  //     library.getSigner(account),
-  //   )
-  //   const tx = await contract.acceptBid()
-
-  //   let filter = {
-  //     address: process.env.NEXT_PUBLIC_CONTRACT_ID,
-  //     topics: [transferTopic],
-  //   }
-
-  //   getNetworkLibrary().on(filter, (result) => {
-  //     console.log('APPROVED LISTENER', result.transactionHash, tx.hash)
-  //     if (result.transactionHash === tx.hash) {
-  //       getApproved()
-  //       getNetworkLibrary().off(filter, (offResult) => {
-  //         console.log('OFF', offResult)
-  //       })
-  //       setApprovalLoading(false)
-  //     }
-  //   })
-  // }
-
-  // component mount - check ownerOf and approval status
-
   useEffect(() => {
     checkOwnerOf()
     getApproved()
@@ -158,6 +122,7 @@ const BiddingDetailView = ({ tokenId }) => {
           <strong>Collector: </strong>
           <AccountId address={nftOwner} />
         </div>
+        <div className={'mt-6'} ><ReportButton /></div>
 
         <div className={'mt-12'} />
 

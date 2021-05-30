@@ -1,32 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Layout, Navbar } from '../../components'
+import { Layout } from '../../components'
 import { useRouter } from 'next/router'
 import ItemDetailView from './ItemDetailView'
 import axios from 'axios'
-import { Web3Provider } from '@ethersproject/providers'
-import { useWeb3React } from '@web3-react/core'
 import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../../constants/gallery'
 import { getNetworkLibrary } from '../../connectors'
 import NFT from '../../types'
-import SetSalePrice from '../../components/SetSalePrice'
-import BidRow from '../../components/BidRow'
 import BiddingDetailView from './BiddingDetailView'
 import Head from 'next/head'
 
 const ItemDetailPage: React.VFC = () => {
-  // TODO: Pull item by slug from router
-
-  // state : preview & not preview
-
-  const {
-    chainId,
-    account,
-    activate,
-    active,
-    deactivate,
-    library,
-  } = useWeb3React<Web3Provider>()
 
   const router = useRouter()
   const { tokenId, preview } = router.query
@@ -34,9 +18,9 @@ const ItemDetailPage: React.VFC = () => {
   const [loading, setLoading] = useState<boolean>(true)
   const [metadata, setMetadata] = useState<NFT | undefined>()
   const [isPreview, setIsPreview] = useState(false)
+
   async function getMetadata() {
     var meta = await axios.get(uri)
-    console.log('METADDDAATA', meta)
     var tempMetadata = meta.data
     tempMetadata.creationDate = new Date(meta.data.creationDate).toString()
     setMetadata(tempMetadata)
@@ -61,24 +45,19 @@ const ItemDetailPage: React.VFC = () => {
   useEffect(() => {
     console.log(metadata)
     if (!metadata) return
-    console.log('METADATA', metadata)
     setLoading(false)
   }, [metadata])
 
   useEffect(() => {
-    console.log('PREVIEW', preview)
-    if (!tokenId) return
 
+    if (!tokenId) return
     if (!!preview) {
-      console.log('PREVIEW 2', preview)
 
       // add footer
       setUri('https://ipfs.io/ipfs/' + preview.toString())
       setIsPreview(true)
     } else {
-      console.log('HERE')
       getUri()
-      // console.log("PREVIEW 3", preview)
     }
   }, [tokenId, preview])
 
@@ -96,26 +75,21 @@ const ItemDetailPage: React.VFC = () => {
           <title>Screensaver.world | Object #{}</title>
           <meta name="title" content={metadata.name} />
           <meta name="description" content={metadata.description} />
-
           <meta property="og:title" content={metadata.name} />
           <meta property="og:image" content={metadata.image} />
           <meta property="og:description" content={metadata.description} />
           <meta property="og:url" content={`https://www.screensaver.world/object/${tokenId}`} />
           <meta property="og:type" content="website" />
-
           <meta name="twitter:card" content="summary_large_image" />
         </Head>
 
         <div className={'md:mt-12 pb-8 w-11/12 mx-auto'}>
           <div className={'md:p-3 max-w-xl mx-auto min-h-screen'}>
             <ItemDetailView
-              userIsAuthenticated
-              itemListingState={'past'}
               metadata={metadata}
               preview={isPreview}
               hash={preview?.toString()}
             />
-
             {!!tokenId && <BiddingDetailView tokenId={tokenId} />}
           </div>
         </div>

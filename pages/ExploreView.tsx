@@ -11,6 +11,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import AccountId from '../components/AccountId'
 import ReactPaginate from 'react-paginate-next'
 import { gql, useLazyQuery } from '@apollo/client'
+import { db } from "../config/firebase";
 
 interface IProps {
   created?: boolean
@@ -32,10 +33,8 @@ const GALLERY_QUERY = gql`
     }
   }
 `
-
 const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
   const [nfts, setNfts] = useState<NFT[]>([])
-  const [filteredNfts, setFilteredNfts] = useState<NFT[]>([])
   const router = useRouter()
   const { account, page } = router.query
   const [loadingState, setLoadingState] = useState<boolean>(true)
@@ -43,6 +42,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
   const [pageNumber] = useState(1)
   const [pageCount, setPageCount] = useState(0)
   const [totalSupply, setTotalSupply] = useState(0)
+  const [blocklist, setBlockList] = useState([])
 
   const [
     loadCollection,
@@ -50,6 +50,21 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
   ] = useLazyQuery(GALLERY_QUERY, {
     variables: { id: account?.toString()?.toLowerCase() },
   })
+
+  // Listen for changes to TRANSFERS
+  useEffect(() => {
+    const unsubscribe = db.collection("admin").doc('blacklist')
+    .onSnapshot((doc) => {
+      console.log("blocklist", doc.data())
+
+        if (!!doc.data()?.ids) {
+          console.log("blocklist", doc.data()?.ids)
+            setBlockList(doc.data()?.ids)
+        } 
+  
+    });
+    return () => unsubscribe(); // Make sure we un-register Firebase observers when the component unmounts.
+  }, []);
 
   const next = () => {
     if (!page || parseInt(!!page && page.toString()) >= pageCount) return
@@ -72,9 +87,10 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
   }, [data])
 
   useEffect(() => {
+    if (blocklist.length <= 1) return;
     if ((!created && !owned) || !account) return
     loadCollection()
-  }, [account])
+  }, [blocklist, account])
 
   useEffect(() => {
     if (!!created || !!owned) return
@@ -83,9 +99,10 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
   }, [pageCount, account, pageNumber, page])
 
   useEffect(() => {
+    if (blocklist.length <= 1) return;
     if (!!created || !!owned) return
     getPageCount()
-  }, [])
+  }, [blocklist])
 
   async function getPageCount() {
     const contract = new ethers.Contract(
@@ -105,6 +122,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
   }
 
   async function getCollectionIds(data) {
+
     let ids
 
     if (created) {
@@ -119,8 +137,6 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
     let ascending = filteredIds.sort(function (a, b) {
       return a - b
     })
-
-    console.log('IDS', ascending)
 
     await getNFTs(ascending)
 
@@ -140,8 +156,6 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
 
     const filteredResults = result.filter((i) => i > 0)
 
-    console.log('SUPPLIES', filteredResults)
-
     await getNFTs(filteredResults)
 
     setLoadingState(false)
@@ -153,14 +167,15 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
       GALLERY_ABI,
       getNetworkLibrary(),
     )
-    console.log('HERE 1')
 
     var allMetadata = await Promise.all(
       range.map(async (id) => {
-        if (id === 122) return null
+
+        // id blocklist 
+        if (blocklist.includes(id.toString())) return null
+
         var ownerOf = await contract.ownerOf(id)
-        if (ownerOf === '0x000000000000000000000000000000000000dEaD')
-          return null
+        if (ownerOf === '0x000000000000000000000000000000000000dEaD') return null
 
         var uri = await contract.tokenURI(id)
         if (uri.includes(undefined)) return null
@@ -171,27 +186,10 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
       }),
     )
 
-    console.log('HERE #', allMetadata)
     const filteredMeta = allMetadata.filter((i) => i !== null)
 
     setNfts(filteredMeta.reverse())
   }
-
-  // useEffect(() => {
-  //   updateInput(input)
-  // }, [nfts])
-
-  // const updateInput = async (input) => {
-  //   if (input === '') {
-  //     setFilteredNfts(nfts)
-  //   }
-
-  //   const filtered = nfts.filter((nft) => {
-  //     return JSON.stringify(nft).toLowerCase().includes(input.toLowerCase())
-  //   })
-  //   setInput(input)
-  //   setFilteredNfts(filtered)
-  // }
 
   if (loadingState)
     return (

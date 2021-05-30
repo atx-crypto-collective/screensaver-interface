@@ -52,7 +52,7 @@ module.exports = {
           900: '#120b0d',
         },
         red: {
-          50: '#A78BFA',
+          50: '#FF472D',
           100: '#A78BFA',
           200: '#A78BFA',
           300: '#A78BFA',
