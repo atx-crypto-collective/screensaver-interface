@@ -5,8 +5,13 @@
   status = 200
 
 [[redirects]]
-  from = "/collection/:collection"
-  to = "/collection/[account].html?object=:account"
+  from = "/created/:created"
+  to = "/created/[account].html?object=:account"
+  status = 200
+
+  [[redirects]]
+  from = "/owned/:owned"
+  to = "/owned/[account].html?object=:account"
   status = 200
 
 [[redirects]]
