@@ -10,12 +10,11 @@ import NFT from '../types'
 import SearchBar from '../components/SearchBar'
 import AccountId from '../components/AccountId'
 import ReactPaginate from 'react-paginate-next';
-import { useWeb3React } from '@web3-react/core'
-import { Web3Provider } from '@ethersproject/providers'
 import { gql, useLazyQuery } from "@apollo/client";
 
 interface IProps {
-  collection: boolean
+  created?: boolean
+  owned?: boolean
 }
 
 const GALLERY_QUERY = gql`query HomePage($id: String) {
@@ -32,7 +31,7 @@ const GALLERY_QUERY = gql`query HomePage($id: String) {
   }
 }`
 
-const ExploreView: React.VFC<IProps> = ({ collection }) => {
+const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
   const [nfts, setNfts] = useState<NFT[]>([])
   const [filteredNfts, setFilteredNfts] = useState<NFT[]>([])
   const router = useRouter()
@@ -54,25 +53,24 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
   }
 
   useEffect(() => {
-    if (!collection || !account) return
+    if ((!created && !owned) || !account || !data) return
     console.log("DATA", data)
     getCollectionIds(data)
   }, [data])
 
   useEffect(() => {
-    if (!collection || !account) return
+    if ((!created && !owned) || !account) return
     loadCollection()
   }, [account])
 
   useEffect(() => {
-    console.log("PAGE", page)
-    if (collection) return;
-    if (!account && !!collection || pageCount === 0) return
+    if (!!created || !!owned) return;
+    if (!account || pageCount === 0) return
     loadTokens(!page ? 1 : (parseInt(page.toString())))
-  }, [pageCount, account, collection, pageNumber, page])
+  }, [pageCount, account, pageNumber, page])
 
   useEffect(() => {
-    if (collection) return;
+    if (!!created || !!owned) return;
     getPageCount()
   }, [])
 
@@ -95,12 +93,22 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
 
   async function getCollectionIds(data) {
 
-    //combine items and created arrays 
-    let ids = data.account.items.map(i => i.id).concat(data.account.created.map(i => i.id))
-    console.log("IDS", ids)
-    let filteredIds = ids.filter((v,i) => ids.indexOf(v) === i)
+    let ids;
 
-    await getNFTs(filteredIds)
+    if (created) {
+      ids = data.account.created.map(i => i.id)
+    }
+
+    if (owned) {
+      ids = data.account.items.map(i => i.id)
+    }
+
+    let filteredIds = ids.filter((v,i) => ids.indexOf(v) === i)
+    let ascending = filteredIds.sort(function(a, b){return a-b});
+
+    console.log("IDS", ascending)
+
+    await getNFTs(ascending)
 
     setLoadingState(false)
 
@@ -151,24 +159,24 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
 
         if (ownerOf === "0x000000000000000000000000000000000000dEaD") return null
         
-        if (collection) {
+        // if (collection) {
           
-          if (ownerOf === account) {
-            collectedNFTs.push(metadata.data)
-          }
-        }
+        //   if (ownerOf === account) {
+        //     collectedNFTs.push(metadata.data)
+        //   }
+        // }
         return metadata.data
       }),
     )
 
     const filteredMeta = allMetadata.filter((i) => i !== null)
-    const filteredCollected = collectedNFTs.filter((i) => i !== null)
+    // const filteredCollected = collectedNFTs.filter((i) => i !== null)
 
-    if (collection) {
-      setNfts(filteredCollected.reverse())
-    } else {
+    // if (created || owned) {
+    //   setNfts(filteredCollected.reverse())
+    // } else {
       setNfts(filteredMeta.reverse())
-    }
+    // }
 
   }
 
@@ -198,11 +206,12 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
       <div
         className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto mt-24 '}
       >
-        {!collection ? (
+        {(!created && !owned) ? (
           <SearchBar input={input} onChange={updateInput} />
         ) : (
           <div className={'absolute -mt-16 text-3xl font-bold'}>
             <AccountId address={account.toString()} />
+    
           </div>
         )}
         {!loadingState
@@ -222,7 +231,7 @@ const ExploreView: React.VFC<IProps> = ({ collection }) => {
           : <NFTItemCard loading={true} /> }
       </div>
 
-      {(!collection && pageCount > 1) && <ReactPaginate
+      {(!created && !owned && pageCount > 1) && <ReactPaginate
           previousLabel={'< previous'}
           nextLabel={'next >'}
           breakLabel={'...'}
