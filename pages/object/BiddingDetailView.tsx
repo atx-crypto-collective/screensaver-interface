@@ -1,7 +1,6 @@
 import React from 'react'
 import AccountId from '../../components/AccountId'
 import BidRow from '../../components/BidRow'
-import ReportButton from '../../components/ReportButton'
 import { useState, useEffect } from 'react'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
@@ -30,20 +29,20 @@ const BiddingDetailView = ({ tokenId }) => {
   // get approved
   async function getApproved() {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_V1_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )
     var approvedAddress = await contract.getApproved(tokenId)
 
-    setApprovalStatus(approvedAddress === process.env.NEXT_PUBLIC_CONTRACT_ID)
+    setApprovalStatus(approvedAddress === process.env.NEXT_PUBLIC_V1_CONTRACT_ID)
   }
 
   // ownerOf
   async function checkOwnerOf() {
 
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_V1_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )
@@ -51,7 +50,7 @@ const BiddingDetailView = ({ tokenId }) => {
     var ownerOf = await contract.ownerOf(tokenId)
 
     let filter = {
-      address: process.env.NEXT_PUBLIC_CONTRACT_ID,
+      address: process.env.NEXT_PUBLIC_V1_CONTRACT_ID,
       topics: [transferTopic],
     }
 
@@ -74,20 +73,20 @@ const BiddingDetailView = ({ tokenId }) => {
     setApprovalLoading(true)
 
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_V1_CONTRACT_ID,
       GALLERY_ABI,
       library.getSigner(account),
     )
 
     const tx = await contract.approve(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_V1_CONTRACT_ID,
       tokenId
     )
 
     setLoading(true)
 
     let filter = {
-      address: process.env.NEXT_PUBLIC_CONTRACT_ID,
+      address: process.env.NEXT_PUBLIC_V1_CONTRACT_ID,
       topics: [approvalTopic]
     }
 
@@ -122,8 +121,6 @@ const BiddingDetailView = ({ tokenId }) => {
           <strong>Collector: </strong>
           <AccountId address={nftOwner} />
         </div>
-        <div className={'mt-6'} ><ReportButton /></div>
-
         <div className={'mt-12'} />
 
         {!approvalStatus ? (

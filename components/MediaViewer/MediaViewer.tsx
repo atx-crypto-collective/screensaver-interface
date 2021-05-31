@@ -27,7 +27,7 @@ const MediaViewer: React.VFC<IProps> = ({
         <AudioPlayer fileUrl={fileUrl} coverImageUrl={coverImageUrl} />
       )}
       {type === 'pdf' && (
-        <PdfViewer fileUrl={fileUrl} coverImageUrl={coverImageUrl} />
+        <PdfViewer fileUrl={fileUrl} />
       )}
     </div>
   )

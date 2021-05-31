@@ -9,6 +9,7 @@ import { getNetworkLibrary } from '../../connectors'
 import NFT from '../../types'
 import BiddingDetailView from './BiddingDetailView'
 import Head from 'next/head'
+import ReportButton from '../../components/ReportButton'
 
 const ItemDetailPage: React.VFC = () => {
 
@@ -28,7 +29,7 @@ const ItemDetailPage: React.VFC = () => {
 
   async function getUri() {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_V1_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )
@@ -91,6 +92,9 @@ const ItemDetailPage: React.VFC = () => {
               hash={preview?.toString()}
             />
             {!!tokenId && <BiddingDetailView tokenId={tokenId} />}
+
+            <div className={'mt-6'} ><ReportButton /></div>
+
           </div>
         </div>
       </Layout>

@@ -1,7 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-// import { CheckIcon } from '@heroicons/react/outline'
+import { PdfViewer } from '../components/MediaViewer'
 import { shortenAddress, getSigner } from '../utils'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
@@ -66,6 +66,53 @@ const SwitchView = () => {
     )
 }
 
+const TosView = () => {
+
+  const {
+    chainId,
+    account,
+  } = useWeb3React<Web3Provider>()
+
+  async function switchToPolygon() {
+    injected.getProvider().then(provider => {
+      provider
+        .request({
+          method: 'wallet_addEthereumChain',
+          params: [POLYGON_MAINNET_PARAMS]
+        })
+        .catch((error: any) => {
+          console.log(error)
+        })
+    })
+  }
+
+
+    return (
+        <div className={'m-4'}>
+        <div className={'h-96'}>
+            <div className="mt-3 text-center sm:mt-5">
+            <Dialog.Title
+                as="h3"
+                className="text-xl leading-6 font-bold text-gray-900 mb-6"
+            >
+            Terms of Service
+            </Dialog.Title>
+            </div>
+        </div>
+            {/* <div className="mt-5 sm:mt-5"> */}
+        <PdfViewer fileUrl={''}/>
+            <button
+          type="button"
+          onClick={switchToPolygon}
+          className="inline-flex items-center px-6 py-3 shadow-sm text-base font-medium rounded-md text-white bg-red-300"
+        >
+          Accept
+        </button>
+
+        </div>
+    )
+}
+
 interface ConnectIProps {
   setOpen: (open: boolean) => void
 }
@@ -126,8 +173,8 @@ function ModalViews({ status, setOpen }) {
               return <ConnectView setOpen={setOpen} />;
             case 'switch-network':
                 return <SwitchView />;
-                // case 'error':
-                //     return <ConnectView />;
+                case 'tos':
+                return <TosView />;
                     default:
               return null;
           }
@@ -137,7 +184,8 @@ function ModalViews({ status, setOpen }) {
   }
 
 const Modal: React.VFC<IProps> = ({ status, open, setOpen }) => {
-    const { account, chainId } = useWeb3React<Web3Provider>()
+
+  const { account, chainId } = useWeb3React<Web3Provider>()
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -177,11 +225,11 @@ const Modal: React.VFC<IProps> = ({ status, open, setOpen }) => {
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <div className="inline-block align-bottom bg-white rounded-sm px-4 pt-5 pb-4 text-center overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
-            
-            {chainId !== 137 && <ModalViews status={"switch-network"} setOpen={setOpen} /> }
-            {(chainId === 137 && !account) && <ModalViews status={"connect"} setOpen={setOpen} />}
-            {(chainId === 137 && !!account) && <ModalViews status={status} setOpen={setOpen} />}
+            <div className="inline-block align-bottom bg-white rounded-sm h-full px-4 pt-5 pb-4 text-center shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
+
+              {chainId !== 137 && <ModalViews status={"switch-network"} setOpen={setOpen} /> }
+              {(chainId === 137 && !account) && <ModalViews status={"connect"} setOpen={setOpen} />}
+              {(chainId === 137 && !!account) && <ModalViews status={status} setOpen={setOpen} />}
             
             </div>
           </Transition.Child>

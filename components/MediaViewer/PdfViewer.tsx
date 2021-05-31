@@ -2,23 +2,14 @@ import React from 'react'
 
 interface IProps {
   fileUrl: string
-  coverImageUrl: string
 }
 
-const PdfViewer: React.VFC<IProps> = ({ fileUrl, coverImageUrl }) => {
+const PdfViewer: React.VFC<IProps> = ({ fileUrl }) => {
   return (
-    <div className={'relative'}>
-      <img
-        src={coverImageUrl}
-        alt={'cover photo'}
-        className={'blur-sm filter object-fill'}
-      />
-      <span
-        className={'top-4 absolute shadow-xl w-full text-center text-red-400'}
-      >
-        PDF viewer here
-      </span>
-    </div>
+        <iframe
+          src="https://firebasestorage.googleapis.com/v0/b/lilnif.appspot.com/o/FILE_6428.pdf?alt=media&token=4e6f8cce-0765-4716-9e2c-efb27ca180fd"
+          className={'w-screen h-screen'}
+        ></iframe>
   )
 }
 
