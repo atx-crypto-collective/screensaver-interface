@@ -16,6 +16,7 @@ import { db } from "../config/firebase";
 interface IProps {
   created?: boolean
   owned?: boolean
+  admin?: boolean
 }
 
 const GALLERY_QUERY = gql`
@@ -33,7 +34,7 @@ const GALLERY_QUERY = gql`
     }
   }
 `
-const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
+const ExploreView: React.VFC<IProps> = ({ created, owned, admin}) => {
   const [nfts, setNfts] = useState<NFT[]>([])
   const router = useRouter()
   const { account, page } = router.query
@@ -51,56 +52,61 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
     variables: { id: account?.toString()?.toLowerCase() },
   })
 
-  // Listen for changes to TRANSFERS
+  // check reports for 
   useEffect(() => {
-    const unsubscribe = db.collection("admin").doc('blacklist')
-    .onSnapshot((doc) => {
-      console.log("blocklist", doc.data())
+    const unsubscribe = db.collection("reported")
+    .onSnapshot((reportsSnapshot) => {
+      if (reportsSnapshot.empty) return;
+      let ids = [];
+      reportsSnapshot.forEach((doc) => {
+        ids.push(parseInt(doc.id))
+      });
+      loadReports(ids)
 
-        if (!!doc.data()?.ids) {
-          console.log("blocklist", doc.data()?.ids)
-            setBlockList(doc.data()?.ids)
-        } 
-  
     });
     return () => unsubscribe(); // Make sure we un-register Firebase observers when the component unmounts.
   }, []);
 
+  async function loadReports(ids: number[]) {
+    setLoadingState(true)
+    await getNFTs(ids)
+    setLoadingState(false)
+  }
+
   const next = () => {
     if (!page || parseInt(!!page && page.toString()) >= pageCount) return
-    router.push(`/gallery?page=${parseInt(!!page && page.toString()) + 1}`)
+    router.push(`?page=${parseInt(!!page && page.toString()) + 1}`)
   }
 
   const previous = () => {
     if (!page || parseInt(!!page && page.toString()) <= 1) return
-    router.push(`/gallery?page=${parseInt(!!page && page.toString()) - 1}`)
+    router.push(`?page=${parseInt(!!page && page.toString()) - 1}`)
   }
 
   const handlePageClick = (newPage: { selected: number }) => {
-    router.push(`/gallery?page=${newPage.selected + 1}`)
+    router.push(`?page=${newPage.selected + 1}`)
   }
 
   useEffect(() => {
-    if ((!created && !owned) || !account || !data) return
-    console.log('DATA', data)
+    if ((!created && !owned && !admin) || !account || !data) return
     getCollectionIds(data)
   }, [data])
 
   useEffect(() => {
     if (blocklist.length <= 1) return;
-    if ((!created && !owned) || !account) return
+    if ((!created && !owned && !admin) || !account) return
     loadCollection()
   }, [blocklist, account])
 
   useEffect(() => {
-    if (!!created || !!owned) return
+    if (!!created || !!owned || !!admin) return
     if (pageCount === 0) return
     loadTokens(!page ? 1 : parseInt(page.toString()))
   }, [pageCount, account, pageNumber, page])
 
   useEffect(() => {
     if (blocklist.length <= 1) return;
-    if (!!created || !!owned) return
+    if (!!created || !!owned || !!admin) return
     getPageCount()
   }, [blocklist])
 
@@ -199,18 +205,23 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
     )
 
   return (
-    <div className={'flex flex-col space-y-4 '}>
-      <div
-        className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto mt-24 '}
-      >
-        {!created && !owned ? (
-          <></>
-        ) : (
-          // <SearchBar input={input} onChange={updateInput} />
-          <div className={'absolute -mt-16 text-3xl font-bold'}>
-            <AccountId address={account.toString()} />
+    <>
+            {
+            created && <div className={'flex items-center justify-center text-2xl font-light h-16'}>
+            CREATED&nbsp; <AccountId address={account.toString()} />
           </div>
-        )}
+          }
+{
+            owned && <div className={'flex items-center justify-center text-2xl font-light h-16'}>
+            OWNED&nbsp; <AccountId address={account.toString()} />
+          </div>
+          }
+     
+    <div className={'flex flex-col space-y-4'}>
+      
+      <div
+        className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto mt-8'}
+      >
         {!loadingState ? (
           nfts.map((item, key) => (
             <div key={key}>
@@ -269,6 +280,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
         </div>
       )}
     </div>
+    </>
   )
 }
 

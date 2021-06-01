@@ -50,22 +50,12 @@ const BiddingDetailView = ({ tokenId }) => {
 
     var ownerOf = await contract.ownerOf(tokenId)
 
-    let filter = {
-      address: process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
-      topics: [transferTopic],
-    }
-
-    const transfers = await contract.queryFilter(filter, 13905194, 13906194)
-
-    console.log('TRANSFERS', transfers)
-
     setNFTOwner(ownerOf)
-
-    console.log('Owner of', ownerOf)
 
     if (ownerOf !== account) return
 
     setOwnerOf(true)
+    
   }
 
   // approve sales
@@ -122,7 +112,6 @@ const BiddingDetailView = ({ tokenId }) => {
           <strong>Collector: </strong>
           <AccountId address={nftOwner} />
         </div>
-        <div className={'mt-6'} ><ReportButton /></div>
 
         <div className={'mt-12'} />
 
