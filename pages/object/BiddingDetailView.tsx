@@ -9,10 +9,6 @@ import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../../constants/gallery'
 import { getNetworkLibrary } from '../../connectors'
 
-interface IProps {
-  tokenId: string
-}
-
 const BiddingDetailView = ({ tokenId }) => {
   const {
     account,
