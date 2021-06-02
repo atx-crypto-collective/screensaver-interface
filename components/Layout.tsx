@@ -22,11 +22,6 @@ const Layout: React.FC<IProps> = ({ children }) => {
 
   return (
     <div className={'mt-32 pace-y-4 lg:pb-20 bg-black h-full relative'}>
-      <div className="animate-roll absolute ">
-        <img src={require('../assets/neo.png')} className={'w-40 h-64'} />
-        <p>❤️❤️ SRRY MINTING TEMPORARILY DISABLED. HAVE A NICE DAY. 😀</p>
-      </div>
-
       <Navbar />
       <div>{children}</div>
     </div>
