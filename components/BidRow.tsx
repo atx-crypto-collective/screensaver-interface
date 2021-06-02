@@ -5,7 +5,6 @@ import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../constants/gallery'
 import Modal from '../components/Modal'
 import { getNetworkLibrary } from '../connectors'
-import SetSalePrice from './SetSalePrice'
 import AccountId from './AccountId'
 
 var utils = require('ethers').utils
