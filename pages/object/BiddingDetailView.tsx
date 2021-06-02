@@ -57,11 +57,7 @@ const BiddingDetailView = ({ tokenId }) => {
 
     const transfers = await contract.queryFilter(filter, 13905194, 13906194)
 
-    console.log('TRANSFERS', transfers)
-
     setNFTOwner(ownerOf)
-
-    console.log('Owner of', ownerOf)
 
     if (ownerOf !== account) return
 
@@ -92,12 +88,10 @@ const BiddingDetailView = ({ tokenId }) => {
     }
 
     getNetworkLibrary().on(filter, (result) => {
-      console.log('APPROVED LISTENER', result.transactionHash, tx.hash)
       if (result.transactionHash === tx.hash) {
         getApproved()
         setLoading(false)
         getNetworkLibrary().off(filter, (offResult) => {
-          console.log('OFF', offResult)
         })
         setApprovalLoading(false)
       }

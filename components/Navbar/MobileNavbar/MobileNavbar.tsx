@@ -49,7 +49,6 @@ const MobileNavbar: React.FC<IProps> = () => {
     // var intBalance = balance.toString()
     var intBalance = utils.formatEther(balance)
     setTokenBalance(intBalance)
-    console.log('TOKEN BALANCE', intBalance)
   }
 
   useEffect(() => {

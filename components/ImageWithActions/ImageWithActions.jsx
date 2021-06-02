@@ -18,7 +18,6 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
   useEffect(() => {
     if (!nft?.media?.mimeType) return
     const typeArray = nft?.media?.mimeType.split('/')
-    console.log("TYPEm", typeArray[0])
     setType(typeArray[0])
   }, [nft])
 

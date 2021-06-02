@@ -29,10 +29,6 @@ export default function index() {
     })
   }
 
-  useEffect(() => {
-    console.log("CHAIN ID", chainId)
-  }, [account])
-
   return (
     <>
       <Modal status={"connect"} open={open} setOpen={setOpen} />

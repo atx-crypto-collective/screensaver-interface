@@ -55,10 +55,8 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
   useEffect(() => {
     const unsubscribe = db.collection("admin").doc('blacklist')
     .onSnapshot((doc) => {
-      console.log("blocklist", doc.data())
 
         if (!!doc.data()?.ids) {
-          console.log("blocklist", doc.data()?.ids)
             setBlockList(doc.data()?.ids)
         } 
   
@@ -82,7 +80,6 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
 
   useEffect(() => {
     if ((!created && !owned) || !account || !data) return
-    console.log('DATA', data)
     getCollectionIds(data)
   }, [data])
 

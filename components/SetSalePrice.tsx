@@ -26,33 +26,20 @@ const SetSalePrice: React.VFC<IProps> = ({ onUpdate, tokenId, sale = true }) => 
   const {
     chainId,
     account,
-    activate,
-    active,
-    deactivate,
     library,
   } = useWeb3React<Web3Provider>()
   const [loading, setLoading] = useState<boolean>(false)
-  const [bidder, setBidder] = useState<string | undefined>()
-  const [ownerOf, setOwnerOf] = useState<boolean>(false)
   const [open, setOpen] = useState<boolean>(false)
-  let transferTopic = ethers.utils.id('Transfer(address,address,uint256)')
-
-  const handleSubmit = (evt) => {
-    evt.preventDefault()
-    // contract call
-    console.log('VALUE', value)
-  }
 
   // accept active bid
   async function createBid() {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
       GALLERY_ABI,
       library.getSigner(account),
     )
 
     const big = utils.parseEther(value) 
-    console.log("VALUE AT CREATE BID CALL", value, big)
     let overrides = {
       // To convert Ether to Wei:
       value: utils.parseEther(value) // ether in this case MUST be a string

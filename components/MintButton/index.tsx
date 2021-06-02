@@ -32,7 +32,7 @@ const index: React.FC<IProps> = ({ hash }) => {
 
   async function createToken(uri: string) {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
       GALLERY_ABI,
       library.getSigner(account),
     )
@@ -44,26 +44,22 @@ const index: React.FC<IProps> = ({ hash }) => {
     let topic = ethers.utils.id('Transfer(address,address,uint256)')
 
     let filter = {
-      address: process.env.NEXT_PUBLIC_CONTRACT_ID,
+      address: process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
       topics: [topic, null, ethers.utils.hexZeroPad(account, 32)],
     }
 
     getNetworkLibrary().on(filter, (result) => {
-      console.log('MINTAGE', result, tx.hash)
       if (result.transactionHash === tx.hash) {
         goToNFT()
         getNetworkLibrary().off(filter, (offResult) => {
-          console.log('OFF', offResult)
         })
       }
     })
-
-    console.log('URI', uri)
   }
 
   async function goToNFT() {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
       GALLERY_ABI,
       library.getSigner(account),
     )
@@ -79,13 +75,12 @@ const index: React.FC<IProps> = ({ hash }) => {
     let topic = ethers.utils.id('Transfer(address,address,uint256)')
 
     let filter = {
-      address: process.env.NEXT_PUBLIC_CONTRACT_ID,
+      address: process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
       topics: [topic],
     }
 
     return () => {
       getNetworkLibrary().off(filter, (offResult) => {
-        console.log('OFF', offResult)
       })
     }
   }, [])

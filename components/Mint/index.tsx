@@ -22,7 +22,6 @@ export default function Mint() {
 
   // check if file size is too large
   useEffect(() => {
-    console.log("MEDIA", media)
     if (media?.size > 40000000) {
       return setError(true)
     }
@@ -58,8 +57,6 @@ export default function Mint() {
       creator: account
     }
 
-    console.log("META", metadata)
-
     try {
       const metadataUri = await axios.post(uri, metadata)
 
@@ -91,8 +88,6 @@ export default function Mint() {
 
         // get metadata of file to get file type 
         const metadata = await fileRef.getMetadata()
-
-        console.log("META", metadata, )
 
         if (metadata.size > 40000000) {
           return setError(true)

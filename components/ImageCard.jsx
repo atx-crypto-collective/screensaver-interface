@@ -9,7 +9,6 @@ const ImageCard = ({ srcUrl, nft, footer, children }) => {
   useEffect(() => {
     if (!nft?.media?.mimeType) return
     const typeArray = nft?.media?.mimeType.split('/')
-    // console.log("TYPE", typeArray[0])
     setType(typeArray[0])
   }, [])
 
@@ -48,7 +47,6 @@ const ImageCard = ({ srcUrl, nft, footer, children }) => {
                 ar
                 ar-modes="webxr scene-viewer quick-look"
                 ar-scale="auto"
-              // ios-src={}
               />
             )}
           </div>

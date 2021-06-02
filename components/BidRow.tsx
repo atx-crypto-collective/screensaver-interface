@@ -31,13 +31,11 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
   // ownerOf
   async function checkOwnerOf() {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )
     var ownerOf = await contract.ownerOf(tokenId)
-
-    console.log('Owner of', ownerOf)
 
     if (ownerOf !== account) return
 
@@ -47,14 +45,13 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
   // get current bids
   async function currentBids() {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )
 
     var currentBid = await contract.currentBidDetailsOfToken(tokenId)
 
-    console.log(currentBid)
     if (utils.formatEther(currentBid[0]) === '0.0') {
       setBid(undefined)
       setBidder(currentBid[1])
@@ -67,7 +64,7 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
   // accept active bid
   async function acceptBid() {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
       GALLERY_ABI,
       library.getSigner(account),
     )
@@ -84,7 +81,7 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
   // cancel active bid
   async function cancelBid() {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
       GALLERY_ABI,
       library.getSigner(account),
     )
