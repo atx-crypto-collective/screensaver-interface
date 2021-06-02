@@ -9,11 +9,19 @@ import { getNetworkLibrary } from '../../../connectors'
 import NFT from '../../../types'
 import BiddingDetailView from './BiddingDetailView'
 import Head from 'next/head'
+<<<<<<< HEAD
 import ReportButton from '../../../components/ReportButton'
 import BurnButton from '../../../components/BurnButton'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import { db, auth } from '../../../config/firebase'
+=======
+import ReportButton from '../../components/ReportButton'
+import BurnButton from '../../components/BurnButton'
+import { Web3Provider } from '@ethersproject/providers'
+import { useWeb3React } from '@web3-react/core'
+import { db, auth } from '../../config/firebase'
+>>>>>>> 951cff55fb89c5572019365c523e37980a3bc0a1
 
 const ReportItem = ({ report }) => {
   return (
@@ -51,7 +59,11 @@ const ItemDetailPage: React.VFC = () => {
   // ownerOf
   async function checkOwnerOf() {
     const contract = new ethers.Contract(
+<<<<<<< HEAD
       process.env.NEXT_PUBLIC_CONTRACT_ID,
+=======
+      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
+>>>>>>> 951cff55fb89c5572019365c523e37980a3bc0a1
       GALLERY_ABI,
       getNetworkLibrary(),
     )
@@ -73,13 +85,21 @@ const ItemDetailPage: React.VFC = () => {
         if (!doc.exists) return
         if (!doc?.data().tickets) return
         setReports(doc?.data().tickets)
+<<<<<<< HEAD
         if (!doc?.data().status) return
+=======
+        if (!doc?.data().status) return 
+>>>>>>> 951cff55fb89c5572019365c523e37980a3bc0a1
         setReportStatus(doc?.data().status)
       })
   }
 
   useEffect(() => {
+<<<<<<< HEAD
     if (!tokenId) return
+=======
+    if (!tokenId) return;
+>>>>>>> 951cff55fb89c5572019365c523e37980a3bc0a1
     getReports(tokenId)
   }, [tokenId])
 
@@ -96,7 +116,7 @@ const ItemDetailPage: React.VFC = () => {
 
   async function getUri() {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )
@@ -146,7 +166,11 @@ const ItemDetailPage: React.VFC = () => {
           <meta property="og:description" content={metadata.description} />
           <meta
             property="og:url"
+<<<<<<< HEAD
             content={`https://www.screensaver.world/v1/object/${tokenId}`}
+=======
+            content={`https://www.screensaver.world/object/${tokenId}`}
+>>>>>>> 951cff55fb89c5572019365c523e37980a3bc0a1
           />
           <meta property="og:type" content="website" />
           <meta name="twitter:card" content="summary_large_image" />
@@ -154,6 +178,7 @@ const ItemDetailPage: React.VFC = () => {
 
         <div className={'md:mt-12 pb-8 w-11/12 mx-auto'}>
           <div className={'md:p-3 max-w-xl mx-auto min-h-screen'}>
+
             <ItemDetailView
               metadata={metadata}
               preview={isPreview}
@@ -167,6 +192,7 @@ const ItemDetailPage: React.VFC = () => {
               <ReportButton />
             </div>
 
+<<<<<<< HEAD
             {isSignedIn && (
               <>
                 <div className="bg-white shadow p-2 text-black sm:rounded-lg mt-10">
@@ -184,6 +210,22 @@ const ItemDetailPage: React.VFC = () => {
                 )}
               </>
             )}
+=======
+            {isSignedIn && <>
+            <div className="bg-white shadow p-2 text-black sm:rounded-lg mt-10">
+              {`Report Status: ${reportStatus}`}
+            </div>
+
+            <div className="bg-white shadow overflow-hidden sm:rounded-lg mt-10">
+              <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
+                {reports.map((report, key) => (
+                  <ReportItem report={report} key={key}/>
+                ))}
+              </div>
+            </div>
+            </>}
+
+>>>>>>> 951cff55fb89c5572019365c523e37980a3bc0a1
           </div>
         </div>
       </Layout>
