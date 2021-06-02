@@ -1,13 +1,12 @@
 import React from 'react'
-import AccountId from '../../../components/AccountId'
-import BidRow from '../../../components/BidRow'
-import ReportButton from '../../../components/ReportButton'
+import AccountId from '../../components/AccountId'
+import BidRow from '../../components/BidRow'
 import { useState, useEffect } from 'react'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import { ethers } from 'ethers'
-import { GALLERY_ABI } from '../../../constants/gallery'
-import { getNetworkLibrary } from '../../../connectors'
+import { GALLERY_ABI } from '../../constants/gallery'
+import { getNetworkLibrary } from '../../connectors'
 
 interface IProps {
   tokenId: string
