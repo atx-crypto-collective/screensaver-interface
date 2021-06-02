@@ -122,7 +122,8 @@ const BiddingDetailView = ({ tokenId }) => {
           <strong>Collector: </strong>
           <AccountId address={nftOwner} />
         </div>
-        <div className={'mt-6'} ><ReportButton /></div>
+        
+        {/* <div className={'mt-6'} ><ReportButton /></div> */}
 
         <div className={'mt-12'} />
 
