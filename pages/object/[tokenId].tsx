@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { Layout } from '../../components'
+import { Layout } from '../../../components'
 import { useRouter } from 'next/router'
 import ItemDetailView from './ItemDetailView'
 import axios from 'axios'
 import { ethers } from 'ethers'
-import { GALLERY_ABI } from '../../constants/gallery'
-import { getNetworkLibrary } from '../../connectors'
-import NFT from '../../types'
+import { GALLERY_ABI } from '../../../constants/gallery'
+import { getNetworkLibrary } from '../../../connectors'
+import NFT from '../../../types'
 import BiddingDetailView from './BiddingDetailView'
 import Head from 'next/head'
-import ReportButton from '../../components/ReportButton'
-import BurnButton from '../../components/BurnButton'
+import ReportButton from '../../../components/ReportButton'
+import BurnButton from '../../../components/BurnButton'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
-import { db, auth } from '../../config/firebase'
+import { db, auth } from '../../../config/firebase'
 
 const ReportItem = ({ report }) => {
   return (
@@ -51,7 +51,7 @@ const ItemDetailPage: React.VFC = () => {
   // ownerOf
   async function checkOwnerOf() {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )
@@ -73,13 +73,13 @@ const ItemDetailPage: React.VFC = () => {
         if (!doc.exists) return
         if (!doc?.data().tickets) return
         setReports(doc?.data().tickets)
-        if (!doc?.data().status) return 
+        if (!doc?.data().status) return
         setReportStatus(doc?.data().status)
       })
   }
 
   useEffect(() => {
-    if (!tokenId) return;
+    if (!tokenId) return
     getReports(tokenId)
   }, [tokenId])
 
@@ -96,7 +96,7 @@ const ItemDetailPage: React.VFC = () => {
 
   async function getUri() {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )
@@ -146,7 +146,7 @@ const ItemDetailPage: React.VFC = () => {
           <meta property="og:description" content={metadata.description} />
           <meta
             property="og:url"
-            content={`https://www.screensaver.world/object/${tokenId}`}
+            content={`https://www.screensaver.world/v1/object/${tokenId}`}
           />
           <meta property="og:type" content="website" />
           <meta name="twitter:card" content="summary_large_image" />
@@ -154,7 +154,6 @@ const ItemDetailPage: React.VFC = () => {
 
         <div className={'md:mt-12 pb-8 w-11/12 mx-auto'}>
           <div className={'md:p-3 max-w-xl mx-auto min-h-screen'}>
-
             <ItemDetailView
               metadata={metadata}
               preview={isPreview}
@@ -168,20 +167,23 @@ const ItemDetailPage: React.VFC = () => {
               <ReportButton />
             </div>
 
-            {isSignedIn && <>
-            <div className="bg-white shadow p-2 text-black sm:rounded-lg mt-10">
-              {`Report Status: ${reportStatus}`}
-            </div>
+            {isSignedIn && (
+              <>
+                <div className="bg-white shadow p-2 text-black sm:rounded-lg mt-10">
+                  {`Report Status: ${reportStatus}`}
+                </div>
 
-            <div className="bg-white shadow overflow-hidden sm:rounded-lg mt-10">
-              <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
-                {reports.map((report, key) => (
-                  <ReportItem report={report} key={key}/>
-                ))}
-              </div>
-            </div>
-            </>}
-
+                {!preview && (
+                  <div className="bg-white shadow overflow-hidden sm:rounded-lg mt-10">
+                    <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
+                      {reports.map((report, key) => (
+                        <ReportItem report={report} key={key} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
       </Layout>

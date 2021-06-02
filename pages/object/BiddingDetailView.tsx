@@ -1,13 +1,13 @@
 import React from 'react'
-import AccountId from '../../components/AccountId'
-import BidRow from '../../components/BidRow'
-import ReportButton from '../../components/ReportButton'
+import AccountId from '../../../components/AccountId'
+import BidRow from '../../../components/BidRow'
+import ReportButton from '../../../components/ReportButton'
 import { useState, useEffect } from 'react'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import { ethers } from 'ethers'
-import { GALLERY_ABI } from '../../constants/gallery'
-import { getNetworkLibrary } from '../../connectors'
+import { GALLERY_ABI } from '../../../constants/gallery'
+import { getNetworkLibrary } from '../../../connectors'
 
 interface IProps {
   tokenId: string
@@ -30,20 +30,20 @@ const BiddingDetailView = ({ tokenId }) => {
   // get approved
   async function getApproved() {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )
     var approvedAddress = await contract.getApproved(tokenId)
 
-    setApprovalStatus(approvedAddress === process.env.NEXT_PUBLIC_V0_CONTRACT_ID)
+    setApprovalStatus(approvedAddress === process.env.NEXT_PUBLIC_CONTRACT_ID)
   }
 
   // ownerOf
   async function checkOwnerOf() {
 
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )
@@ -64,20 +64,20 @@ const BiddingDetailView = ({ tokenId }) => {
     setApprovalLoading(true)
 
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       library.getSigner(account),
     )
 
     const tx = await contract.approve(
-      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
       tokenId
     )
 
     setLoading(true)
 
     let filter = {
-      address: process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
+      address: process.env.NEXT_PUBLIC_CONTRACT_ID,
       topics: [approvalTopic]
     }
 

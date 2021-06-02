@@ -112,7 +112,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin}) => {
 
   async function getPageCount() {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )
@@ -169,7 +169,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin}) => {
 
   const getNFTs = async (range: number[]) => {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )

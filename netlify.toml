@@ -1,7 +1,12 @@
 
 [[redirects]]
-  from = "/object/:object"
-  to = "/object/[tokenId].html?object=:tokenId"
+  from = "/v1/object/:object"
+  to = "/v1/object/[tokenId].html?object=:tokenId"
+  status = 200
+
+[[redirects]]
+  from = "/object/*"
+  to = "https://v0.screensaver.world/object/:splat"
   status = 200
 
 [[redirects]]

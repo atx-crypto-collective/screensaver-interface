@@ -15,7 +15,7 @@ export default function index() {
 
   async function burn(tokenId: string) {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       library.getSigner(account),
     )
@@ -27,19 +27,15 @@ export default function index() {
     let topic = ethers.utils.id('Transfer(address,address,uint256)')
 
     let filter = {
-      address: process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
+      address: process.env.NEXT_PUBLIC_CONTRACT_ID,
       topics: [topic, null, ethers.utils.hexZeroPad(account, 32)],
     }
 
-    getNetworkLibrary().on(filter, (result) => {
-      if (result.transactionHash === tx.hash) {
-        setLoading(false)
-        router.push(`/owned/${account}`)
-        getNetworkLibrary().off(filter, (offResult) => {
-          console.log('OFF', offResult)
-        })
-      }
-    })
+    setTimeout(() => {
+      setLoading(false)
+      router.push(`/owned/${account}`)
+    }, 20000)
+
   }
 
   return (
