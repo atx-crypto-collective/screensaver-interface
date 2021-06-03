@@ -105,7 +105,7 @@ export default function Mint() {
         const hash = uri.split('/')
 
         // push to item page in preview mode with IPFS hash 
-        router.push(`/v1/object/1?preview=${hash[hash.length - 1]}`)
+        router.push(`/object/1?preview=${hash[hash.length - 1]}`)
 
         // return { mediaUrl: downloadUrl, mimeType: metadata.contentType } 
     } catch (error) {

@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../../constants/gallery'
 import { getNetworkLibrary } from '../../connectors'
+import { shortenAddress } from "../../utils";
 
 export default function Home() {
   const { account, library } = useWeb3React<Web3Provider>()
@@ -58,7 +59,11 @@ export default function Home() {
 
       const verificationResponse = await verify(signature)
 
-      setWhitelistingLoading(false)
+      setTimeout(() => {
+        checkIsWhitelisted()
+        setWhitelistingLoading(false)
+      }, 30000)
+
     } catch (err) {
       console.log('ERROR GETTING SEED', err)
     }
@@ -78,7 +83,6 @@ export default function Home() {
     })
       .then((res) => {
         console.log('VERIFICATION RESPONSE', res.status)
-        setWhitelistingLoading(false)
       })
       .catch((err) => console.log('ERROR GETTING VERIFICATION', err))
   }
@@ -105,12 +109,12 @@ export default function Home() {
     <Layout>
       {isWhitelisted ? (
         <div className={'flex w-full justify-center text-2xl font-bold mt-40'}>
-          This account is already whitelisted
+          {`Account ${!!account && shortenAddress(account)} is whitelisted`}
         </div>
       ) : (
         <div className={'w-11/12 max-w-2xl mx-auto py-6'}>
-          <h1 className={'text-2xl font-bold mb-3'}>TOS</h1>
-          <p>TOS</p>
+          <h1 className={'text-2xl font-bold mb-3'}>Screensaver Terms of Service</h1>
+          <p>Terms of service will go here...</p>
           <button
             onClick={fetchSeed}
             className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"

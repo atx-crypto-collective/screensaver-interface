@@ -72,7 +72,7 @@ const index: React.FC<IProps> = ({ hash }) => {
 
     var parsedSupply = supply.toNumber()
 
-    router.push(`/v1/object/${parsedSupply}`)
+    router.push(`/object/${parsedSupply}`)
   }
 
   useEffect(() => {

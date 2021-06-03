@@ -146,7 +146,7 @@ const ItemDetailPage: React.VFC = () => {
           <meta property="og:description" content={metadata.description} />
           <meta
             property="og:url"
-            content={`https://www.screensaver.world/v1/object/${tokenId}`}
+            content={`https://www.screensaver.world/object/${tokenId}`}
           />
           <meta property="og:type" content="website" />
           <meta name="twitter:card" content="summary_large_image" />
