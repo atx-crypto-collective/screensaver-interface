@@ -6,7 +6,6 @@ import { useWeb3React } from '@web3-react/core'
 import Modal from '../../components/Modal'
 import { useRouter } from 'next/router'
 import {parseTags} from '../../utils'
-import {waitTransaction} from '../../utils/web3'
 
 var uri = 'https://us-central1-broccoli-df8cd.cloudfunctions.net/api/mint'
 
