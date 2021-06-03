@@ -41,22 +41,29 @@ const index: React.FC<IProps> = ({ hash }) => {
 
     let tx = await contract.createToken(uri)
 
-    let topic = ethers.utils.id('Transfer(address,address,uint256)')
+    const receipt = await tx.wait();
 
-    let filter = {
-      address: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      topics: [topic, null, ethers.utils.hexZeroPad(account, 32)],
-    }
+    goToNFT()
 
-    getNetworkLibrary().on(filter, (result) => {
-      console.log('MINTAGE', result, tx.hash)
-      if (result.transactionHash === tx.hash) {
-        goToNFT()
-        getNetworkLibrary().off(filter, (offResult) => {
-          console.log('OFF', offResult)
-        })
-      }
-    })
+
+    // console.log("MINTED RETURN VALUE", tx)
+
+    // let topic = ethers.utils.id('Transfer(address,address,uint256)')
+
+    // let filter = {
+    //   address: process.env.NEXT_PUBLIC_CONTRACT_ID,
+    //   topics: [topic, null, ethers.utils.hexZeroPad(account, 32)],
+    // }
+
+    // getNetworkLibrary().on(filter, (result) => {
+    //   console.log('MINTAGE', result, tx.hash)
+    //   if (result.transactionHash === tx.hash) {
+    //     goToNFT()
+    //     getNetworkLibrary().off(filter, (offResult) => {
+    //       console.log('OFF', offResult)
+    //     })
+    //   }
+    // })
 
     console.log('URI', uri)
   }
@@ -68,27 +75,29 @@ const index: React.FC<IProps> = ({ hash }) => {
       library.getSigner(account),
     )
 
-    var supply = await contract.totalSupply()
+    var supply = await contract.totalMinted()
+
+    console.log("SUPPLY", supply)
 
     var parsedSupply = supply.toNumber()
 
     router.push(`/object/${parsedSupply}`)
   }
 
-  useEffect(() => {
-    let topic = ethers.utils.id('Transfer(address,address,uint256)')
+  // useEffect(() => {
+  //   let topic = ethers.utils.id('Transfer(address,address,uint256)')
 
-    let filter = {
-      address: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      topics: [topic],
-    }
+  //   let filter = {
+  //     address: process.env.NEXT_PUBLIC_CONTRACT_ID,
+  //     topics: [topic],
+  //   }
 
-    return () => {
-      getNetworkLibrary().off(filter, (offResult) => {
-        console.log('OFF', offResult)
-      })
-    }
-  }, [])
+  //   return () => {
+  //     getNetworkLibrary().off(filter, (offResult) => {
+  //       console.log('OFF', offResult)
+  //     })
+  //   }
+  // }, [])
 
   return (
     <>

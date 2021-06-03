@@ -117,7 +117,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin}) => {
       getNetworkLibrary(),
     )
 
-    var supply = await contract.totalSupply()
+    var supply = await contract.totalMinted()
 
     var total_supply = supply.toNumber()
 
@@ -180,15 +180,21 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin}) => {
         // id blocklist 
         if (blocklist.includes(id.toString())) return null
 
-        var ownerOf = await contract.ownerOf(id)
-        if (ownerOf === '0x000000000000000000000000000000000000dEaD') return null
+        // var ownerOf = await contract.ownerOf(id)
+        // if (ownerOf === '0x000000000000000000000000000000000000dEaD') return null
 
-        var uri = await contract.tokenURI(id)
-        if (uri.includes(undefined)) return null
-        var metadata = await axios.get(uri)
-        metadata.data.tokenId = id
+        try {
+          var uri = await contract.tokenURI(id)
+          if (uri.includes(undefined)) return null
+          var metadata = await axios.get(uri)
+          metadata.data.tokenId = id
+  
+          return metadata.data
+        } catch(error) {
+          console.log("ERROR getting token URI", error)
+          return null 
+        }
 
-        return metadata.data
       }),
     )
 

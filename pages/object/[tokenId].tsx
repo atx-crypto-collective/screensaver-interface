@@ -50,6 +50,8 @@ const ItemDetailPage: React.VFC = () => {
 
   // ownerOf
   async function checkOwnerOf() {
+
+    try {
     const contract = new ethers.Contract(
       process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
@@ -63,6 +65,11 @@ const ItemDetailPage: React.VFC = () => {
     if (ownerOf !== account) return
 
     setOwnerOf(true)
+
+  } catch (error) {
+    console.log('error')
+    setOwnerOf(false)
+  }
   }
 
   function getReports(tokenId) {
@@ -95,13 +102,18 @@ const ItemDetailPage: React.VFC = () => {
   }
 
   async function getUri() {
-    const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
-      GALLERY_ABI,
-      getNetworkLibrary(),
-    )
-    var tokenUri = await contract.tokenURI(tokenId)
-    setUri(tokenUri)
+    try {
+      const contract = new ethers.Contract(
+        process.env.NEXT_PUBLIC_CONTRACT_ID,
+        GALLERY_ABI,
+        getNetworkLibrary(),
+      )
+      var tokenUri = await contract.tokenURI(tokenId)
+      setUri(tokenUri)
+    } catch(error) {
+      console.log("error", error)
+    }
+
   }
 
   useEffect(() => {
@@ -162,10 +174,10 @@ const ItemDetailPage: React.VFC = () => {
 
             {!!tokenId && <BiddingDetailView tokenId={tokenId} />}
 
-            <div className={'flex w-full mt-6'}>
+            {!preview && (<div className={'flex w-full mt-6'}>
               {(contractOwner || ownerOf) && <BurnButton />}
               <ReportButton />
-            </div>
+            </div>)}
 
             {isSignedIn && (
               <>
@@ -173,7 +185,7 @@ const ItemDetailPage: React.VFC = () => {
                   {`Report Status: ${reportStatus}`}
                 </div>
 
-                {!preview && (
+                
                   <div className="bg-white shadow overflow-hidden sm:rounded-lg mt-10">
                     <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
                       {reports.map((report, key) => (
@@ -181,7 +193,7 @@ const ItemDetailPage: React.VFC = () => {
                       ))}
                     </div>
                   </div>
-                )}
+                
               </>
             )}
           </div>
