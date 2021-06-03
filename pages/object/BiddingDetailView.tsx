@@ -78,24 +78,32 @@ const BiddingDetailView = ({ tokenId }) => {
         tokenId,
       )
 
+      console.log("APPROVAL CALLED")
+
       setLoading(true)
 
-      let filter = {
-        address: process.env.NEXT_PUBLIC_CONTRACT_ID,
-        topics: [approvalTopic],
-      }
+      const receipt = await tx.wait()
 
-      getNetworkLibrary().on(filter, (result) => {
-        console.log('APPROVED LISTENER', result.transactionHash, tx.hash)
-        if (result.transactionHash === tx.hash) {
+      console.log("WAIT", receipt)
+
+      // setLoading(true)
+
+      // let filter = {
+      //   address: process.env.NEXT_PUBLIC_CONTRACT_ID,
+      //   topics: [approvalTopic],
+      // }
+
+      // getNetworkLibrary().on(filter, (result) => {
+      //   console.log('APPROVED LISTENER', result.transactionHash, tx.hash)
+      //   if (result.transactionHash === tx.hash) {
           getApproved()
           setLoading(false)
-          getNetworkLibrary().off(filter, (offResult) => {
-            console.log('OFF', offResult)
-          })
+          // getNetworkLibrary().off(filter, (offResult) => {
+          //   console.log('OFF', offResult)
+          // })
           setApprovalLoading(false)
-        }
-      })
+      //   }
+      // })
     } catch (error) {
       console.log('error')
     }

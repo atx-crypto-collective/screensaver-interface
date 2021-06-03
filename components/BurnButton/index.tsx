@@ -23,18 +23,19 @@ export default function index() {
     setLoading(true)
 
     let tx = await contract.burn(tokenId)
+    const receipt = await tx.wait()
 
-    let topic = ethers.utils.id('Transfer(address,address,uint256)')
+    // let topic = ethers.utils.id('Transfer(address,address,uint256)')
 
-    let filter = {
-      address: process.env.NEXT_PUBLIC_CONTRACT_ID,
-      topics: [topic, null, ethers.utils.hexZeroPad(account, 32)],
-    }
+    // let filter = {
+    //   address: process.env.NEXT_PUBLIC_CONTRACT_ID,
+    //   topics: [topic, null, ethers.utils.hexZeroPad(account, 32)],
+    // }
 
-    setTimeout(() => {
+    // setTimeout(() => {
       setLoading(false)
       router.push(`/owned/${account}`)
-    }, 20000)
+    // }, 20000)
 
   }
 

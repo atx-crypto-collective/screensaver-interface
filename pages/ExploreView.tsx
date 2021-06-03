@@ -11,7 +11,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import AccountId from '../components/AccountId'
 import ReactPaginate from 'react-paginate-next'
 import { gql, useLazyQuery } from '@apollo/client'
-import { db } from "../config/firebase";
+import { db } from '../config/firebase'
 
 interface IProps {
   created?: boolean
@@ -34,38 +34,37 @@ const GALLERY_QUERY = gql`
     }
   }
 `
-const ExploreView: React.VFC<IProps> = ({ created, owned, admin}) => {
+const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
   const [nfts, setNfts] = useState<NFT[]>([])
   const router = useRouter()
   const { account, page } = router.query
   const [loadingState, setLoadingState] = useState<boolean>(true)
   const [count] = useState<number>(12)
   const [pageNumber] = useState(1)
-  const [pageCount, setPageCount] = useState(0)
+  const [pageCount, setPageCount] = useState< number | null>(null)
   const [totalSupply, setTotalSupply] = useState(0)
-  const [blocklist, setBlockList] = useState([])
 
-  const [
-    loadCollection,
-    { called, loading, data },
-  ] = useLazyQuery(GALLERY_QUERY, {
-    variables: { id: account?.toString()?.toLowerCase() },
-  })
+  const [loadCollection, { called, error, loading, data }] = useLazyQuery(
+    GALLERY_QUERY,
+    {
+      variables: { id: account?.toString()?.toLowerCase() },
+    },
+  )
 
-  // check reports for 
+  // check reports for
   useEffect(() => {
-    const unsubscribe = db.collection("reported")
-    .onSnapshot((reportsSnapshot) => {
-      if (reportsSnapshot.empty) return;
-      let ids = [];
-      reportsSnapshot.forEach((doc) => {
-        ids.push(parseInt(doc.id))
-      });
-      loadReports(ids)
-
-    });
-    return () => unsubscribe(); // Make sure we un-register Firebase observers when the component unmounts.
-  }, []);
+    const unsubscribe = db
+      .collection('reported')
+      .onSnapshot((reportsSnapshot) => {
+        if (reportsSnapshot.empty) return
+        let ids = []
+        reportsSnapshot.forEach((doc) => {
+          ids.push(parseInt(doc.id))
+        })
+        loadReports(ids)
+      })
+    return () => unsubscribe() // Make sure we un-register Firebase observers when the component unmounts.
+  }, [])
 
   async function loadReports(ids: number[]) {
     setLoadingState(true)
@@ -89,26 +88,26 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin}) => {
 
   useEffect(() => {
     if ((!created && !owned && !admin) || !account || !data) return
+    console.log("GET COLLECTION IDS")
     getCollectionIds(data)
   }, [data])
 
   useEffect(() => {
-    if (blocklist.length <= 1) return;
     if ((!created && !owned && !admin) || !account) return
+    console.log("LOAD COLLECTION")
     loadCollection()
-  }, [blocklist, account])
+  }, [account])
 
   useEffect(() => {
     if (!!created || !!owned || !!admin) return
-    if (pageCount === 0) return
+    console.log("LOAD TOKENS PAGE", page)
     loadTokens(!page ? 1 : parseInt(page.toString()))
-  }, [pageCount, account, pageNumber, page])
+  }, [pageCount])
 
   useEffect(() => {
-    if (blocklist.length <= 1) return;
-    if (!!created || !!owned || !!admin) return
+    if (!!created || !!owned || !!admin || pageCount !== null) return
     getPageCount()
-  }, [blocklist])
+  }, [])
 
   async function getPageCount() {
     const contract = new ethers.Contract(
@@ -128,7 +127,6 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin}) => {
   }
 
   async function getCollectionIds(data) {
-
     let ids
 
     if (created) {
@@ -150,9 +148,10 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin}) => {
   }
 
   async function loadTokens(pageNumber) {
+
     setLoadingState(true)
 
-    let lowRange = totalSupply - count * pageNumber
+    let lowRange = totalSupply - (count * pageNumber)
 
     if (lowRange < 0) {
       lowRange = 0
@@ -168,6 +167,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin}) => {
   }
 
   const getNFTs = async (range: number[]) => {
+
     const contract = new ethers.Contract(
       process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
@@ -176,34 +176,36 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin}) => {
 
     var allMetadata = await Promise.all(
       range.map(async (id) => {
-
-        // id blocklist 
-        if (blocklist.includes(id.toString())) return null
-
-        // var ownerOf = await contract.ownerOf(id)
-        // if (ownerOf === '0x000000000000000000000000000000000000dEaD') return null
-
         try {
+          console.log("HERE")
           var uri = await contract.tokenURI(id)
+          console.log("URI", uri)
           if (uri.includes(undefined)) return null
           var metadata = await axios.get(uri)
           metadata.data.tokenId = id
-  
           return metadata.data
-        } catch(error) {
-          console.log("ERROR getting token URI", error)
-          return null 
+        } catch (error) {
+          console.log('ERROR getting token URI', error)
+          return null
         }
-
       }),
     )
 
     const filteredMeta = allMetadata.filter((i) => i !== null)
 
+    console.log("FILTERED METADATA", filteredMeta)
     setNfts(filteredMeta.reverse())
   }
 
-  if (loadingState)
+  if (error) {
+    return (
+      <Layout>
+        <div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>{error}</div>
+      </Layout>
+    )
+  }
+
+  if (loadingState || loading)
     return (
       <Layout>
         <div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>loading...</div>
@@ -212,80 +214,91 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin}) => {
 
   return (
     <>
-            {
-            created && <div className={'flex items-center justify-center text-2xl font-light h-16'}>
-            CREATED&nbsp; <AccountId address={account.toString()} />
-          </div>
+      {created && (
+        <div
+          className={
+            'flex items-center justify-center text-2xl font-light h-16'
           }
-{
-            owned && <div className={'flex items-center justify-center text-2xl font-light h-16'}>
-            OWNED&nbsp; <AccountId address={account.toString()} />
-          </div>
-          }
-     
-    <div className={'flex flex-col space-y-4'}>
-      
-      <div
-        className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto mt-8'}
-      >
-        {!loadingState ? (
-          nfts.map((item, key) => (
-            <div key={key}>
-              <NFTItemCard
-                nft={item}
-                title={item?.name}
-                coverImageSrc={item?.image}
-                creator={item?.creator}
-                endDateTime={new Date('1/1/count00')}
-                amountCollected={count}
-                tokenId={item?.tokenId}
-              />
-            </div>
-          ))
-        ) : (
-          <NFTItemCard loading={true} />
-        )}
-      </div>
-
-      {!created && !owned && pageCount > 1 && (
-        <div className={'flex'}>
-          {(!!page && parseInt(page.toString()) > 1) && <button
-            type="button"
-            onClick={previous}
-            className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-          >
-            <span className="sr-only">Previous</span>
-            <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-          </button>}
-
-          <ReactPaginate
-            previousLabel={''}
-            nextLabel={''}
-            breakLabel={'...'}
-            breakClassName={'break-me'}
-            pageCount={pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={handlePageClick}
-            containerClassName={
-              'flex w-full bg-red-400 justify-center items-center h-10'
-            }
-            pageClassName={
-              'flex justify-center items-center w-10 bg-white text-red-400 m-2'
-            }
-            activeClassName={'active'}
-          />
-          {(!!page && parseInt(page.toString()) < pageCount) && <button
-            type="button"
-            onClick={next}
-            className="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-          >
-            <span className="sr-only">Next</span>
-            <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-          </button>}
+        >
+          CREATED&nbsp; <AccountId address={account.toString()} />
         </div>
       )}
-    </div>
+      {owned && (
+        <div
+          className={
+            'flex items-center justify-center text-2xl font-light h-16'
+          }
+        >
+          OWNED&nbsp; <AccountId address={account.toString()} />
+        </div>
+      )}
+
+      <div className={'flex flex-col space-y-4'}>
+        <div
+          className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto mt-8'}
+        >
+          {!loadingState ? (
+            nfts.map((item, key) => (
+              <div key={key}>
+                <NFTItemCard
+                  nft={item}
+                  title={item?.name}
+                  coverImageSrc={item?.image}
+                  creator={item?.creator}
+                  endDateTime={new Date('1/1/count00')}
+                  amountCollected={count}
+                  tokenId={item?.tokenId}
+                />
+              </div>
+            ))
+          ) : (
+            <NFTItemCard loading={true} />
+          )}
+        </div>
+
+        {!created && !owned && pageCount > 1 && (
+          <div className={'flex'}>
+            {!!page && parseInt(page.toString()) > 1 && (
+              <button
+                type="button"
+                onClick={previous}
+                className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <span className="sr-only">Previous</span>
+                <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+              </button>
+            )}
+
+            <ReactPaginate
+              previousLabel={''}
+              nextLabel={''}
+              breakLabel={'...'}
+              breakClassName={'break-me'}
+              pageCount={pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={handlePageClick}
+              containerClassName={
+                'flex w-full bg-red-400 justify-center items-center h-10'
+              }
+              pageClassName={
+                'flex justify-center items-center w-10 bg-white text-red-400 m-2'
+              }
+              activeClassName={'active'}
+            />
+            {!!page && parseInt(page.toString()) < pageCount && (
+              <button
+                type="button"
+                onClick={next}
+                className="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <span className="sr-only">Next</span>
+                <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+              </button>
+            )}
+          </div>
+        )}
+      </div>
     </>
   )
 }
