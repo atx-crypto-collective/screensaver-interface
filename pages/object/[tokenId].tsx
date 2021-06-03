@@ -36,7 +36,7 @@ const ItemDetailPage: React.VFC = () => {
   const [reports, setReports] = useState<string[]>([])
   const [isPreview, setIsPreview] = useState(false)
   const [ownerOf, setOwnerOf] = useState<boolean>(false)
-  const [contractOwner, setContractOwner] = useState<boolean>(false)
+  const [isContractOwner, setIsContractOwner] = useState<boolean>(false)
   const [reportStatus, setReportStatus] = useState<string>('')
   const [isSignedIn, setIsSignedIn] = useState(false) // Local signed-in state.
 
@@ -59,8 +59,11 @@ const ItemDetailPage: React.VFC = () => {
     )
 
     var ownerOf = await contract.ownerOf(tokenId)
-    var owner = await contract.owner()
-    setContractOwner(owner)
+    var contractOwner = await contract.owner()
+
+    const accountIsContractOwner = contractOwner === account 
+
+    setIsContractOwner(accountIsContractOwner)
 
     if (ownerOf !== account) return
 
@@ -175,7 +178,7 @@ const ItemDetailPage: React.VFC = () => {
             {!!tokenId && <BiddingDetailView tokenId={tokenId} />}
 
             {!preview && (<div className={'flex w-full mt-6'}>
-              {(contractOwner || ownerOf) && <BurnButton />}
+              {(isContractOwner || ownerOf) && <BurnButton />}
               <ReportButton />
             </div>)}
 
