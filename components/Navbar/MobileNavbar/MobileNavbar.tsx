@@ -212,6 +212,20 @@ const MobileNavbar: React.FC<IProps> = () => {
                           </a>
                         )}
                       </Menu.Item>
+                      
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            href="https://v0.screensaver.world"
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm text-gray-700',
+                            )}
+                          >
+                            Screensaver V0
+                          </a>
+                        )}
+                      </Menu.Item>
 
                       {isSignedIn && <Menu.Item>
                         {({ active }) => (
@@ -235,6 +249,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                             Admin Logout
                           </div>
                         )}
+                      
                       </Menu.Item>
                       }
 

@@ -53,6 +53,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
 
   // check reports for
   useEffect(() => {
+    if (!admin) return;
     const unsubscribe = db
       .collection('reported')
       .onSnapshot((reportsSnapshot) => {

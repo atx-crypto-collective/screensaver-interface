@@ -12,14 +12,13 @@ export default function Home() {
           Screensaver is the first digital Marketplace Dao built on Polygon Layer 2.
           Using Polygon means extremely low minting and bidding fees ( ~
           $0.0002). Polygon also uses POS which means it's a cleaner alternative to minting on the ethereum mainnet.
-          Screensaver.world is an entirely open marketplace and takes zero fees.
         </p>
-        <h1 className={'text-xl font-bold mt-6 mb-3'}>👩‍⚖️ Governance</h1>
+        {/* <h1 className={'text-xl font-bold mt-6 mb-3'}>👩‍⚖️ Governance</h1>
         <p>
           A governance token will be distributed to users based on their
           activity in the marketplace. We are figuring out the best algorithm to
           use for this so - stay tuned.{' '}
-        </p>
+        </p> */}
         <h1 className={'text-xl font-bold mt-6 mb-3'}>🎨 Gallery</h1>
 
         <a

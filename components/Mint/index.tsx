@@ -6,6 +6,8 @@ import { useWeb3React } from '@web3-react/core'
 import Modal from '../../components/Modal'
 import { useRouter } from 'next/router'
 import {parseTags} from '../../utils'
+import {waitTransaction} from '../../utils/web3'
+
 var uri = 'https://us-central1-broccoli-df8cd.cloudfunctions.net/api/mint'
 
 export default function Mint() {
@@ -133,7 +135,7 @@ export default function Mint() {
                 Mint
               </h3>
               <p className="mt-1 max-w-2xl text-md text-gray-100 font-medium">
-                Creators will receive 15% royalties on all secondary sales with zero marketplace fees. 
+                Creators will receive 15% royalties on all secondary sales with 5% marketplace fees. 
               </p>
             </div>
 
