@@ -110,11 +110,11 @@ const index: React.FC<IProps> = ({ hash }) => {
       <div className={'mr-2'}>
         <button
           disabled={loading}
-          onClick={
-            !account || chainId !== 137
-              ? () => setOpen(true)
-              : () => createToken(`https://ipfs.io/ipfs/${hash}`)
-          }
+          // onClick={
+          //   !account || chainId !== 137
+          //     ? () => setOpen(true)
+          //     : () => createToken(`https://ipfs.io/ipfs/${hash}`)
+          // }
           className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
         >
           Mint
