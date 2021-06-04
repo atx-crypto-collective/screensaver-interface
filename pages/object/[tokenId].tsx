@@ -171,7 +171,6 @@ const ItemDetailPage: React.VFC = () => {
           <div className={'md:p-3 max-w-xl mx-auto min-h-screen'}>
             <ItemDetailView
               metadata={metadata}
-              preview={isPreview}
               hash={preview?.toString()}
             />
 

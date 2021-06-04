@@ -6,18 +6,21 @@ import NFT from '../../types'
 import MintButton from '../../components/MintButton'
 import AccountId from '../../components/AccountId'
 import moment from 'moment'
+import { useRouter } from 'next/router'
 
 interface IProps {
   metadata: NFT
-  preview: boolean
   hash?: string
 }
 
 const ItemDetailView: React.VFC<IProps> = ({
   metadata,
-  preview,
   hash,
 }) => {
+
+  const router = useRouter()
+  const { tokenId, preview } = router.query
+
   return (
     <div className={'flex flex-col space-y-12'}>
       <div className={'flex flex-col space-y-8'}>

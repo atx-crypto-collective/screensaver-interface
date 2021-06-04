@@ -5,12 +5,15 @@ import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import Modal from '../../components/Modal'
 import { useRouter } from 'next/router'
-import {parseTags} from '../../utils'
+import { parseTags } from '../../utils'
+import { ethers } from 'ethers'
+import { GALLERY_ABI } from '../../constants/gallery'
+import { getNetworkLibrary } from '../../connectors'
+import { Layout } from '../../components'
 
 var uri = 'https://us-central1-broccoli-df8cd.cloudfunctions.net/api/mint'
 
 export default function Mint() {
-
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(false)
   const [title, setTitle] = useState('')
@@ -19,18 +22,37 @@ export default function Mint() {
   const [media, setMedia] = useState<File>()
   const [open, setOpen] = useState(false)
   const router = useRouter()
-  const { chainId , account } = useWeb3React<Web3Provider>()
+  const { chainId, account } = useWeb3React<Web3Provider>()
+  const [isWhitelisted, setIsWhitelisted] = useState(false)
+  const [whitelistedLoading, setWhitelistedLoading] = useState(true)
+
+  // ownerOf
+  async function checkIsWhitelisted() {
+    setWhitelistedLoading(true)
+    const contract = new ethers.Contract(
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      GALLERY_ABI,
+      getNetworkLibrary(),
+    )
+    var whitelistStatus = await contract.isWhitelisted(account)
+
+    console.log("WHITELIST", whitelistStatus)
+    setIsWhitelisted(whitelistStatus)
+    setWhitelistedLoading(false)
+  }
+
+  useEffect(() => {
+    checkIsWhitelisted()
+  }, [])
 
   // check if file size is too large
   useEffect(() => {
-    console.log("MEDIA", media)
     if (media?.size > 40000000) {
       return setError(true)
     }
-
   }, [media])
 
-  // on preview button submit 
+  // on preview button submit
   const submit = (evt) => {
     setError(false)
     evt.preventDefault()
@@ -41,11 +63,10 @@ export default function Mint() {
     }
   }
 
-  // post metadata to server then to ipfs 
+  // post metadata to server then to ipfs
   async function postMetadata(imageUrl: string, mimeType: string) {
-
     var parsedTags = parseTags(tags)
-    var creationDate = new Date();
+    var creationDate = new Date()
     const metadata = {
       name: title,
       creationDate: new Date(),
@@ -56,90 +77,104 @@ export default function Mint() {
         size: media.size,
       },
       tags: parsedTags,
-      creator: account
+      creator: account,
     }
 
-    console.log("META", metadata)
+    console.log('META', metadata)
 
     try {
       const metadataUri = await axios.post(uri, metadata)
 
       return metadataUri.data.uri
     } catch (error) {
-      console.log("ERROR", error)
+      console.log('ERROR', error)
       throw new Error('error posting to ipfs')
     }
-
   }
 
   async function tempFileUpload() {
-
     setLoading(true)
 
     try {
-        // Create a root reference
-        var storageRef = storage().ref()
-        var name = media.name
+      // Create a root reference
+      var storageRef = storage().ref()
+      var name = media.name
 
-        // Create a reference to 'mountains.jpg'
-        var fileRef = storageRef.child(name.split(' ').join('_'))
+      // Create a reference to 'mountains.jpg'
+      var fileRef = storageRef.child(name.split(' ').join('_'))
 
-        // upload file to temp storage 
-        await fileRef.put(media)
+      // upload file to temp storage
+      await fileRef.put(media)
 
-        // get download url 
-        var downloadUrl = await fileRef.getDownloadURL()
+      // get download url
+      var downloadUrl = await fileRef.getDownloadURL()
 
-        // get metadata of file to get file type 
-        const metadata = await fileRef.getMetadata()
+      // get metadata of file to get file type
+      const metadata = await fileRef.getMetadata()
 
-        console.log("META", metadata, )
+      console.log('META', metadata)
 
-        if (metadata.size > 40000000) {
-          return setError(true)
-        }
+      if (metadata.size > 40000000) {
+        return setError(true)
+      }
 
-        // post metadata to server which will post to IPFS
-        const uri = await postMetadata(downloadUrl, metadata.contentType)
+      // post metadata to server which will post to IPFS
+      const uri = await postMetadata(downloadUrl, metadata.contentType)
 
-        // get hash from returned URI 
-        const hash = uri.split('/')
+      // get hash from returned URI
+      const hash = uri.split('/')
 
-        // push to item page in preview mode with IPFS hash 
-        router.push(`/object/1?preview=${hash[hash.length - 1]}`)
+      // push to item page in preview mode with IPFS hash
+      router.push(`/object/1?preview=${hash[hash.length - 1]}`)
 
-        // return { mediaUrl: downloadUrl, mimeType: metadata.contentType } 
+      // return { mediaUrl: downloadUrl, mimeType: metadata.contentType }
     } catch (error) {
-      console.log("ERROR", error)
+      console.log('ERROR', error)
     }
 
     setLoading(false)
-   
   }
 
-  // return (<a href={"https://discord.gg/tvXAbYE3"}>minting disabled https://discord.gg/tvXAbYE3</a>)
+  if (whitelistedLoading) {
+    return (<Layout>
+      <div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>loading...</div>
+    </Layout>)
+  }
+
+  if (!isWhitelisted) {
+    return (<Layout>
+      <div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>
+        Your account is not yet whitelisted. To become whitelisted please review
+        and accept our Terms of Service. :)
+      </div>
+      <button
+        onClick={() => {router.push('/whitelist')}}
+        className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+      >
+        Get Whitelisted
+      </button>
+    </Layout>)
+  }
 
   return (
     <div>
-
       <Modal status={'switch-network'} open={open} setOpen={setOpen} />
 
       <form className="space-y-8 divide-y divide-gray-200" onSubmit={submit}>
         <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
           <div>
-
-            
             <div>
               <h3 className="mt-4 max-w-3xl text-3xl text-white font-bold">
                 Mint
               </h3>
               <p className="mt-1 max-w-2xl text-md text-gray-100 font-medium">
-                Creators will receive 15% royalties on all secondary sales with 5% marketplace fees. 
+                Creators will receive 15% royalties on all secondary sales with
+                5% marketplace fees.
               </p>
             </div>
 
             <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
                 <label
                   htmlFor="cover_photo"
                   className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
@@ -182,7 +217,8 @@ export default function Mint() {
                           </label>
                         </div>
                         <p className="text-lg text-gray-500">
-                          Upload .png, .jpg, .glb, .mp3, .mp4, .gif <strong className={'text-xl'}>up to 40MB.</strong>
+                          Upload .png, .jpg, .glb, .mp3, .mp4, .gif{' '}
+                          <strong className={'text-xl'}>up to 40MB.</strong>
                         </p>
                       </div>
                     )}
@@ -190,9 +226,8 @@ export default function Mint() {
                 </div>
               </div>
               <div className={'text-white text-md font-regular mt-3'}>
-              {error &&
-                `File size too large! Keep in under 40MB please :).`}
-            </div>
+                {error && `File size too large! Keep in under 40MB please :).`}
+              </div>
               <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
                 <label
                   htmlFor="username"
@@ -260,15 +295,12 @@ export default function Mint() {
                   </p>
                 </div>
               </div>
-
             </div>
 
             <button
-
               type="submit"
               className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
               disabled={!media || loading || error}
-
             >
               Preview
               {loading && (
@@ -295,8 +327,7 @@ export default function Mint() {
               )}
             </button>
             <div className={'text-white text-md font-regular mt-3'}>
-              {error &&
-                `Error occured.`}
+              {error && `Error occured.`}
             </div>
           </div>
         </div>

@@ -122,8 +122,8 @@ export default function Home() {
 <p>Introduction</p>
 
 <p className={""}>Welcome to Screensaver.World, a website owned and operated 
-<div
-className={"bg-red"}>by XXXXXX, LLC. d/b/a Screensaver.World</div>
+{/* <div
+className={"bg-red"}>by XXXXXX, LLC. d/b/a Screensaver.World</div> */}
 (“Screensaver”, “Screensaver.World”, “Screensaver.world”, “SW”, “we”, “us”,
 “our”). Screensaver is a community-first digital marketplace built on Polygon
 Layer 2. Using Polygon technology allows for extremely low minting and bidding
