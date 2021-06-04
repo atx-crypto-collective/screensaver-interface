@@ -125,7 +125,6 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
 
     var total_supply = supply.toNumber()
 
-
     var minted = await contract.totalMinted()
 
     var total_minted = minted.toNumber()
