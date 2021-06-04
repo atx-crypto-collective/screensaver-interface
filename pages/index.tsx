@@ -19,6 +19,17 @@ export default function Home() {
           activity in the marketplace. We are figuring out the best algorithm to
           use for this so - stay tuned.{' '}
         </p> */}
+
+<h1 className={'text-xl font-bold mt-6 mb-3'}>New to Screensaver.world?</h1>
+
+<a
+  href={'/'}
+  target={'_blank'}
+  className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+>
+  Check out the faqs
+</a>
+
         <h1 className={'text-xl font-bold mt-6 mb-3'}>🎨 Gallery</h1>
 
         <a

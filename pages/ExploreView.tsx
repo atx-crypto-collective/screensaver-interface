@@ -43,6 +43,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
   const [pageNumber] = useState(1)
   const [pageCount, setPageCount] = useState< number | null>(null)
   const [totalSupply, setTotalSupply] = useState(0)
+  const [totalMinted, setMintedSupply] = useState(0)
 
   const [loadCollection, { called, error, loading, data }] = useLazyQuery(
     GALLERY_QUERY,
@@ -79,11 +80,13 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
   }
 
   const previous = () => {
+    console.log("PAGE", page)
     if (!page || parseInt(!!page && page.toString()) <= 1) return
     router.push(`?page=${parseInt(!!page && page.toString()) - 1}`)
   }
 
   const handlePageClick = (newPage: { selected: number }) => {
+    console.log("NEW PAGE", newPage.selected)
     router.push(`?page=${newPage.selected + 1}`)
   }
 
@@ -99,16 +102,17 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
     loadCollection()
   }, [account])
 
-  useEffect(() => {
-    if (!!created || !!owned || !!admin) return
-    console.log("LOAD TOKENS PAGE", page)
-    loadTokens(!page ? 1 : parseInt(page.toString()))
-  }, [pageCount])
+  // useEffect(() => {
+  //   console.log("LOAD TOKENS PAGE", page)
+  //   if (!!created || !!owned || !!admin || pageCount !== null) return
+  //   console.log("LOAD TOKENS PAGE", page)
+  // }, [page, pageCount])
 
   useEffect(() => {
-    if (!!created || !!owned || !!admin || pageCount !== null) return
+    console.log("PAGE", page)
+    if (!!created || !!owned || !!admin) return
     getPageCount()
-  }, [])
+  }, [page])
 
   async function getPageCount() {
     const contract = new ethers.Contract(
@@ -117,14 +121,25 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
       getNetworkLibrary(),
     )
 
-    var supply = await contract.totalMinted()
+    var supply = await contract.totalSupply()
 
     var total_supply = supply.toNumber()
 
-    var page_count = Math.floor(total_supply / count)
+
+    var minted = await contract.totalMinted()
+
+    var total_minted = minted.toNumber()
+
+    var page_count = Math.ceil(total_minted / count)
+
+    console.log("PAGE COUNT", total_supply, total_minted, page_count)
 
     setTotalSupply(total_supply)
-    setPageCount(page_count)
+    setMintedSupply(total_minted)
+    setPageCount(page_count === 0 ? 1 : page_count)
+
+    loadTokens(!page ? 1 : parseInt(page.toString()))
+
   }
 
   async function getCollectionIds(data) {
@@ -155,7 +170,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
     let lowRange = totalSupply - (count * pageNumber)
 
     if (lowRange < 0) {
-      lowRange = 0
+      lowRange = (count * pageNumber) - count
     }
 
     const result = new Array(count).fill(true).map((e, i) => i + 1 + lowRange)
@@ -238,7 +253,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
         <div
           className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto mt-8'}
         >
-          {!loadingState ? (
+          {(!loadingState && !loading) ? (
             nfts.map((item, key) => (
               <div key={key}>
                 <NFTItemCard
@@ -287,7 +302,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
               }
               activeClassName={'active'}
             />
-            {!!page && parseInt(page.toString()) < pageCount && (
+            {(!!page && parseInt(page.toString()) < pageCount) && (
               <button
                 type="button"
                 onClick={next}
