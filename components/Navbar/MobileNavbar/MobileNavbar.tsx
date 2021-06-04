@@ -82,7 +82,7 @@ const MobileNavbar: React.FC<IProps> = () => {
             {/* <span className={'inline text-2xl mr-2'}>💊</span> */}
             <a
               className={'font-serif text-2xl text-red-400 font-bold'}
-              href={'/gallery'}
+              href={'/gallery?page=1'}
             >
               <img
                 src={logoImage}
@@ -133,7 +133,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="/gallery"
+                            href="/gallery?page=1"
                             className={classNames(
                               active ? 'bg-gray-100' : '',
                               'block px-4 py-2 text-sm text-gray-700',

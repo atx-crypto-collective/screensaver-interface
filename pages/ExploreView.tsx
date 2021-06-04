@@ -80,25 +80,21 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
   }
 
   const previous = () => {
-    console.log("PAGE", page)
     if (!page || parseInt(!!page && page.toString()) <= 1) return
     router.push(`?page=${parseInt(!!page && page.toString()) - 1}`)
   }
 
   const handlePageClick = (newPage: { selected: number }) => {
-    console.log("NEW PAGE", newPage.selected)
     router.push(`?page=${newPage.selected + 1}`)
   }
 
   useEffect(() => {
     if ((!created && !owned && !admin) || !account || !data) return
-    console.log("GET COLLECTION IDS")
     getCollectionIds(data)
   }, [data])
 
   useEffect(() => {
     if ((!created && !owned && !admin) || !account) return
-    console.log("LOAD COLLECTION")
     loadCollection()
   }, [account])
 
@@ -137,7 +133,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
     setMintedSupply(total_minted)
     setPageCount(page_count === 0 ? 1 : page_count)
 
-    loadTokens(!page ? 1 : parseInt(page.toString()))
+    loadTokens(!page ? 1 : parseInt(page.toString()), total_minted)
 
   }
 
@@ -162,19 +158,25 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
     setLoadingState(false)
   }
 
-  async function loadTokens(pageNumber) {
+  async function loadTokens(pageNumber, total_minted) {
 
     setLoadingState(true)
 
-    let lowRange = totalSupply - (count * pageNumber)
+    let lowRange = total_minted - (total_minted - (count * pageNumber)) 
 
-    if (lowRange < 0) {
-      lowRange = (count * pageNumber) - count
+    console.log("LOW RANGE", lowRange, total_minted)
+
+    if (lowRange > total_minted ) {
+      lowRange = 0
     }
+
+    console.log("LOW RANGE", lowRange)
 
     const result = new Array(count).fill(true).map((e, i) => i + 1 + lowRange)
 
     const filteredResults = result.filter((i) => i > 0)
+
+    console.log("FILTERED", filteredResults)
 
     await getNFTs(filteredResults)
 
