@@ -79,7 +79,8 @@ const MobileNavbar: React.FC<IProps> = () => {
           }
         >
           <div className={'flex'}>
-            {/* <span className={'inline text-2xl mr-2'}>💊</span> */}
+      
+            <span className={'inline text-2xl mr-2'}>🌈</span>
             <a
               className={'font-serif text-2xl text-red-400 font-bold'}
               href={'/gallery?page=1'}
@@ -114,6 +115,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                           ' text-red-300 h-8 w-8 p-2 border border-red-300 text-md font-medium rounded-sm shadow-lg hover:shadow-sm text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
                         }
                       />
+                
                     </Menu.Button>
                   </div>
                   <Transition
