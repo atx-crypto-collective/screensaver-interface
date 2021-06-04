@@ -162,7 +162,14 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
     console.log("PAGE NUMBER", page, "TOTAL MINTED", total_minted)
 
     setLoadingState(true)
-    let minus =  page * count
+
+    let pageNumber = 1
+    
+    if (!!page) {
+      pageNumber = parseInt(page.toString())
+    }
+
+    let minus =  pageNumber * count
     let lowRange = total_minted - minus
 
     console.log("LOW RANGE", lowRange, total_minted)
