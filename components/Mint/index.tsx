@@ -36,7 +36,7 @@ export default function Mint() {
     )
     var whitelistStatus = await contract.isWhitelisted(account)
 
-    console.log("WHITELIST", whitelistStatus)
+    console.log('WHITELIST', whitelistStatus)
     setIsWhitelisted(whitelistStatus)
     setWhitelistedLoading(false)
   }
@@ -135,25 +135,41 @@ export default function Mint() {
     setLoading(false)
   }
 
+  if (!account) {
+    return (
+      <Layout>
+        <div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>
+          Please connect your metamask to start minting.
+        </div>{' '}
+      </Layout>
+    )
+  }
+
   if (whitelistedLoading) {
-    return (<Layout>
-      <div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>loading...</div>
-    </Layout>)
+    return (
+      <Layout>
+        <div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>loading...</div>
+      </Layout>
+    )
   }
 
   if (!isWhitelisted) {
-    return (<Layout>
-      <div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>
-        Your account is not yet whitelisted. To become whitelisted please review
-        and accept our Terms of Service. :)
-      </div>
-      <button
-        onClick={() => {router.push('/whitelist')}}
-        className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-      >
-        Get Whitelisted
-      </button>
-    </Layout>)
+    return (
+      <Layout>
+        <div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>
+          Your account is not yet whitelisted. To become whitelisted please
+          review and accept our Terms of Service. :)
+        </div>
+        <button
+          onClick={() => {
+            router.push('/whitelist')
+          }}
+          className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+        >
+          Get Whitelisted
+        </button>
+      </Layout>
+    )
   }
 
   return (
