@@ -40,7 +40,6 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
   const { account, page } = router.query
   const [loadingState, setLoadingState] = useState<boolean>(true)
   const [count] = useState<number>(12)
-  const [pageNumber] = useState(1)
   const [pageCount, setPageCount] = useState< number | null>(null)
   const [totalSupply, setTotalSupply] = useState(0)
   const [totalMinted, setMintedSupply] = useState(0)
@@ -98,16 +97,15 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
     loadCollection()
   }, [account])
 
-  useEffect(() => {
-    console.log("LOAD TOKENS PAGE", page)
-    if (!!created || !!owned || !!admin || pageCount !== null) return
-    console.log("LOAD TOKENS PAGE", page)
-    loadTokens(!page ? 1 : parseInt(page.toString()))
-  }, [totalMinted, pageNumber, page])
+  // useEffect(() => {
+  //   console.log("LOAD TOKENS PAGE", page)
+  //   if (!!created || !!owned || !!admin || pageCount !== null) return
+  //   console.log("LOAD TOKENS PAGE", page)
+  // }, [totalMinted])
 
   useEffect(() => {
     console.log("PAGE", page)
-    if (!!created || !!owned || !!admin) return
+    if (!!created || !!owned || !!admin || !page) return
     getPageCount()
   }, [page])
 
@@ -129,6 +127,8 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
     var page_count = Math.ceil(total_minted / count)
 
     console.log("PAGE COUNT", total_supply, total_minted, page_count)
+
+    loadTokens(total_minted)
 
     setTotalSupply(total_supply)
     setMintedSupply(total_minted)
@@ -157,17 +157,17 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
     setLoadingState(false)
   }
 
-  async function loadTokens(pageNumber) {
+  async function loadTokens(total_minted) {
 
-    console.log("PAGE NUMBER", pageNumber, "TOTAL MINTED", totalMinted)
+    console.log("PAGE NUMBER", page, "TOTAL MINTED", total_minted)
 
     setLoadingState(true)
-    let minus =  pageNumber * count
-    let lowRange = totalMinted - minus
+    let minus =  page * count
+    let lowRange = total_minted - minus
 
-    console.log("LOW RANGE", lowRange, totalMinted)
+    console.log("LOW RANGE", lowRange, total_minted)
 
-    if (lowRange > totalMinted ) {
+    if (lowRange > total_minted ) {
       lowRange = 0
     }
 
