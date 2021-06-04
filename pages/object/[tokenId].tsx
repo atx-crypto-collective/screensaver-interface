@@ -174,7 +174,7 @@ const ItemDetailPage: React.VFC = () => {
               hash={preview?.toString()}
             />
 
-            {!!tokenId && <BiddingDetailView tokenId={tokenId} />}
+            {(!preview && !!tokenId) && <BiddingDetailView tokenId={tokenId} />}
 
             {!preview && (<div className={'flex w-full mt-6'}>
               {(isContractOwner || ownerOf) && <BurnButton />}
