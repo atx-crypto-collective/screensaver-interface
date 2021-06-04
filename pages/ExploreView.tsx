@@ -11,11 +11,12 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import AccountId from '../components/AccountId'
 import ReactPaginate from 'react-paginate-next'
 import { gql, useLazyQuery } from '@apollo/client'
-import { db } from "../config/firebase";
+import { db } from '../config/firebase'
 
 interface IProps {
   created?: boolean
   owned?: boolean
+  admin?: boolean
 }
 
 const GALLERY_QUERY = gql`
@@ -33,80 +34,85 @@ const GALLERY_QUERY = gql`
     }
   }
 `
-const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
+const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
   const [nfts, setNfts] = useState<NFT[]>([])
   const router = useRouter()
   const { account, page } = router.query
   const [loadingState, setLoadingState] = useState<boolean>(true)
   const [count] = useState<number>(12)
   const [pageNumber] = useState(1)
-  const [pageCount, setPageCount] = useState(0)
+  const [pageCount, setPageCount] = useState< number | null>(null)
   const [totalSupply, setTotalSupply] = useState(0)
-  const [blocklist, setBlockList] = useState([])
+  const [totalMinted, setMintedSupply] = useState(0)
 
-  const [
-    loadCollection,
-    { called, loading, data },
-  ] = useLazyQuery(GALLERY_QUERY, {
-    variables: { id: account?.toString()?.toLowerCase() },
-  })
+  const [loadCollection, { called, error, loading, data }] = useLazyQuery(
+    GALLERY_QUERY,
+    {
+      variables: { id: account?.toString()?.toLowerCase() },
+    },
+  )
 
-  // Listen for changes to TRANSFERS
+  // check reports for
   useEffect(() => {
-    const unsubscribe = db.collection("admin").doc('blacklist')
-    .onSnapshot((doc) => {
-      console.log("blocklist", doc.data())
+    if (!admin) return;
+    const unsubscribe = db
+      .collection('reported')
+      .onSnapshot((reportsSnapshot) => {
+        if (reportsSnapshot.empty) return
+        let ids = []
+        reportsSnapshot.forEach((doc) => {
+          ids.push(parseInt(doc.id))
+        })
+        loadReports(ids)
+      })
+    return () => unsubscribe() // Make sure we un-register Firebase observers when the component unmounts.
+  }, [])
 
-        if (!!doc.data()?.ids) {
-          console.log("blocklist", doc.data()?.ids)
-            setBlockList(doc.data()?.ids)
-        } 
-  
-    });
-    return () => unsubscribe(); // Make sure we un-register Firebase observers when the component unmounts.
-  }, []);
+  async function loadReports(ids: number[]) {
+    setLoadingState(true)
+    await getNFTs(ids)
+    setLoadingState(false)
+  }
 
   const next = () => {
     if (!page || parseInt(!!page && page.toString()) >= pageCount) return
-    router.push(`/gallery?page=${parseInt(!!page && page.toString()) + 1}`)
+    router.push(`?page=${parseInt(!!page && page.toString()) + 1}`)
   }
 
   const previous = () => {
     if (!page || parseInt(!!page && page.toString()) <= 1) return
-    router.push(`/gallery?page=${parseInt(!!page && page.toString()) - 1}`)
+    router.push(`?page=${parseInt(!!page && page.toString()) - 1}`)
   }
 
   const handlePageClick = (newPage: { selected: number }) => {
-    router.push(`/gallery?page=${newPage.selected + 1}`)
+    router.push(`?page=${newPage.selected + 1}`)
   }
 
   useEffect(() => {
-    if ((!created && !owned) || !account || !data) return
-    console.log('DATA', data)
+    if ((!created && !owned && !admin) || !account || !data) return
     getCollectionIds(data)
   }, [data])
 
   useEffect(() => {
-    if (blocklist.length <= 1) return;
-    if ((!created && !owned) || !account) return
+    if ((!created && !owned && !admin) || !account) return
     loadCollection()
-  }, [blocklist, account])
+  }, [account])
+
+  // useEffect(() => {
+  //   console.log("LOAD TOKENS PAGE", page)
+  //   if (!!created || !!owned || !!admin || pageCount !== null) return
+  //   console.log("LOAD TOKENS PAGE", page)
+  // }, [page, pageCount])
 
   useEffect(() => {
-    if (!!created || !!owned) return
-    if (pageCount === 0) return
-    loadTokens(!page ? 1 : parseInt(page.toString()))
-  }, [pageCount, account, pageNumber, page])
-
-  useEffect(() => {
-    if (blocklist.length <= 1) return;
-    if (!!created || !!owned) return
+    console.log("PAGE", page)
+    if (!!created || !!owned || !!admin) return
     getPageCount()
-  }, [blocklist])
+  }, [page])
 
   async function getPageCount() {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )
@@ -115,14 +121,23 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
 
     var total_supply = supply.toNumber()
 
-    var page_count = Math.floor(total_supply / count)
+    var minted = await contract.totalMinted()
+
+    var total_minted = minted.toNumber()
+
+    var page_count = Math.ceil(total_minted / count)
+
+    console.log("PAGE COUNT", total_supply, total_minted, page_count)
 
     setTotalSupply(total_supply)
-    setPageCount(page_count)
+    setMintedSupply(total_minted)
+    setPageCount(page_count === 0 ? 1 : page_count)
+
+    loadTokens(!page ? 1 : parseInt(page.toString()), total_minted)
+
   }
 
   async function getCollectionIds(data) {
-
     let ids
 
     if (created) {
@@ -143,18 +158,25 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
     setLoadingState(false)
   }
 
-  async function loadTokens(pageNumber) {
+  async function loadTokens(pageNumber, total_minted) {
+
     setLoadingState(true)
 
-    let lowRange = totalSupply - count * pageNumber
+    let lowRange = total_minted - (total_minted - (count * pageNumber)) 
 
-    if (lowRange < 0) {
+    console.log("LOW RANGE", lowRange, total_minted)
+
+    if (lowRange > total_minted ) {
       lowRange = 0
     }
+
+    console.log("LOW RANGE", lowRange)
 
     const result = new Array(count).fill(true).map((e, i) => i + 1 + lowRange)
 
     const filteredResults = result.filter((i) => i > 0)
+
+    console.log("FILTERED", filteredResults)
 
     await getNFTs(filteredResults)
 
@@ -162,36 +184,45 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
   }
 
   const getNFTs = async (range: number[]) => {
+
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )
 
     var allMetadata = await Promise.all(
       range.map(async (id) => {
-
-        // id blocklist 
-        if (blocklist.includes(id.toString())) return null
-
-        var ownerOf = await contract.ownerOf(id)
-        if (ownerOf === '0x000000000000000000000000000000000000dEaD') return null
-
-        var uri = await contract.tokenURI(id)
-        if (uri.includes(undefined)) return null
-        var metadata = await axios.get(uri)
-        metadata.data.tokenId = id
-
-        return metadata.data
+        try {
+          console.log("HERE")
+          var uri = await contract.tokenURI(id)
+          console.log("URI", uri)
+          if (uri.includes(undefined)) return null
+          var metadata = await axios.get(uri)
+          metadata.data.tokenId = id
+          return metadata.data
+        } catch (error) {
+          console.log('ERROR getting token URI', error)
+          return null
+        }
       }),
     )
 
     const filteredMeta = allMetadata.filter((i) => i !== null)
 
+    console.log("FILTERED METADATA", filteredMeta)
     setNfts(filteredMeta.reverse())
   }
 
-  if (loadingState)
+  if (error) {
+    return (
+      <Layout>
+        <div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>{error}</div>
+      </Layout>
+    )
+  }
+
+  if (loadingState || loading)
     return (
       <Layout>
         <div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>loading...</div>
@@ -199,76 +230,93 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
     )
 
   return (
-    <div className={'flex flex-col space-y-4 '}>
-      <div
-        className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto mt-24 '}
-      >
-        {!created && !owned ? (
-          <></>
-        ) : (
-          // <SearchBar input={input} onChange={updateInput} />
-          <div className={'absolute -mt-16 text-3xl font-bold'}>
-            <AccountId address={account.toString()} />
-          </div>
-        )}
-        {!loadingState ? (
-          nfts.map((item, key) => (
-            <div key={key}>
-              <NFTItemCard
-                nft={item}
-                title={item?.name}
-                coverImageSrc={item?.image}
-                creator={item?.creator}
-                endDateTime={new Date('1/1/count00')}
-                amountCollected={count}
-                tokenId={item?.tokenId}
-              />
-            </div>
-          ))
-        ) : (
-          <NFTItemCard loading={true} />
-        )}
-      </div>
-
-      {!created && !owned && pageCount > 1 && (
-        <div className={'flex'}>
-          {(!!page && parseInt(page.toString()) > 1) && <button
-            type="button"
-            onClick={previous}
-            className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-          >
-            <span className="sr-only">Previous</span>
-            <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-          </button>}
-
-          <ReactPaginate
-            previousLabel={''}
-            nextLabel={''}
-            breakLabel={'...'}
-            breakClassName={'break-me'}
-            pageCount={pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={handlePageClick}
-            containerClassName={
-              'flex w-full bg-red-400 justify-center items-center h-10'
-            }
-            pageClassName={
-              'flex justify-center items-center w-10 bg-white text-red-400 m-2'
-            }
-            activeClassName={'active'}
-          />
-          {(!!page && parseInt(page.toString()) < pageCount) && <button
-            type="button"
-            onClick={next}
-            className="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-          >
-            <span className="sr-only">Next</span>
-            <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-          </button>}
+    <>
+      {created && (
+        <div
+          className={
+            'flex items-center justify-center text-2xl font-light h-16'
+          }
+        >
+          CREATED&nbsp; <AccountId address={account.toString()} />
         </div>
       )}
-    </div>
+      {owned && (
+        <div
+          className={
+            'flex items-center justify-center text-2xl font-light h-16'
+          }
+        >
+          OWNED&nbsp; <AccountId address={account.toString()} />
+        </div>
+      )}
+
+      <div className={'flex flex-col space-y-4'}>
+        <div
+          className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto mt-8'}
+        >
+          {(!loadingState && !loading) ? (
+            nfts.map((item, key) => (
+              <div key={key}>
+                <NFTItemCard
+                  nft={item}
+                  title={item?.name}
+                  coverImageSrc={item?.image}
+                  creator={item?.creator}
+                  endDateTime={new Date('1/1/count00')}
+                  amountCollected={count}
+                  tokenId={item?.tokenId}
+                />
+              </div>
+            ))
+          ) : (
+            <NFTItemCard loading={true} />
+          )}
+        </div>
+
+        {!created && !owned && pageCount > 1 && (
+          <div className={'flex'}>
+            {!!page && parseInt(page.toString()) > 1 && (
+              <button
+                type="button"
+                onClick={previous}
+                className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <span className="sr-only">Previous</span>
+                <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+              </button>
+            )}
+
+            <ReactPaginate
+              previousLabel={''}
+              nextLabel={''}
+              breakLabel={'...'}
+              breakClassName={'break-me'}
+              pageCount={pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={handlePageClick}
+              containerClassName={
+                'flex w-full bg-red-400 justify-center items-center h-10'
+              }
+              pageClassName={
+                'flex justify-center items-center w-10 bg-white text-red-400 m-2'
+              }
+              activeClassName={'active'}
+            />
+            {(!!page && parseInt(page.toString()) < pageCount) && (
+              <button
+                type="button"
+                onClick={next}
+                className="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <span className="sr-only">Next</span>
+                <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+    </>
   )
 }
 

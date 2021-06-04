@@ -20,8 +20,18 @@
   status = 200
 
 [[redirects]]
+  from = "/whitelist/:whitelist"
+  to = "/whitelist/:whitelist"
+  status = 200
+
+[[redirects]]
   from = "/gallery/:gallery"
   to = "/gallery/:gallery"
+  status = 200
+
+[[redirects]]
+  from = "/admin/:admin"
+  to = "/admin/:admin"
   status = 200
 
 # you can also target a specific branch

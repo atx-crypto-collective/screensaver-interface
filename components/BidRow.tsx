@@ -72,13 +72,15 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
       library.getSigner(account),
     )
     const tx = await contract.acceptBid(tokenId)
-
     setLoading(true)
 
-    setTimeout(() => {
+    const receipt = await tx.wait()
+
+
+    // setTimeout(() => {
       currentBids()
       setLoading(false)
-    }, 10000)
+    // }, 10000)
   }
 
   // cancel active bid
@@ -92,10 +94,10 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
 
     setLoading(true)
 
-    setTimeout(() => {
-      currentBids()
-      setLoading(false)
-    }, 10000)
+    const receipt = await tx.wait()
+
+    currentBids()
+    setLoading(false)
 
   }
 

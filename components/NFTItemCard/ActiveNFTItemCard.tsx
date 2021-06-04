@@ -1,20 +1,9 @@
 import React from 'react'
-
 import ImageCard from '../ImageCard'
-
 import { IProps } from './types'
 import { useState, useEffect } from 'react'
-import { storage } from '../../config/firebase'
-import axios from 'axios'
-import { Web3Provider } from '@ethersproject/providers'
-import { useWeb3React } from '@web3-react/core'
 import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../../constants/gallery'
-import Modal from '../../components/Modal'
-import classNames from 'classnames'
-import { injected } from '../../connectors'
-import { useRouter } from 'next/router'
-import { shortenAddress } from '../../utils'
 import { getNetworkLibrary } from '../../connectors'
 import AccountId from '../AccountId'
 
@@ -22,10 +11,7 @@ var utils = require('ethers').utils
 
 const NFTItemCard: React.FC<IProps> = ({
   nft,
-  coverImageSrc,
   creator,
-  endDateTime,
-  amountCollected,
   loading
 }) => {
   const [bid, setBid] = useState<number | undefined>()
@@ -36,7 +22,7 @@ const NFTItemCard: React.FC<IProps> = ({
     if (!nft?.tokenId) return
 
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )
@@ -53,13 +39,13 @@ const NFTItemCard: React.FC<IProps> = ({
   // get approved
   async function getApproved() {
     const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       getNetworkLibrary(),
     )
     var approvedAddress = await contract.getApproved(nft?.tokenId)
 
-    setForSale(approvedAddress === process.env.NEXT_PUBLIC_V0_CONTRACT_ID)
+    setForSale(approvedAddress === process.env.NEXT_PUBLIC_CONTRACT_ID)
   }
 
   useEffect(() => {

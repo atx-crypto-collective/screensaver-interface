@@ -1,7 +1,6 @@
 import React from 'react'
 import AccountId from '../../components/AccountId'
 import BidRow from '../../components/BidRow'
-import ReportButton from '../../components/ReportButton'
 import { useState, useEffect } from 'react'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
@@ -14,10 +13,7 @@ interface IProps {
 }
 
 const BiddingDetailView = ({ tokenId }) => {
-  const {
-    account,
-    library,
-  } = useWeb3React<Web3Provider>()
+  const { account, library } = useWeb3React<Web3Provider>()
   const [approvalStatus, setApprovalStatus] = useState<boolean | undefined>()
   const [ownerOf, setOwnerOf] = useState<boolean>(false)
   const [approvalLoading, setApprovalLoading] = useState<boolean>(false)
@@ -29,80 +25,88 @@ const BiddingDetailView = ({ tokenId }) => {
 
   // get approved
   async function getApproved() {
-    const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
-      GALLERY_ABI,
-      getNetworkLibrary(),
-    )
-    var approvedAddress = await contract.getApproved(tokenId)
+    try {
+      const contract = new ethers.Contract(
+        process.env.NEXT_PUBLIC_CONTRACT_ID,
+        GALLERY_ABI,
+        getNetworkLibrary(),
+      )
+      var approvedAddress = await contract.getApproved(tokenId)
 
-    setApprovalStatus(approvedAddress === process.env.NEXT_PUBLIC_V0_CONTRACT_ID)
+      setApprovalStatus(approvedAddress === process.env.NEXT_PUBLIC_CONTRACT_ID)
+    } catch (error) {
+      console.log('error', error)
+      setApprovalStatus(false)
+    }
   }
 
   // ownerOf
   async function checkOwnerOf() {
+    try {
+      const contract = new ethers.Contract(
+        process.env.NEXT_PUBLIC_CONTRACT_ID,
+        GALLERY_ABI,
+        getNetworkLibrary(),
+      )
 
-    const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
-      GALLERY_ABI,
-      getNetworkLibrary(),
-    )
+      var ownerOf = await contract.ownerOf(tokenId)
 
-    var ownerOf = await contract.ownerOf(tokenId)
+      setNFTOwner(ownerOf)
 
-    let filter = {
-      address: process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
-      topics: [transferTopic],
+      if (ownerOf !== account) return
+
+      setOwnerOf(true)
+    } catch (error) {
+      console.log('error')
+      setOwnerOf(false)
     }
-
-    const transfers = await contract.queryFilter(filter, 13905194, 13906194)
-
-    console.log('TRANSFERS', transfers)
-
-    setNFTOwner(ownerOf)
-
-    console.log('Owner of', ownerOf)
-
-    if (ownerOf !== account) return
-
-    setOwnerOf(true)
   }
 
   // approve sales
   async function approve() {
+    try {
+      setApprovalLoading(true)
 
-    setApprovalLoading(true)
+      const contract = new ethers.Contract(
+        process.env.NEXT_PUBLIC_CONTRACT_ID,
+        GALLERY_ABI,
+        library.getSigner(account),
+      )
 
-    const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
-      GALLERY_ABI,
-      library.getSigner(account),
-    )
+      const tx = await contract.approve(
+        process.env.NEXT_PUBLIC_CONTRACT_ID,
+        tokenId,
+      )
 
-    const tx = await contract.approve(
-      process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
-      tokenId
-    )
+      console.log("APPROVAL CALLED")
 
-    setLoading(true)
+      setLoading(true)
 
-    let filter = {
-      address: process.env.NEXT_PUBLIC_V0_CONTRACT_ID,
-      topics: [approvalTopic]
+      const receipt = await tx.wait()
+
+      console.log("WAIT", receipt)
+
+      // setLoading(true)
+
+      // let filter = {
+      //   address: process.env.NEXT_PUBLIC_CONTRACT_ID,
+      //   topics: [approvalTopic],
+      // }
+
+      // getNetworkLibrary().on(filter, (result) => {
+      //   console.log('APPROVED LISTENER', result.transactionHash, tx.hash)
+      //   if (result.transactionHash === tx.hash) {
+          getApproved()
+          setLoading(false)
+          // getNetworkLibrary().off(filter, (offResult) => {
+          //   console.log('OFF', offResult)
+          // })
+          setApprovalLoading(false)
+      //   }
+      // })
+    } catch (error) {
+      console.log('error')
     }
-
-    getNetworkLibrary().on(filter, (result) => {
-      console.log('APPROVED LISTENER', result.transactionHash, tx.hash)
-      if (result.transactionHash === tx.hash) {
-        getApproved()
-        setLoading(false)
-        getNetworkLibrary().off(filter, (offResult) => {
-          console.log('OFF', offResult)
-        })
-        setApprovalLoading(false)
-      }
-    })
-
   }
 
   useEffect(() => {
@@ -122,8 +126,6 @@ const BiddingDetailView = ({ tokenId }) => {
           <strong>Collector: </strong>
           <AccountId address={nftOwner} />
         </div>
-        
-        {/* <div className={'mt-6'} ><ReportButton /></div> */}
 
         <div className={'mt-12'} />
 
@@ -163,9 +165,7 @@ const BiddingDetailView = ({ tokenId }) => {
             </div>
           )
         ) : (
-          <>
-            {!!tokenId && <BidRow tokenId={tokenId.toString()} />}
-          </>
+          <>{!!tokenId && <BidRow tokenId={tokenId.toString()} />}</>
         )}
       </div>
     </div>

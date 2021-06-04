@@ -65,10 +65,12 @@ const SetSalePrice: React.VFC<IProps> = ({ onUpdate, tokenId, sale = true }) => 
   
     setLoading(true)
 
-      setTimeout(() => {
+    const receipt = await tx.wait()
+
+      // setTimeout(() => {
         onUpdate()
         setLoading(false)
-      }, 10000)
+      // }, 10000)
     
   }
 

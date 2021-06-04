@@ -17,14 +17,14 @@ import { SearchIcon } from '@heroicons/react/outline'
 import ConnectButton from '../../ConnectButton'
 import Banner from '../../Banner'
 import { useWeb3React } from '@web3-react/core'
-import { Web3Provider } from '@ethersproject/providers'
 import { useEffect } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import logoImage from './SCREENSAVER.png'
-import { Token, TokenAmount } from '@uniswap/sdk'
 import { ethers } from 'ethers'
 import { ERC20_ABI } from '../../../constants/abis/erc20'
+import { auth } from '../../../config/firebase'
+
 var utils = require('ethers').utils
 
 function classNames(...classes) {
@@ -37,6 +37,15 @@ const MobileNavbar: React.FC<IProps> = () => {
   const [state, setState] = useState<State>('initial')
   const [tokenBalance, setTokenBalance] = useState<number>(0)
   const { account, chainId, library } = useWeb3React()
+  const [isSignedIn, setIsSignedIn] = useState(false) // Local signed-in state.
+
+  useEffect(() => {
+    const unregisterAuthObserver = auth().onAuthStateChanged((user) => {
+      setIsSignedIn(!!user)
+      console.log('SIGN UP', user)
+    })
+    return () => unregisterAuthObserver()
+  }, [])
 
   async function balanceOf() {
     const contract = new ethers.Contract(
@@ -73,7 +82,7 @@ const MobileNavbar: React.FC<IProps> = () => {
             {/* <span className={'inline text-2xl mr-2'}>💊</span> */}
             <a
               className={'font-serif text-2xl text-red-400 font-bold'}
-              href={'/gallery'}
+              href={'/gallery?page=1'}
             >
               <img
                 src={logoImage}
@@ -124,7 +133,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="/gallery"
+                            href="/gallery?page=1"
                             className={classNames(
                               active ? 'bg-gray-100' : '',
                               'block px-4 py-2 text-sm text-gray-700',
@@ -180,6 +189,19 @@ const MobileNavbar: React.FC<IProps> = () => {
                       <Menu.Item>
                         {({ active }) => (
                           <a
+                            href="/whitelist"
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm text-gray-700',
+                            )}
+                          >
+                            Whitelist
+                          </a>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
                             href="/"
                             className={classNames(
                               active ? 'bg-gray-100' : '',
@@ -190,6 +212,47 @@ const MobileNavbar: React.FC<IProps> = () => {
                           </a>
                         )}
                       </Menu.Item>
+
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            href="https://v0.screensaver.world"
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm text-gray-700',
+                            )}
+                          >
+                            Screensaver V0
+                          </a>
+                        )}
+                      </Menu.Item>
+
+                      {isSignedIn && <Menu.Item>
+                        {({ active }) => (
+                          <div
+                          onClick={
+                            () => {
+                              auth().signOut().then(() => {
+                                // Sign-out successful.
+                                console.log("SIGNOUT")
+                              }).catch((error) => {
+                                // An error happened.
+                                console.log("SIGNOUT ERROR", error)
+                              });
+                            }
+                          }
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm text-gray-700',
+                            )}
+                          >
+                            Admin Logout
+                          </div>
+                        )}
+                      
+                      </Menu.Item>
+                      }
+
                     </Menu.Items>
                   </Transition>
                 </>
