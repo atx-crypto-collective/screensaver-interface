@@ -98,11 +98,12 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
     loadCollection()
   }, [account])
 
-  // useEffect(() => {
-  //   console.log("LOAD TOKENS PAGE", page)
-  //   if (!!created || !!owned || !!admin || pageCount !== null) return
-  //   console.log("LOAD TOKENS PAGE", page)
-  // }, [page, pageCount])
+  useEffect(() => {
+    console.log("LOAD TOKENS PAGE", page)
+    if (!!created || !!owned || !!admin || pageCount !== null) return
+    console.log("LOAD TOKENS PAGE", page)
+    loadTokens(!page ? 1 : parseInt(page.toString()))
+  }, [totalMinted, pageNumber, page])
 
   useEffect(() => {
     console.log("PAGE", page)
@@ -133,8 +134,6 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
     setMintedSupply(total_minted)
     setPageCount(page_count === 0 ? 1 : page_count)
 
-    loadTokens(!page ? 1 : parseInt(page.toString()), total_minted)
-
   }
 
   async function getCollectionIds(data) {
@@ -158,15 +157,17 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
     setLoadingState(false)
   }
 
-  async function loadTokens(pageNumber, total_minted) {
+  async function loadTokens(pageNumber) {
+
+    console.log("PAGE NUMBER", pageNumber, "TOTAL MINTED", totalMinted)
 
     setLoadingState(true)
+    let minus =  pageNumber * count
+    let lowRange = totalMinted - minus
 
-    let lowRange = total_minted - (total_minted - (count * pageNumber)) 
+    console.log("LOW RANGE", lowRange, totalMinted)
 
-    console.log("LOW RANGE", lowRange, total_minted)
-
-    if (lowRange > total_minted ) {
+    if (lowRange > totalMinted ) {
       lowRange = 0
     }
 
