@@ -62,6 +62,41 @@ const BiddingDetailView = ({ tokenId }) => {
     }
   }
 
+    // approve sales
+    async function removeFromSale() {
+      try {
+        setApprovalLoading(true)
+  
+        const contract = new ethers.Contract(
+          process.env.NEXT_PUBLIC_CONTRACT_ID,
+          GALLERY_ABI,
+          library.getSigner(account),
+        )
+  
+        const tx = await contract.setApprovalForAll(
+          process.env.NEXT_PUBLIC_CONTRACT_ID,
+          false
+        )
+  
+        console.log("APPROVAL CALLED")
+  
+        setLoading(true)
+  
+        const receipt = await tx.wait()
+  
+        console.log("WAIT", receipt)
+ 
+            getApproved()
+            setLoading(false)
+  
+            setApprovalLoading(false)
+
+      } catch (error) {
+        console.log('error')
+      }
+
+    }
+
   // approve sales
   async function approve() {
     try {
@@ -165,7 +200,10 @@ const BiddingDetailView = ({ tokenId }) => {
             </div>
           )
         ) : (
-          <>{!!tokenId && <BidRow tokenId={tokenId.toString()} />}</>
+          <>
+          {!!tokenId && <BidRow tokenId={tokenId.toString()} />}
+          {!!ownerOf && <button onClick={removeFromSale}>Remove From Sale</button>}
+          </>
         )}
       </div>
     </div>
