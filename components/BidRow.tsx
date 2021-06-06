@@ -6,6 +6,7 @@ import { GALLERY_ABI } from '../constants/gallery'
 import Modal from '../components/Modal'
 import { getNetworkLibrary } from '../connectors'
 import AccountId from './AccountId'
+import SetSalePrice from './SetSalePrice'
 
 var utils = require('ethers').utils
 
