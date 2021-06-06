@@ -192,6 +192,9 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
       >No Bids Yet</div>
     
     }
+          {!ownerOf && (
+        <SetSalePrice sale={false} tokenId={tokenId} onUpdate={currentBids} />
+      )}
     </>
   )
 }
