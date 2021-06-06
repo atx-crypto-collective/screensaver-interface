@@ -86,7 +86,7 @@ const MobileNavbar: React.FC<IProps> = () => {
               href={'/gallery?page=1'}
             >
               <img
-                src={logoImage}
+                src={require('../../../assets/uber.jpg')}
                 alt={'Screen Saver'}
                 className={'cursor-pointer'}
                 width={200}
