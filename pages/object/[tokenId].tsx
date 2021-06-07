@@ -22,6 +22,7 @@ const ItemDetailPage: React.VFC = () => {
   async function getMetadata() {
     var meta = await axios.get(uri)
     var tempMetadata = meta.data
+    tempMetadata.metadataUri = uri 
     tempMetadata.creationDate = new Date(meta.data.creationDate).toString()
     setMetadata(tempMetadata)
   }
@@ -91,6 +92,9 @@ const ItemDetailPage: React.VFC = () => {
               hash={preview?.toString()}
             />
             {!!tokenId && <BiddingDetailView tokenId={tokenId} />}
+            <div>METADATA URI: {!!metadata?.metadataUri && metadata.metadataUri.split('https://ipfs.io/ipfs/')[1]}</div>
+            {!!metadata.image && <div>{`MEDIA URI:${metadata.image.split('https://ipfs.io/ipfs/')[1]}`}</div>}
+            {!!metadata.animation_url && <div>{`MEDIA URI: ${metadata.animation_url.split('https://ipfs.io/ipfs/')[1]}`}</div>}
           </div>
         </div>
       </Layout>

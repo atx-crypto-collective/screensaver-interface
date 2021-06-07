@@ -178,8 +178,9 @@ const ExploreView: React.VFC<IProps> = ({ created, owned }) => {
         if (uri.includes(undefined)) return null
         var metadata = await axios.get(uri)
         metadata.data.tokenId = id
-
-        return metadata.data
+        let nft: NFT = metadata.data
+        nft.metadataUri = uri
+        return nft
       }),
     )
 
