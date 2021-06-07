@@ -86,7 +86,7 @@ const MobileNavbar: React.FC<IProps> = () => {
               href={'/gallery?page=1'}
             >
               <img
-                src={'https://firebasestorage.googleapis.com/v0/b/broccoli-df8cd.appspot.com/o/662066441_b9TgtND0_EC9AB0EBB2841.JPG?alt=media&token=e1d7e2e2-2926-4092-bd6e-911d9de5fda2'}
+                src={logoImage}
                 alt={'Screen Saver'}
                 className={'cursor-pointer'}
                 width={200}
