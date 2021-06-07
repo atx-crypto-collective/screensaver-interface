@@ -200,7 +200,6 @@ const ItemDetailPage: React.VFC = () => {
               </>
             )}
 
-{!!tokenId && <BiddingDetailView tokenId={tokenId} />}
             <div>METADATA URI: {!!metadata?.metadataUri && metadata.metadataUri.split('https://ipfs.io/ipfs/')[1]}</div>
             {!!metadata.image && <div>{`MEDIA URI:${metadata.image.split('https://ipfs.io/ipfs/')[1]}`}</div>}
             {!!metadata.animation_url && <div>{`MEDIA URI: ${metadata.animation_url.split('https://ipfs.io/ipfs/')[1]}`}</div>}
