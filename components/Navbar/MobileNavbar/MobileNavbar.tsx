@@ -55,10 +55,8 @@ const MobileNavbar: React.FC<IProps> = () => {
     )
 
     var balance = await contract.balanceOf(account)
-    // var intBalance = balance.toString()
     var intBalance = utils.formatEther(balance)
-    setTokenBalance(intBalance)
-    console.log('TOKEN BALANCE', intBalance)
+    setTokenBalance(Number(intBalance))
   }
 
   useEffect(() => {
@@ -79,7 +77,7 @@ const MobileNavbar: React.FC<IProps> = () => {
           }
         >
           <div className={'flex'}>
-      
+
             <span className={'inline text-2xl mr-2'}>🌈</span>
             <a
               className={'font-serif text-2xl text-red-400 font-bold'}
@@ -95,7 +93,7 @@ const MobileNavbar: React.FC<IProps> = () => {
           </div>
           <div className={'flex space-x-3 items-center'}>
             <div className="px-6 w-full py-2 border border-red-300 text-sm shadow-lg font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 focus:outline-none ">
-              {tokenBalance} SSD
+              {tokenBalance.toFixed(4)} SSD
             </div>
             <ConnectButton />
 
@@ -115,7 +113,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                           ' text-red-300 h-8 w-8 p-2 border border-red-300 text-md font-medium rounded-sm shadow-lg hover:shadow-sm text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
                         }
                       />
-                
+
                     </Menu.Button>
                   </div>
                   <Transition
@@ -251,7 +249,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                             Admin Logout
                           </div>
                         )}
-                      
+
                       </Menu.Item>
                       }
 
