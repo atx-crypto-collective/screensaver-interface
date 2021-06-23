@@ -26,7 +26,7 @@ const ItemDetailView: React.VFC<IProps> = ({
       <div className={'flex flex-col space-y-8'}>
 
         <div className={'space-y-3 mt-3'}>
-          <ImageWithActions 
+          <ImageWithActions
             src={metadata.image}
             alt={metadata.name}
             nft={metadata}
@@ -48,7 +48,7 @@ const ItemDetailView: React.VFC<IProps> = ({
           <div className={'w-full border-t border-gray-800'} />
 
           <div className={'text-lg py-1 mt-3'}>
-            <strong>Creator: </strong> <AccountId address={metadata.creator} />
+            <strong>Creator: </strong> <AccountId linkToCreated address={metadata.creator} />
           </div>
           <div className={'text-sm py-1'}>
             <strong>Minted: </strong>

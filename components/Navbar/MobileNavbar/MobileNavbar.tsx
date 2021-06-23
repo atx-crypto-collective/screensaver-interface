@@ -33,10 +33,22 @@ function classNames(...classes) {
 
 type State = 'initial' | 'search' | 'menu'
 
+const tokenAddress = '0x580127f3F17516A945785b9485048ad22f036142'
+
+const addToMetamask = async (provider: any): Promise<void> => {
+  await provider.request({
+    method: 'wallet_watchAsset',
+    params: {
+      type: 'ERC20',
+      options: { address: tokenAddress, symbol: 'SSD', decimals: 18 },
+    },
+  });
+};
+
 const MobileNavbar: React.FC<IProps> = () => {
   const [state, setState] = useState<State>('initial')
   const [tokenBalance, setTokenBalance] = useState<number>(0)
-  const { account, chainId, library } = useWeb3React()
+  const { account, chainId, library, connector } = useWeb3React()
   const [isSignedIn, setIsSignedIn] = useState(false) // Local signed-in state.
 
   useEffect(() => {
@@ -49,22 +61,27 @@ const MobileNavbar: React.FC<IProps> = () => {
 
   async function balanceOf() {
     const contract = new ethers.Contract(
-      '0x580127f3F17516A945785b9485048ad22f036142',
+      tokenAddress,
       ERC20_ABI,
       library.getSigner(account),
     )
 
     var balance = await contract.balanceOf(account)
-    // var intBalance = balance.toString()
     var intBalance = utils.formatEther(balance)
-    setTokenBalance(intBalance)
-    console.log('TOKEN BALANCE', intBalance)
+    setTokenBalance(Number(intBalance))
   }
 
   useEffect(() => {
     if (!account) return
     balanceOf()
   }, [account])
+
+  const track = async () => {
+    // track is only called from a component that is only rendered once an
+    // account is active, so we know connetor will be defined at that point
+    const provider = await connector.getProvider();
+    return addToMetamask(provider);
+  }
 
   return (
     <div
@@ -79,7 +96,7 @@ const MobileNavbar: React.FC<IProps> = () => {
           }
         >
           <div className={'flex'}>
-      
+
             <span className={'inline text-2xl mr-2'}>🌈</span>
             <a
               className={'font-serif text-2xl text-red-400 font-bold'}
@@ -94,9 +111,13 @@ const MobileNavbar: React.FC<IProps> = () => {
             </a>
           </div>
           <div className={'flex space-x-3 items-center'}>
-            <div className="px-6 w-full py-2 border border-red-300 text-sm shadow-lg font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 focus:outline-none ">
-              {tokenBalance} SSD
-            </div>
+            { connector &&
+              <div className="px-6 w-full py-2 border border-red-300 text-sm shadow-lg font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 focus:outline-none ">
+                {tokenBalance.toFixed(3)} <span
+                  onClick={() => track()}
+                  className="hover:underline cursor-pointer">SSD</span>
+              </div>
+            }
             <ConnectButton />
 
             <Menu as="div" className="ml-3 relative z-20">
@@ -115,7 +136,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                           ' text-red-300 h-8 w-8 p-2 border border-red-300 text-md font-medium rounded-sm shadow-lg hover:shadow-sm text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
                         }
                       />
-                
+
                     </Menu.Button>
                   </div>
                   <Transition
@@ -251,7 +272,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                             Admin Logout
                           </div>
                         )}
-                      
+
                       </Menu.Item>
                       }
 
