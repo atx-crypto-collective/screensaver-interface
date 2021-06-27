@@ -9,6 +9,7 @@ import { getNetworkLibrary } from '../connectors'
 import NFT from '../types'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import AccountId from '../components/AccountId'
+import Error from '../components/Error';
 import ReactPaginate from 'react-paginate-next'
 import { gql, useLazyQuery } from '@apollo/client'
 import { db } from '../config/firebase'
@@ -41,6 +42,8 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
   const [loadingState, setLoadingState] = useState<boolean>(true)
   const [count] = useState<number>(12)
   const [pageCount, setPageCount] = useState< number | null>(null)
+  const [pageCountError, setPageCountError] = useState<string | null>(null)
+  const [uriError, setUriError] = useState<string | null>(null)
   const [totalSupply, setTotalSupply] = useState(0)
   const [totalMinted, setMintedSupply] = useState(0)
 
@@ -50,6 +53,8 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
       variables: { id: account?.toString()?.toLowerCase() },
     },
   )
+
+  const hasError = error || pageCountError;
 
   // check reports for
   useEffect(() => {
@@ -110,30 +115,34 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
   }, [page])
 
   async function getPageCount() {
-    const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
-      GALLERY_ABI,
-      getNetworkLibrary(),
-    )
+    try {
+      setPageCountError(null);
+      const contract = new ethers.Contract(
+        process.env.NEXT_PUBLIC_CONTRACT_ID,
+        GALLERY_ABI,
+        getNetworkLibrary(),
+      )
 
-    var supply = await contract.totalSupply()
+      var supply = await contract.totalSupply()
 
-    var total_supply = supply.toNumber()
+      var total_supply = supply.toNumber()
 
-    var minted = await contract.totalMinted()
+      var minted = await contract.totalMinted()
 
-    var total_minted = minted.toNumber()
+      var total_minted = minted.toNumber()
 
-    var page_count = Math.ceil(total_minted / count)
+      var page_count = Math.ceil(total_minted / count)
 
-    console.log("PAGE COUNT", total_supply, total_minted, page_count)
+      console.log("PAGE COUNT", total_supply, total_minted, page_count)
 
-    loadTokens(total_minted)
+      loadTokens(total_minted)
 
-    setTotalSupply(total_supply)
-    setMintedSupply(total_minted)
-    setPageCount(page_count === 0 ? 1 : page_count)
-
+      setTotalSupply(total_supply)
+      setMintedSupply(total_minted)
+      setPageCount(page_count === 0 ? 1 : page_count)
+    } catch (e) {
+      setPageCountError(e.message);
+    }
   }
 
   async function getCollectionIds(data) {
@@ -192,7 +201,6 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
   }
 
   const getNFTs = async (range: number[]) => {
-
     const contract = new ethers.Contract(
       process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
@@ -222,10 +230,10 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
     setNfts(filteredMeta.reverse())
   }
 
-  if (error) {
+  if (hasError) {
     return (
       <Layout>
-        <div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>{error}</div>
+        <Error message="There was an error loading the gallery." />
       </Layout>
     )
   }
@@ -258,7 +266,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
         </div>
       )}
 
-      {nfts.length === 0 && (
+      {nfts.length === 0 && !hasError && (
         <div className="flex items-center justify-center text-md font-light h-12">
           This address has no {created ? 'created' : owned ? 'owned' : ''} objects.
         </div>
