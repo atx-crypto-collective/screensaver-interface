@@ -12,6 +12,7 @@ import { injected } from '../connectors'
 import { useRouter } from 'next/router'
 import { shortenAddress } from '../utils'
 import { getNetworkLibrary } from '../connectors'
+import { useMaticBalance } from '../hooks/useMaticBalance';
 import { BigNumber } from 'ethers'
 var utils = require('ethers').utils
 
@@ -35,6 +36,7 @@ const SetSalePrice: React.VFC<IProps> = ({ onUpdate, tokenId, sale = true }) => 
   const [bidder, setBidder] = useState<string | undefined>()
   const [ownerOf, setOwnerOf] = useState<boolean>(false)
   const [open, setOpen] = useState<boolean>(false)
+  const maticBalance = useMaticBalance();
   let transferTopic = ethers.utils.id('Transfer(address,address,uint256)')
 
   const handleSubmit = (evt) => {
@@ -42,6 +44,8 @@ const SetSalePrice: React.VFC<IProps> = ({ onUpdate, tokenId, sale = true }) => 
     // contract call
     console.log('VALUE', value)
   }
+
+  const hasError = account && value && maticBalance < parseFloat(value);
 
   // accept active bid
   async function createBid() {
@@ -82,7 +86,7 @@ const SetSalePrice: React.VFC<IProps> = ({ onUpdate, tokenId, sale = true }) => 
   setOpen={setOpen}
 />
       <label htmlFor="number" className="block text-sm font-medium text-white">
-        {sale ? 'Sale Price' : 'Place Bid'}
+        {sale ? 'Sale Price' : account && `Balance: ${maticBalance.toFixed(3)} MATIC`}
       </label>
       <form className="mt-5 sm:flex sm:items-center" onSubmit={handleSubmit}>
         <div className="w-full sm:max-w-xs">
@@ -113,7 +117,8 @@ const SetSalePrice: React.VFC<IProps> = ({ onUpdate, tokenId, sale = true }) => 
         ) : (
           <button
           onClick={!!account ? createBid : () => setOpen(true)}
-          className="ml-3 w-1/3 justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          className="button ml-3 w-1/3 justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          disabled={!maticBalance || !value || !parseFloat(value) || hasError}
         >
           Place Bid
           {loading && (
@@ -146,6 +151,10 @@ const SetSalePrice: React.VFC<IProps> = ({ onUpdate, tokenId, sale = true }) => 
         This should be a numeric value.
       </p>
     } */}
+
+      <span className={classNames({ invisible: !hasError}, "text-sm font-medium text-red-50")}>
+        You do not have enough MATIC for this bid.
+      </span>
     </div>
   )
 }
