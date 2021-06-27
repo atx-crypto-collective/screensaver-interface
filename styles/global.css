@@ -10,6 +10,21 @@ body {
   @apply font-mono;
 }
 
+#nprogress .bar {
+  background: #17ffe3 linear-gradient(to right, #17ffe3, #3c0ddb, #17ffe3);
+  background-size: 500%;
+  animation: 2s linear infinite progress, 0.3s fadein;
+}
+
+@keyframes progress {
+  0% {
+    background-position: 0% 0;
+  }
+  to {
+    background-position: 125% 0;
+  }
+}
+
 @layer base {
   .primary-gradient-background {
     background: linear-gradient(270.05deg, #f5af19 0.05%, #f12711 99.97%);
