@@ -45,7 +45,7 @@ const SetSalePrice: React.VFC<IProps> = ({ onUpdate, tokenId, sale = true }) => 
     console.log('VALUE', value)
   }
 
-  const hasError = account && value && maticBalance < parseFloat(value);
+  const hasPlaceBidError = !sale && account && value && maticBalance < parseFloat(value);
 
   // accept active bid
   async function createBid() {
@@ -118,7 +118,7 @@ const SetSalePrice: React.VFC<IProps> = ({ onUpdate, tokenId, sale = true }) => 
           <button
           onClick={!!account ? createBid : () => setOpen(true)}
           className="button ml-3 w-1/3 justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-          disabled={!maticBalance || !value || !parseFloat(value) || hasError}
+          disabled={!maticBalance || !value || !parseFloat(value) || hasPlaceBidError}
         >
           Place Bid
           {loading && (
@@ -152,7 +152,7 @@ const SetSalePrice: React.VFC<IProps> = ({ onUpdate, tokenId, sale = true }) => 
       </p>
     } */}
 
-      <span className={classNames({ invisible: !hasError}, "text-sm font-medium text-red-50")}>
+      <span className={classNames({ invisible: !hasPlaceBidError }, "text-sm font-medium text-red-50")}>
         You do not have enough MATIC for this bid.
       </span>
     </div>
