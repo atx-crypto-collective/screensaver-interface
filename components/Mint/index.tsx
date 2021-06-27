@@ -4,6 +4,7 @@ import axios from 'axios'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import Modal from '../../components/Modal'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { parseTags } from '../../utils'
 import { ethers } from 'ethers'
@@ -160,14 +161,11 @@ export default function Mint() {
           Your account is not yet whitelisted. To become whitelisted please
           review and accept our Terms of Service. :)
         </div>
-        <button
-          onClick={() => {
-            router.push('/whitelist')
-          }}
-          className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-        >
-          Get Whitelisted
-        </button>
+        <Link href="/whitelist">
+          <button className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+            Get Whitelisted
+          </button>
+        </Link>
       </Layout>
     )
   }
