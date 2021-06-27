@@ -27,6 +27,10 @@ body {
     @apply opacity-60;
   }
 
+  .button[disabled]:hover {
+    cursor: not-allowed;
+  }
+
   .button--gradient {
     @apply primary-gradient-background;
   }
