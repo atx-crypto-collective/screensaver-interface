@@ -3,6 +3,7 @@
 // TODO: Properly handle login button placement code (current code is smelly)
 // TODO: Properly color search box
 import React, { useState } from 'react'
+import Link from 'next/link'
 import { IProps } from '../types'
 // TODO: figure out why inline require'ing these don't work (webpack issue?)
 // import logoImage from './REDPILL.svg'
@@ -95,13 +96,9 @@ const MobileNavbar: React.FC<IProps> = () => {
             'flex justify-between mx-auto w-11/12 items-center h-16 z-10'
           }
         >
-          <div className={'flex'}>
-
-            <span className={'inline text-2xl mr-2'}>🌈</span>
-            <a
-              className={'font-serif text-2xl text-red-400 font-bold'}
-              href={'/gallery?page=1'}
-            >
+          <Link href={'/gallery?page=1'}>
+            <a className='flex font-serif text-2xl text-red-400 font-bold'>
+              <span className={'inline text-2xl mr-2'}>🌈</span>
               <img
                 src={logoImage}
                 alt={'Screen Saver'}
@@ -109,7 +106,8 @@ const MobileNavbar: React.FC<IProps> = () => {
                 width={200}
               />
             </a>
-          </div>
+          </Link>
+
           <div className={'flex space-x-3 items-center'}>
             { connector &&
               <div className="px-6 w-full py-2 border border-red-300 text-sm shadow-lg font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 focus:outline-none ">
@@ -154,124 +152,78 @@ const MobileNavbar: React.FC<IProps> = () => {
                       className="origin-top-right absolute right-0 mt-2 w-48 shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                     >
                       <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="/gallery?page=1"
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700',
-                            )}
-                          >
+                        <Link href="/gallery?page=1">
+                          <a className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
                             Gallery
                           </a>
-                        )}
+                        </Link>
                       </Menu.Item>
                       {!!account && (
                         <>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              href={`/created/${account}`}
-                              className={classNames(
-                                active ? 'bg-gray-100' : '',
-                                'block px-4 py-2 text-sm text-gray-700',
-                              )}
-                            >
-                              Created
-                            </a>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href={`/owned/${account}`}
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700',
-                            )}
-                          >
-                            Owned
-                          </a>
-                        )}
-                      </Menu.Item>
-                      </>
+                          <Menu.Item>
+                            <Link href={`/created/${account}`}>
+                              <a className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                                Created
+                              </a>
+                            </Link>
+                          </Menu.Item>
+                          <Menu.Item>
+                            <Link href={`/owned/${account}`}>
+                              <a className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                                Owned
+                              </a>
+                            </Link>
+                          </Menu.Item>
+                        </>
                       )}
                       <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="/mint"
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700',
-                            )}
-                          >
+                        <Link href="/mint">
+                          <a className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
                             Mint
                           </a>
-                        )}
+                        </Link>
                       </Menu.Item>
                       <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="/whitelist"
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700',
-                            )}
-                          >
+                        <Link href="/whitelist">
+                          <a className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
                             Whitelist
                           </a>
-                        )}
+                        </Link>
                       </Menu.Item>
                       <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="/"
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700',
-                            )}
-                          >
+                        <Link href="/">
+                          <a className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
                             What is Screensaver Dao?
                           </a>
-                        )}
+                        </Link>
                       </Menu.Item>
 
                       <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="https://v0.screensaver.world"
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700',
-                            )}
-                          >
-                            Screensaver V0
-                          </a>
-                        )}
+                        <a
+                          href="https://v0.screensaver.world"
+                          className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                        >
+                          Screensaver V0
+                        </a>
                       </Menu.Item>
 
                       {isSignedIn && <Menu.Item>
-                        {({ active }) => (
-                          <div
-                          onClick={
-                            () => {
-                              auth().signOut().then(() => {
-                                // Sign-out successful.
-                                console.log("SIGNOUT")
-                              }).catch((error) => {
-                                // An error happened.
-                                console.log("SIGNOUT ERROR", error)
-                              });
-                            }
+                        <div
+                        onClick={
+                          () => {
+                            auth().signOut().then(() => {
+                              // Sign-out successful.
+                              console.log("SIGNOUT")
+                            }).catch((error) => {
+                              // An error happened.
+                              console.log("SIGNOUT ERROR", error)
+                            });
                           }
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700',
-                            )}
-                          >
-                            Admin Logout
-                          </div>
-                        )}
+                        }
+                        className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                        >
+                          Admin Logout
+                        </div>
 
                       </Menu.Item>
                       }
