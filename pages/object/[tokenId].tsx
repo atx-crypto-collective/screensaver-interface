@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
+import moment from 'moment'
+
 import { Layout } from '../../components'
 import { useRouter } from 'next/router'
 import ItemDetailView from './ItemDetailView'
+import AccountId from '../../components/AccountId'
 import axios from 'axios'
 import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../../constants/gallery'
 import { getNetworkLibrary } from '../../connectors'
+import MintButton from '../../components/MintButton'
 import NFT from '../../types'
 import BiddingDetailView from './BiddingDetailView'
 import Head from 'next/head'
@@ -166,7 +170,7 @@ const ItemDetailPage: React.VFC = () => {
     <>
       <Layout>
         <Head>
-          <title>Screensaver.world | Object #{}</title>
+          <title>Screensaver.world | Object #{tokenId}</title>
           <meta name="title" content={metadata.name} />
           <meta name="description" content={metadata.description} />
           <meta property="og:title" content={metadata.name} />
@@ -180,14 +184,48 @@ const ItemDetailPage: React.VFC = () => {
           <meta name="twitter:card" content="summary_large_image" />
         </Head>
 
-        <div className={'md:mt-12 pb-8 w-11/12 mx-auto'}>
-          <div className={'md:p-3 max-w-xl mx-auto min-h-screen'}>
+        <div className="grid md:grid-cols-2 xs:grid-cols-1">
+          <div>
             <ItemDetailView
               metadata={metadata}
               hash={preview?.toString()}
             />
-
+          </div>
+          <div>
+            <div className={'text-red-400'}>
+              OBJ: #{tokenId}
+            </div>
+            <div className={'text-4xl font-bold mt-3 mb-1 md:mt-12 mt-8'}>{metadata.name}</div>
+            <div className={'text-md flex w-full'}>
+              {/* TODO: swear to god lisa if you add the space character to add margin*/}
+              <strong>CREATOR &nbsp;</strong> <AccountId linkToCreated address={metadata.creator} />
+            </div>
             {(!preview && !!tokenId) && <BiddingDetailView tokenId={tokenId} />}
+            <div className={'text-xl mt-4 mb-6'}>
+              <strong></strong>
+              {metadata.description}
+            </div>
+            <div className={'flex flex-col space-y-8'}>
+              <div className={'px-3'}>
+                {!!preview && <MintButton hash={hash} />}
+
+                <div className={'w-full border-t border-gray-800'} />
+
+                <div className={'text-lg py-1 mt-3'}>
+                  <strong>Creator: </strong> <AccountId linkToCreated address={metadata.creator} />
+                </div>
+                <div className={'text-sm py-1'}>
+                  <strong>Minted: </strong>
+                  {moment(metadata.creationDate).format('MMMM Do YYYY, h:mm:ss a')}
+                </div>
+                <div className={'text-sm py-1'}>
+                  <strong>MimeType: </strong> {metadata.media.mimeType}
+                </div>
+              </div>
+            </div>
+          </div>
+            
+
 
             {!preview && (<div className={'flex w-full mt-6'}>
               {(isContractOwner || ownerOf) && <BurnButton />}
@@ -215,7 +253,6 @@ const ItemDetailPage: React.VFC = () => {
             <div>METADATA URI: {!!metadata?.metadataUri && metadata.metadataUri.split('https://ipfs.io/ipfs/')[1]}</div>
             {!!metadata.image && <div>{`MEDIA URI:${metadata.image.split('https://ipfs.io/ipfs/')[1]}`}</div>}
             {!!metadata.animation_url && <div>{`MEDIA URI: ${metadata.animation_url.split('https://ipfs.io/ipfs/')[1]}`}</div>}
-          </div>
         </div>
       </Layout>
     </>

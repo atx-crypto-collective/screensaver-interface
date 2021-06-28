@@ -152,11 +152,6 @@ const BiddingDetailView = ({ tokenId }) => {
   return (
     <div className={'flex flex-col space-y-12'}>
       <div className={'flex flex-col space-y-8'}>
-        {/** if approved for sale */}
-        <h2 className={'font-bold pl-3 text-md text-gray-200'}>
-          id: {tokenId}
-        </h2>
-
         <div className={'text-md pl-3 flex w-full space-x-2'}>
           <strong>Collector: </strong>
           <AccountId address={nftOwner} />
