@@ -42,6 +42,8 @@ const BiddingDetailView = ({ tokenId }) => {
 
       setIsContractOwner(accountIsContractOwner)
 
+      setNFTOwner(ownerOf)
+
       if (ownerOf !== account) return
 
       setOwnerOf(true)
