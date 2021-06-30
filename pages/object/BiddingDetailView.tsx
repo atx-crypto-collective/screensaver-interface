@@ -203,7 +203,7 @@ const BiddingDetailView = ({ tokenId }) => {
         ) : (
           <>
             {!!tokenId && <BidRow tokenId={tokenId.toString()} />}
-            {!!ownerOf && <button onClick={removeFromSale}>Remove From Sale</button>}
+            {(!!ownerOf && !bidExists) && <button onClick={removeFromSale}>Remove From Sale</button>}
           </>
         )}
 
