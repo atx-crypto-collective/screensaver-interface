@@ -140,11 +140,11 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
     let ids
 
     if (created) {
-      ids = data.account.created.map((i) => i.id)
+      ids = data.account?.created?.map((i) => i.id) ?? [];
     }
 
     if (owned) {
-      ids = data.account.items.map((i) => i.id)
+      ids = data.account?.items?.map((i) => i.id) ?? [];
     }
 
     let filteredIds = ids.filter((v, i) => ids.indexOf(v) === i)
@@ -258,6 +258,12 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
         </div>
       )}
 
+      {nfts.length === 0 && (
+        <div className="flex items-center justify-center text-md font-light h-12">
+          This address has no {created ? 'created' : owned ? 'owned' : ''} objects.
+        </div>
+      )}
+
       <div className={'flex flex-col space-y-4'}>
         <div
           className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto mt-8'}
@@ -306,8 +312,8 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
               containerClassName={
                 'flex w-full bg-red-400 justify-center items-center h-10'
               }
-              pageClassName={
-                'flex justify-center items-center w-10 bg-white text-red-400 m-2'
+              pageLinkClassName={
+                'flex justify-center items-center w-10 bg-white text-red-400 m-2 hover:cursor-pointer'
               }
               activeClassName={'active'}
             />

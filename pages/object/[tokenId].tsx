@@ -11,6 +11,7 @@ import BiddingDetailView from './BiddingDetailView'
 import Head from 'next/head'
 import ReportButton from '../../components/ReportButton'
 import BurnButton from '../../components/BurnButton'
+import Error from '../../components/Error'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import { db, auth } from '../../config/firebase'
@@ -31,6 +32,7 @@ const ItemDetailPage: React.VFC = () => {
   const router = useRouter()
   const { tokenId, preview } = router.query
   const [uri, setUri] = useState<undefined | string>()
+  const [uriError, setUriError] = useState<string | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [metadata, setMetadata] = useState<NFT | undefined>()
   const [reports, setReports] = useState<string[]>([])
@@ -107,6 +109,7 @@ const ItemDetailPage: React.VFC = () => {
 
   async function getUri() {
     try {
+      setUriError(null);
       const contract = new ethers.Contract(
         process.env.NEXT_PUBLIC_CONTRACT_ID,
         GALLERY_ABI,
@@ -116,6 +119,7 @@ const ItemDetailPage: React.VFC = () => {
       setUri(tokenUri)
     } catch(error) {
       console.log("error", error)
+      setUriError(error);
     }
 
   }
@@ -142,6 +146,14 @@ const ItemDetailPage: React.VFC = () => {
       getUri()
     }
   }, [tokenId, preview])
+
+  if (uriError) {
+    return (
+      <Layout>
+        <Error message="There was an error loading this object." />
+      </Layout>
+    )
+  }
 
   if (loading)
     return (
