@@ -24,6 +24,7 @@ const BiddingDetailView = ({ tokenId }) => {
   const [nftOwner, setNFTOwner] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const [isContractOwner, setIsContractOwner] = useState<boolean>(false)
+  const [hasBurnerRole, setHasBurnerRole] = useState<boolean>(false)
   const [bidExists, setBidExists] = useState<boolean>(false)
 
   // ownerOf
@@ -37,11 +38,11 @@ const BiddingDetailView = ({ tokenId }) => {
 
       var ownerOf = await contract.ownerOf(tokenId)
       var contractOwner = await contract.owner()
-
+      var accountHasBurnerRole = await contract.hasRole("0x9667e80708b6eeeb0053fa0cca44e028ff548e2a9f029edfeac87c118b08b7c8", account) 
       const accountIsContractOwner = contractOwner === account
 
       setIsContractOwner(accountIsContractOwner)
-
+      setHasBurnerRole(accountHasBurnerRole)
       setNFTOwner(ownerOf)
 
       if (ownerOf !== account) return
@@ -210,7 +211,7 @@ const BiddingDetailView = ({ tokenId }) => {
         )}
 
         <div className={'flex w-full mt-6'}>
-          {((isContractOwner || ownerOf) && !!bidExists) && <BurnButton />}
+          {((hasBurnerRole || ownerOf) && !!bidExists) && <BurnButton />}
           <ReportButton />
         </div>
       </div>
