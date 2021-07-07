@@ -25,7 +25,9 @@ export default function Mint() {
   const router = useRouter()
   const { chainId, account } = useWeb3React<Web3Provider>()
   const [isWhitelisted, setIsWhitelisted] = useState(false)
+  const [includeThumbnail, setIncludeThumbnail] = useState(false)
   const [whitelistedLoading, setWhitelistedLoading] = useState(true)
+  const [thumbnailMedia, setThumbnailMedia] = useState<File>()
 
   // ownerOf
   async function checkIsWhitelisted() {
@@ -48,6 +50,10 @@ export default function Mint() {
 
   // check if file size is too large
   useEffect(() => {
+    if (media?.type.includes('video') || media?.type.includes('audio')) {
+      setIncludeThumbnail(true)
+    }
+
     if (media?.size > 40000000) {
       return setError(true)
     }
@@ -65,13 +71,14 @@ export default function Mint() {
   }
 
   // post metadata to server then to ipfs
-  async function postMetadata(imageUrl: string, mimeType: string) {
+  async function postMetadata(imageUrl: string, thumbnailUrl: string, mimeType: string) {
     var parsedTags = parseTags(tags)
     var creationDate = new Date()
     const metadata = {
       name: title,
       creationDate: new Date(),
       uri: imageUrl,
+      thumbnailUrl: thumbnailUrl,
       description: description,
       media: {
         mimeType: mimeType,
@@ -113,14 +120,37 @@ export default function Mint() {
       // get metadata of file to get file type
       const metadata = await fileRef.getMetadata()
 
-      console.log('META', metadata)
-
-      if (metadata.size > 40000000) {
+      if (metadata.size > 5000000) {
         return setError(true)
       }
 
+      let thumbnailDownloadUrl;
+
+      if (includeThumbnail) {
+        // Create a root reference
+        var thumbnailStorageRef = storage().ref()
+        var thumbnailName = media.name
+  
+        // Create a reference to 'mountains.jpg'
+        var thumbnailFileRef = thumbnailStorageRef.child(thumbnailName.split(' ').join('_'))
+  
+        // upload file to temp storage
+        await thumbnailFileRef.put(media)
+  
+        // get download url
+        thumbnailDownloadUrl = await thumbnailFileRef.getDownloadURL()
+  
+        // get metadata of file to get file type
+        const thumbnailMetadata = await thumbnailFileRef.getMetadata()
+
+        if (thumbnailMetadata.size > 40000000 || !thumbnailMetadata.type.includes('image')) {
+          return setError(true)
+        }
+
+      }
+
       // post metadata to server which will post to IPFS
-      const uri = await postMetadata(downloadUrl, metadata.contentType)
+      const uri = await postMetadata(downloadUrl, thumbnailDownloadUrl, metadata.contentType)
 
       // get hash from returned URI
       const hash = uri.split('/')
@@ -239,6 +269,60 @@ export default function Mint() {
                   </div>
                 </div>
               </div>
+
+              {includeThumbnail && (
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
+                  <label
+                    htmlFor="cover_photo"
+                    className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
+                  >
+                    Upload thumbnail
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-700 border-dashed">
+                      {thumbnailMedia ? (
+                        <div>{thumbnailMedia.name} ready!</div>
+                      ) : (
+                        <div className="space-y-1 text-center">
+                          <svg
+                            className="mx-auto h-12 w-12 text-gray-400"
+                            stroke="currentColor"
+                            fill="none"
+                            viewBox="0 0 48 48"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                          <div className="flex text-sm text-gray-600">
+                            <label
+                              htmlFor="file-upload"
+                              className="mt-4 w-full justify-center inline-flex items-center px-2 py-2 mb-2 border border-red-300 shadow-sm text-red-300 text-sm font-medium rounded-full text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                            >
+                              <span>Upload a thumbnail</span>
+                              <input
+                                id="file-upload"
+                                name="file-upload"
+                                type="file"
+                                className="sr-only"
+                                onChange={(e) => setThumbnailMedia(e.target.files[0])}
+                              />
+                            </label>
+                          </div>
+                          <p className="text-lg text-gray-500">
+                            Upload .png, .jpg{' '} as a thumbnail for audio or videos 
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className={'text-white text-md font-regular mt-3'}>
                 {error && `File size too large! Keep in under 40MB please :).`}
               </div>
