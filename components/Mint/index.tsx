@@ -120,7 +120,7 @@ export default function Mint() {
       // get metadata of file to get file type
       const metadata = await fileRef.getMetadata()
 
-      if (metadata.size > 5000000) {
+      if (metadata.size > 40000000) {
         return setError(true)
       }
 
@@ -129,13 +129,13 @@ export default function Mint() {
       if (includeThumbnail) {
         // Create a root reference
         var thumbnailStorageRef = storage().ref()
-        var thumbnailName = media.name
+        var thumbnailName = thumbnailMedia.name
   
         // Create a reference to 'mountains.jpg'
         var thumbnailFileRef = thumbnailStorageRef.child(thumbnailName.split(' ').join('_'))
   
         // upload file to temp storage
-        await thumbnailFileRef.put(media)
+        await thumbnailFileRef.put(thumbnailMedia)
   
         // get download url
         thumbnailDownloadUrl = await thumbnailFileRef.getDownloadURL()
@@ -143,7 +143,8 @@ export default function Mint() {
         // get metadata of file to get file type
         const thumbnailMetadata = await thumbnailFileRef.getMetadata()
 
-        if (thumbnailMetadata.size > 40000000 || !thumbnailMetadata.type.includes('image')) {
+        if (thumbnailMetadata.size > 5000000 || !thumbnailMedia.type.includes('image')) {
+          console.log("HERE WE GO", thumbnailMetadata.size, thumbnailMedia, thumbnailMedia.type.includes('image'))
           return setError(true)
         }
 
