@@ -144,7 +144,7 @@ export default function Mint() {
         const thumbnailMetadata = await thumbnailFileRef.getMetadata()
 
         if (thumbnailMetadata.size > 5000000 || !thumbnailMedia.type.includes('image')) {
-          console.log("HERE WE GO", thumbnailMetadata.size, thumbnailMedia, thumbnailMedia.type.includes('image'))
+          // console.log("HERE WE GO", thumbnailMetadata.size, thumbnailMedia, thumbnailMedia.type.includes('image'))
           return setError(true)
         }
 
