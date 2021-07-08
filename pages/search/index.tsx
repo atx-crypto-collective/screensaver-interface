@@ -21,11 +21,9 @@ interface IProps {
 }
 
 const SEARCH_QUERY = gql`
-  query SearchPage($text: String!) {
+  query SearchPage($text: String) {
     artworkSearch(text: $text) {
-        name
-        description
-        mimeType
+      id
       }
   }
 `
@@ -42,7 +40,7 @@ const SearchView: React.VFC<IProps> = ({ created, owned, admin }) => {
   const [loadCollection, { called, error, loading, data }] = useLazyQuery(
     SEARCH_QUERY,
     {
-      variables: { text: 'Glitchy' },
+      variables: { text: searchInput },
     },
   )
 
@@ -69,7 +67,7 @@ const SearchView: React.VFC<IProps> = ({ created, owned, admin }) => {
   }
 
   useEffect(() => {
-    if ((!created && !owned && !admin) || !data) return
+    if (!data) return
     getCollectionIds(data)
   }, [data])
 
@@ -78,15 +76,9 @@ const SearchView: React.VFC<IProps> = ({ created, owned, admin }) => {
   }, [searchInput])
 
   async function getCollectionIds(data) {
-    let ids
+    console.log("data", data.artworkSearch)
+    let ids = data.artworkSearch.map(a => a.id)
 
-    if (created) {
-      ids = data.account?.created?.map((i) => i.id) ?? [];
-    }
-
-    if (owned) {
-      ids = data.account?.items?.map((i) => i.id) ?? [];
-    }
 
     let filteredIds = ids.filter((v, i) => ids.indexOf(v) === i)
     let ascending = filteredIds.sort(function (a, b) {
@@ -137,27 +129,16 @@ const SearchView: React.VFC<IProps> = ({ created, owned, admin }) => {
     )
   }
 
-  if (loadingState || loading)
-    return (
-      <Layout>
-        <div className={'md:mt-12 pb-8 max-w-xl mx-auto'}>loading...</div>
-      </Layout>
-    )
+
 
   return (
-    <>
+    <Layout>
 
+      <div className={'flex flex-col space-y-4 items-center'}>
         <SearchBar input={searchInput} onChange={value => setSearchInput(value)}/> 
-
-      {nfts.length === 0 && (
-        <div className="flex items-center justify-center text-md font-light h-12">
-          No results.
-        </div>
-      )}
-
-      <div className={'flex flex-col space-y-4'}>
         <div
           className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto mt-8'}
+          
         >
           {(!loadingState && !loading) ? (
             nfts.map((item, key) => (
@@ -180,7 +161,7 @@ const SearchView: React.VFC<IProps> = ({ created, owned, admin }) => {
 
 
       </div>
-    </>
+      </Layout>
   )
 }
 
