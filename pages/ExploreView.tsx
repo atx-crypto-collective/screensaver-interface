@@ -312,8 +312,8 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
               containerClassName={
                 'flex w-full bg-red-400 justify-center items-center h-10'
               }
-              pageClassName={
-                'flex justify-center items-center w-10 bg-white text-red-400 m-2'
+              pageLinkClassName={
+                'flex justify-center items-center w-10 bg-white text-red-400 m-2 hover:cursor-pointer'
               }
               activeClassName={'active'}
             />

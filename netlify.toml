@@ -25,6 +25,11 @@
   status = 200
 
 [[redirects]]
+  from = "/search/:search"
+  to = "/search/:search"
+  status = 200
+
+[[redirects]]
   from = "/gallery/:gallery"
   to = "/gallery/:gallery"
   status = 200

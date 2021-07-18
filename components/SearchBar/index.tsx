@@ -9,7 +9,7 @@ interface IProps {
 const SearchBar: React.FC<IProps> = ({input ,onChange}) => {
   return (
     <input 
-     className={'w-80 lg:w-80 h-12 bg-gray-900 p-3 border border-gray-600 focus:outline-none absolute md:-mt-20 -mt-16'}
+     className={'w-80 lg:w-80 h-12 bg-gray-900 p-3 border border-gray-600 focus:outline-none'}
      key="random1"
      value={input}
      placeholder={"Search... "}
