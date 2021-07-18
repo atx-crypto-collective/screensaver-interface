@@ -211,7 +211,7 @@ const BiddingDetailView = ({ tokenId }) => {
         )}
 
         <div className={'flex w-full mt-6'}>
-          {((hasBurnerRole || ownerOf) && !!bidExists) && <BurnButton />}
+          {((hasBurnerRole || ownerOf) && !bidExists) && <BurnButton />}
           <ReportButton />
         </div>
       </div>
