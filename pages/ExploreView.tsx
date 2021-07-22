@@ -97,14 +97,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
     loadCollection()
   }, [account])
 
-  // useEffect(() => {
-  //   console.log("LOAD TOKENS PAGE", page)
-  //   if (!!created || !!owned || !!admin || pageCount !== null) return
-  //   console.log("LOAD TOKENS PAGE", page)
-  // }, [totalMinted])
-
   useEffect(() => {
-    console.log("PAGE", page)
     if (!!created || !!owned || !!admin || !page) return
     getPageCount()
   }, [page])

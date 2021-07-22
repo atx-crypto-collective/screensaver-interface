@@ -197,7 +197,13 @@ const MobileNavbar: React.FC<IProps> = () => {
                           </a>
                         </Link>
                       </Menu.Item>
-
+                      <Menu.Item>
+                        <Link href="https://ssw.wtf/">
+                          <a className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                            Account shortlinks
+                          </a>
+                        </Link>
+                      </Menu.Item>
                       <Menu.Item>
                         <a
                           href="https://v0.screensaver.world"
