@@ -10,7 +10,7 @@ const Provider = dynamic(() => import("../state/StoreProvider"), {
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: "https://api.thegraph.com/subgraphs/name/jsmellz/screensaversub"
+  uri: "https://api.thegraph.com/subgraphs/name/jsmellz/screensaverv1"
 });
 
 
