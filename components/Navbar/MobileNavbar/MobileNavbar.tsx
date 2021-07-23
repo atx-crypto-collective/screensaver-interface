@@ -5,12 +5,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { IProps } from '../types'
-// TODO: figure out why inline require'ing these don't work (webpack issue?)
-// import logoImage from './REDPILL.svg'
 import SearchInput from '../SearchInput'
-// import closeButtonIcon from './close-button-icon.svg'
-// import searchIcon from './search-icon.svg'
-// import menuIcon from './menu-icon.svg'
 import NavigationLinks from './NavigationLinks'
 import { MenuIcon } from '@heroicons/react/outline'
 import { XIcon } from '@heroicons/react/outline'
@@ -43,8 +38,8 @@ const addToMetamask = async (provider: any): Promise<void> => {
       type: 'ERC20',
       options: { address: tokenAddress, symbol: 'SSD', decimals: 18 },
     },
-  });
-};
+  })
+}
 
 const MobileNavbar: React.FC<IProps> = () => {
   const [state, setState] = useState<State>('initial')
@@ -80,8 +75,8 @@ const MobileNavbar: React.FC<IProps> = () => {
   const track = async () => {
     // track is only called from a component that is only rendered once an
     // account is active, so we know connetor will be defined at that point
-    const provider = await connector.getProvider();
-    return addToMetamask(provider);
+    const provider = await connector.getProvider()
+    return addToMetamask(provider)
   }
 
   return (
@@ -96,8 +91,9 @@ const MobileNavbar: React.FC<IProps> = () => {
             'flex justify-between mx-auto w-11/12 items-center h-16 z-10'
           }
         >
+          <div className={'flex items-center'}>
           <Link href={'/gallery?page=1'}>
-            <a className='flex font-serif text-2xl text-red-400 font-bold'>
+            <a className="flex font-serif text-2xl text-red-400 font-bold">
               <span className={'inline text-2xl mr-2'}>🌈</span>
               <img
                 src={logoImage}
@@ -108,14 +104,27 @@ const MobileNavbar: React.FC<IProps> = () => {
             </a>
           </Link>
 
-          <div className={'flex space-x-3 items-center'}>
-            { connector &&
-              <div className="px-6 w-full py-2 border border-red-300 text-sm shadow-lg font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 focus:outline-none ">
-                {tokenBalance.toFixed(3)} <span
-                  onClick={() => track()}
-                  className="hover:underline cursor-pointer">SSD</span>
-              </div>
+          <Link href={'/search'}>
+          <input
+            placeholder={'Search art titles...'}
+            className={
+              'input rounded-md border cursor-pointer border-gray-800 w-200 text-gray-400 font-bold text-base h-8 px-6 mx-10'
             }
+          />
+          </Link>
+          </div>
+          <div className={'flex space-x-3 items-center'}>
+            {connector && (
+              <div className="px-6 w-full py-2 border border-red-300 text-sm shadow-lg font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 focus:outline-none ">
+                {tokenBalance.toFixed(3)}{' '}
+                <span
+                  onClick={() => track()}
+                  className="hover:underline cursor-pointer"
+                >
+                  SSD
+                </span>
+              </div>
+            )}
             <ConnectButton />
 
             <Menu as="div" className="ml-3 relative z-20">
@@ -134,7 +143,6 @@ const MobileNavbar: React.FC<IProps> = () => {
                           ' text-red-300 h-8 w-8 p-2 border border-red-300 text-md font-medium rounded-sm shadow-lg hover:shadow-sm text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
                         }
                       />
-
                     </Menu.Button>
                   </div>
                   <Transition
@@ -153,14 +161,14 @@ const MobileNavbar: React.FC<IProps> = () => {
                     >
                       <Menu.Item>
                         <Link href="/gallery?page=1">
-                          <a className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                          <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Gallery
                           </a>
                         </Link>
                       </Menu.Item>
                       <Menu.Item>
                         <Link href="/search">
-                          <a className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                          <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Search
                           </a>
                         </Link>
@@ -169,14 +177,14 @@ const MobileNavbar: React.FC<IProps> = () => {
                         <>
                           <Menu.Item>
                             <Link href={`/created/${account}`}>
-                              <a className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                              <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 Created
                               </a>
                             </Link>
                           </Menu.Item>
                           <Menu.Item>
                             <Link href={`/owned/${account}`}>
-                              <a className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                              <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 Owned
                               </a>
                             </Link>
@@ -185,28 +193,28 @@ const MobileNavbar: React.FC<IProps> = () => {
                       )}
                       <Menu.Item>
                         <Link href="/mint">
-                          <a className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                          <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Mint
                           </a>
                         </Link>
                       </Menu.Item>
                       <Menu.Item>
                         <Link href="/whitelist">
-                          <a className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                          <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Whitelist
                           </a>
                         </Link>
                       </Menu.Item>
                       <Menu.Item>
                         <Link href="/">
-                          <a className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                          <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             What is Screensaver Dao?
                           </a>
                         </Link>
                       </Menu.Item>
                       <Menu.Item>
                         <Link href="https://ssw.wtf/">
-                          <a className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                          <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Account shortlinks
                           </a>
                         </Link>
@@ -214,33 +222,33 @@ const MobileNavbar: React.FC<IProps> = () => {
                       <Menu.Item>
                         <a
                           href="https://v0.screensaver.world"
-                          className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
                           Screensaver V0
                         </a>
                       </Menu.Item>
 
-                      {isSignedIn && <Menu.Item>
-                        <div
-                        onClick={
-                          () => {
-                            auth().signOut().then(() => {
-                              // Sign-out successful.
-                              console.log("SIGNOUT")
-                            }).catch((error) => {
-                              // An error happened.
-                              console.log("SIGNOUT ERROR", error)
-                            });
-                          }
-                        }
-                        className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
-                        >
-                          Admin Logout
-                        </div>
-
-                      </Menu.Item>
-                      }
-
+                      {isSignedIn && (
+                        <Menu.Item>
+                          <div
+                            onClick={() => {
+                              auth()
+                                .signOut()
+                                .then(() => {
+                                  // Sign-out successful.
+                                  console.log('SIGNOUT')
+                                })
+                                .catch((error) => {
+                                  // An error happened.
+                                  console.log('SIGNOUT ERROR', error)
+                                })
+                            }}
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          >
+                            Admin Logout
+                          </div>
+                        </Menu.Item>
+                      )}
                     </Menu.Items>
                   </Transition>
                 </>
