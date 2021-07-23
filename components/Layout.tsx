@@ -11,7 +11,7 @@ interface IProps {
 const Layout: React.FC<IProps> = ({ children }) => {
 
   return (
-    <div className={'mt-32 pace-y-4 lg:pb-20 bg-black h-full relative'}>
+    <div className={'mt-40 pace-y-4 lg:pb-20 bg-black h-full relative'}>
       <Navbar />
       <div>{children}</div>
     </div>

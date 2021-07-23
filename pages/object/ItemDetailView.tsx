@@ -16,6 +16,7 @@ const ItemDetailView: React.VFC<IProps> = ({ metadata, hash }) => {
   const router = useRouter()
   const { tokenId, preview } = router.query
   const [copied, setCopied] = useState(false)
+  
   return (
     <div className={'flex flex-col space-y-12'}>
       <div className={'flex flex-col space-y-8'}>
