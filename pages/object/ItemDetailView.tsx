@@ -5,6 +5,7 @@ import {
 import NFT from '../../types'
 import MintButton from '../../components/MintButton'
 import AccountId from '../../components/AccountId'
+import Vibes from './vibes';
 import moment from 'moment'
 import { useRouter } from 'next/router'
 

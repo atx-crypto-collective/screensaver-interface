@@ -15,6 +15,7 @@ import Error from '../../components/Error'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import { db, auth } from '../../config/firebase'
+import Vibes from './vibes'
 
 const ReportItem = ({ report }) => {
   return (
@@ -188,7 +189,7 @@ const ItemDetailPage: React.VFC = () => {
             />
 
             {(!preview && !!tokenId) && <BiddingDetailView tokenId={tokenId} />}
-
+            <Vibes tokenId={tokenId} />
             {isSignedIn && (
               <>
                 <div className="bg-white shadow p-2 text-black sm:rounded-lg mt-10">
