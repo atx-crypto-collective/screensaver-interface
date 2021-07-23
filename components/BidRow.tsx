@@ -17,11 +17,7 @@ interface IProps {
 
 const BidRow: React.VFC<IProps> = ({ tokenId }) => {
   const [value, setValue] = useState<string>()
-  const {
-    chainId,
-    account,
-    library,
-  } = useWeb3React<Web3Provider>()
+  const { chainId, account, library } = useWeb3React<Web3Provider>()
   const [bid, setBid] = useState<number | undefined>()
   const [bidder, setBidder] = useState<string | undefined>()
   const [ownerOf, setOwnerOf] = useState<boolean>(false)
@@ -76,10 +72,9 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
 
     const receipt = await tx.wait()
 
-
     // setTimeout(() => {
-      currentBids()
-      setLoading(false)
+    currentBids()
+    setLoading(false)
     // }, 10000)
   }
 
@@ -98,7 +93,6 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
 
     currentBids()
     setLoading(false)
-
   }
 
   // component mount check for current bid
@@ -122,11 +116,11 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
             <h4 className="sr-only">Visa</h4>
             <div className="sm:flex sm:items-start">
               <div className="mt-3 sm:mt-0 sm:ml-4">
-                <h3 className="text-lg leading-6 font-medium">
-                  {bid} MATIC
-                </h3>
+                <h3 className="text-lg leading-6 font-medium">{bid} MATIC</h3>
                 <div className="mt-1 text-sm  sm:flex sm:items-center">
-                  <div><AccountId address={bidder}/></div>
+                  <div>
+                    <AccountId address={bidder} />
+                  </div>
                 </div>
               </div>
             </div>
@@ -161,43 +155,44 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
                 )}
               </button>
             )}
-            {account === bidder && (
-              <button
-                onClick={!!account ? cancelBid : () => setOpen(true)}
-                className="w-48 h-14 justify-center inline-flex items-center border border-red-300 shadow-sm text-red-300 font-medium rounded-full text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                Cancel Bid
-                {loading && (
-                  <svg
-                    className="animate-spin -mr-1 ml-3 h-5 w-5 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      stroke-width="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                )}
-              </button>
-            )}
           </div>
         </div>
-      ) :
-      <div className="w-full h-14 justify-center inline-flex items-center border border-gray-700 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900"
-      >No Bids Yet</div>
-    
-    }
+      ) : (
+        <div className="w-full h-14 justify-center inline-flex items-center border border-gray-700 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900">
+          No Bids Yet
+        </div>
+      )}
+
+      {account === bidder && (
+        <button
+          onClick={!!account ? cancelBid : () => setOpen(true)}
+          className="w-48 h-14 justify-center inline-flex items-center border border-red-300 shadow-sm text-red-300 font-medium rounded-full text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+        >
+          Cancel Bid
+          {loading && (
+            <svg
+              className="animate-spin -mr-1 ml-3 h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+          )}
+        </button>
+      )}
 
       {!ownerOf && (
         <SetSalePrice sale={false} tokenId={tokenId} onUpdate={currentBids} />

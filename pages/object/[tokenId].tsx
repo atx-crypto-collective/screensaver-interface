@@ -190,11 +190,6 @@ const ItemDetailPage: React.VFC = () => {
 
             {(!preview && !!tokenId) && <BiddingDetailView tokenId={tokenId} />}
 
-            {!preview && (<div className={'flex w-full mt-6'}>
-              {(isContractOwner || ownerOf) && <BurnButton />}
-              <ReportButton />
-            </div>)}
-
             {isSignedIn && (
               <>
                 <div className="bg-white shadow p-2 text-black sm:rounded-lg mt-10">
