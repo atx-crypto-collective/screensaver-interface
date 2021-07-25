@@ -9,13 +9,11 @@ import { getNetworkLibrary } from '../../connectors'
 import NFT from '../../types'
 import BiddingDetailView from './BiddingDetailView'
 import Head from 'next/head'
-import ReportButton from '../../components/ReportButton'
-import BurnButton from '../../components/BurnButton'
 import Error from '../../components/Error'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import { db, auth } from '../../config/firebase'
-import Vibes from './vibes'
+import Vibes from './Vibes'
 
 const ReportItem = ({ report }) => {
   return (
