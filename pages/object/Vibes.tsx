@@ -17,14 +17,13 @@ interface IProps {
 
 const Vibes = ({ tokenId }) => {
   const { account, library } = useWeb3React<Web3Provider>()
-  const [approvalStatus, setApprovalStatus] = useState<boolean | undefined>()
   const [ownerOf, setOwnerOf] = useState<boolean>(false)
-  const [approvalLoading, setApprovalLoading] = useState<boolean>(false)
   const [nftOwner, setNFTOwner] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const [isContractOwner, setIsContractOwner] = useState<boolean>(false)
   const [hasBurnerRole, setHasBurnerRole] = useState<boolean>(false)
   const [bidExists, setBidExists] = useState<boolean>(false)
+  const [claimableVibes, setClaimableVibes] = useState<string>('');
 
   // ownerOf
   async function checkOwnerOf() {
@@ -59,6 +58,12 @@ const Vibes = ({ tokenId }) => {
       VIBES_WELLSPRING_ABI,
       getNetworkLibrary(),
     )
+    const tokenInfo = await contract.tokenInfo(tokenId);
+    if (tokenInfo) {
+      const { claimable } = tokenInfo;
+      const claimableReadable = (parseInt(ethers.BigNumber.from(claimable).toString()) / 1000000000000000000).toFixed(2);
+      setClaimableVibes(claimableReadable);
+    }
   }
 
   useEffect(() => {
@@ -67,7 +72,13 @@ const Vibes = ({ tokenId }) => {
   }, [account])
 
   return (
-    <div>HELLA FRIGGIN VIBES</div>
+    <div className={'flex flex-col space-y-12'}>
+      <div className={'flex flex-col space-y-8'}>
+        <div className={'px-3'}>
+          {claimableVibes.length ? `${claimableVibes} VIBES` : ''}
+        </div>
+      </div>
+    </div>
   )
 }
 
