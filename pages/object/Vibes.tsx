@@ -7,6 +7,7 @@ import VIBES_WELLSPRING_ABI from '../../constants/abis/vibes'
 import { getNetworkLibrary } from '../../connectors'
 import ReportButton from '../../components/ReportButton'
 import BurnButton from '../../components/BurnButton'
+import { GALLERY_ABI } from '../../constants/gallery'
 
 var utils = require('ethers').utils
 
@@ -30,7 +31,7 @@ const Vibes = ({ tokenId }) => {
     try {
       const contract = new ethers.Contract(
         process.env.NEXT_PUBLIC_CONTRACT_ID,
-        VIBES_WELLSPRING_ABI,
+        GALLERY_ABI,
         getNetworkLibrary(),
       )
 
@@ -52,103 +53,17 @@ const Vibes = ({ tokenId }) => {
     }
   }
 
-  // // get current bids
-  // async function currentBids() {
-  //   const contract = new ethers.Contract(
-  //     process.env.NEXT_PUBLIC_CONTRACT_ID,
-  //     GALLERY_ABI,
-  //     getNetworkLibrary(),
-  //   )
-
-  //   var currentBid = await contract.currentBidDetailsOfToken(tokenId)
-
-  //   if (utils.formatEther(currentBid[0]) === '0.0') {
-  //     setBidExists(false)
-  //   } else {
-  //     setBidExists(true)
-  //   }
-  // }
-
-  // // get approved
-  // async function getApproved() {
-  //   try {
-  //     const contract = new ethers.Contract(
-  //       process.env.NEXT_PUBLIC_CONTRACT_ID,
-  //       GALLERY_ABI,
-  //       getNetworkLibrary(),
-  //     )
-  //     var approvedAddress = await contract.getApproved(tokenId)
-
-  //     setApprovalStatus(approvedAddress === process.env.NEXT_PUBLIC_CONTRACT_ID)
-  //   } catch (error) {
-  //     console.log('error', error)
-  //     setApprovalStatus(false)
-  //   }
-  // }
-
-  // // approve sales
-  // async function removeFromSale() {
-  //   try {
-  //     setApprovalLoading(true)
-
-  //     const contract = new ethers.Contract(
-  //       process.env.NEXT_PUBLIC_CONTRACT_ID,
-  //       GALLERY_ABI,
-  //       library.getSigner(account),
-  //     )
-
-  //     const tx = await contract.approve('0x0000000000000000000000000000000000000000', tokenId);
-
-  //     console.log('APPROVAL CALLED')
-
-  //     setLoading(true)
-
-  //     const receipt = await tx.wait()
-
-  //     console.log('WAIT', receipt)
-
-  //     getApproved()
-  //     setLoading(false)
-
-  //     setApprovalLoading(false)
-  //   } catch (error) {
-  //     console.log('error')
-  //   }
-  // }
-
-  // // approve sales
-  // async function approve() {
-  //   try {
-  //     setApprovalLoading(true)
-
-  //     const contract = new ethers.Contract(
-  //       process.env.NEXT_PUBLIC_CONTRACT_ID,
-  //       GALLERY_ABI,
-  //       library.getSigner(account),
-  //     )
-
-  //     const tx = await contract.approve(
-  //       process.env.NEXT_PUBLIC_CONTRACT_ID,
-  //       tokenId,
-  //     )
-
-  //     setLoading(true)
-
-  //     const receipt = await tx.wait()
-
-  //     getApproved()
-  //     setLoading(false)
-  //     setApprovalLoading(false)
-
-  //   } catch (error) {
-  //     console.log('error')
-  //   }
-  // }
+  async function getVibes() {
+    const contract = new ethers.Contract(
+      process.env.NEXT_PUBLIC_VIBES_CONTRACT_ID,
+      VIBES_WELLSPRING_ABI,
+      getNetworkLibrary(),
+    )
+  }
 
   useEffect(() => {
     checkOwnerOf()
-    // getApproved()
-    // currentBids()
+    getVibes()
   }, [account])
 
   return (
