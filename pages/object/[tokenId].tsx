@@ -166,7 +166,7 @@ const ItemDetailPage: React.VFC = () => {
     <>
       <Layout>
         <Head>
-          <title>Screensaver.world | Object #{}</title>
+          <title>Screensaver.world | Object #{tokenId}</title>
           <meta name="title" content={metadata.name} />
           <meta name="description" content={metadata.description} />
           <meta property="og:title" content={metadata.name} />
