@@ -27,7 +27,7 @@ export const POLYGON_MAINNET_PARAMS = {
       symbol: 'MATIC',
       decimals: 18
   },
-  rpcUrls: ['https://rpc-mainnet.matic.network'],
+  rpcUrls: ['https://matic-mainnet.chainstacklabs.com'],
   blockExplorerUrls: ['https://explorer.matic.network/']
 }
 
