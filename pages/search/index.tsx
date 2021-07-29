@@ -76,9 +76,8 @@ const SearchView: React.VFC<IProps> = ({ created, owned, admin }) => {
   }, [searchInput])
 
   async function getCollectionIds(data) {
-    console.log("data", data.artworkSearch)
-    let ids = data.artworkSearch.map(a => a.id)
 
+    let ids = data.artworkSearch.map(a => a.id)
 
     let filteredIds = ids.filter((v, i) => ids.indexOf(v) === i)
     let ascending = filteredIds.sort(function (a, b) {
@@ -134,7 +133,7 @@ const SearchView: React.VFC<IProps> = ({ created, owned, admin }) => {
   return (
     <Layout>
 
-      <div className={'flex flex-col space-y-4 items-center'}>
+      <div className={'flex flex-col space-y-4 items-center mt-48'}>
         <SearchBar input={searchInput} onChange={value => setSearchInput(value)}/> 
         <div
           className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto mt-8'}

@@ -108,7 +108,7 @@ const MobileNavbar: React.FC<IProps> = () => {
           <input
             placeholder={'Search art titles...'}
             className={
-              'input rounded-md border cursor-pointer border-gray-800 w-0 md:w-200 text-gray-400 font-bold text-base p-0 md:h-8 md:px-6 md:mx-10'
+              'input rounded-md border cursor-pointer border-gray-800 w-0 md:w-64 text-gray-400 font-bold text-base p-0 md:h-8 md:px-6 md:mx-10'
             }
           />
           </Link>
