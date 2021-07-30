@@ -21,12 +21,12 @@ const Vibes = ({ tokenId }) => {
       VIBES_WELLSPRING_ABI,
       getNetworkLibrary(),
     )
-    const tokenInfo = await contract.tokenInfo(tokenId);
+    const tokenInfo = await contract.getToken(process.env.NEXT_PUBLIC_CONTRACT_ID, tokenId);
     if (tokenInfo) {
       const { claimable } = tokenInfo;
       const claimableReadable = (parseInt(ethers.BigNumber.from(claimable).toString()) / 1000000000000000000).toFixed(2);
       setClaimableVibes(claimableReadable);
-    }
+    } 
   }
 
   useEffect(() => {
