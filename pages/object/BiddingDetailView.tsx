@@ -38,18 +38,21 @@ const BiddingDetailView = ({ tokenId }) => {
 
       var ownerOf = await contract.ownerOf(tokenId)
       var contractOwner = await contract.owner()
-      var accountHasBurnerRole = await contract.hasRole("0x9667e80708b6eeeb0053fa0cca44e028ff548e2a9f029edfeac87c118b08b7c8", account) 
-      const accountIsContractOwner = contractOwner === account
-
-      setIsContractOwner(accountIsContractOwner)
-      setHasBurnerRole(accountHasBurnerRole)
+      if (!!account) {
+        var accountHasBurnerRole = await contract.hasRole("0x9667e80708b6eeeb0053fa0cca44e028ff548e2a9f029edfeac87c118b08b7c8", account) 
+        const accountIsContractOwner = contractOwner === account
+  
+        setIsContractOwner(accountIsContractOwner)
+        setHasBurnerRole(accountHasBurnerRole)
+      }
+      console.log("OWNER OF", ownerOf)
       setNFTOwner(ownerOf)
 
-      if (ownerOf !== account) return
+      // if (ownerOf !== account) return
 
       setOwnerOf(true)
     } catch (error) {
-      console.log('error')
+      console.log('error', error)
       setOwnerOf(false)
     }
   }
