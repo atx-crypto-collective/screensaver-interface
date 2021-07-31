@@ -276,7 +276,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
               </div>
             ))
           ) : (
-            <NFTItemCard loading={true} />
+            <NFTItemCard cardLoading={true} />
           )}
         </div>
 
