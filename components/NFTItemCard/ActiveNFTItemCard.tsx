@@ -30,7 +30,7 @@ const NFTItemCard: React.FC<IProps> = ({ nft, creator, cardLoading }) => {
   const [forSale, setForSale] = useState(false)
 
   const { loading, error, data } = useQuery(BID_QUERY, {
-    variables: { item: nft.tokenId.toString() },
+    variables: { item: nft?.tokenId.toString() },
   })
 
   // get current bids
@@ -66,8 +66,6 @@ const NFTItemCard: React.FC<IProps> = ({ nft, creator, cardLoading }) => {
 
   useEffect(() => {
     if (loading) return
-
-    console.log('BID DATA', data)
 
     if (data.bidLogs.length > 0) {
       const sortedByMostRecentBids = data.bidLogs.sort(function (x, y) {
