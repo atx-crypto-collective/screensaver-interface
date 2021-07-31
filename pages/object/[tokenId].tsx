@@ -8,6 +8,7 @@ import { GALLERY_ABI } from '../../constants/gallery'
 import { getNetworkLibrary } from '../../connectors'
 import NFT from '../../types'
 import BiddingDetailView from './BiddingDetailView'
+import BidHistory from './BidHistory'
 import Head from 'next/head'
 import ReportButton from '../../components/ReportButton'
 import BurnButton from '../../components/BurnButton'
@@ -206,6 +207,9 @@ const ItemDetailPage: React.VFC = () => {
                 
               </>
             )}
+
+            <BidHistory tokenId={tokenId} />
+
 
             {/* <div>METADATA URI: {!!metadata?.metadataUri && metadata.metadataUri.split('https://ipfs.io/ipfs/')[1]}</div>
             {!!metadata.image && <div>{`MEDIA URI:${metadata.image.split('https://ipfs.io/ipfs/')[1]}`}</div>}
