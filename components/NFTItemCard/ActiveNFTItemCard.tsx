@@ -6,16 +6,32 @@ import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../../constants/gallery'
 import { getNetworkLibrary } from '../../connectors'
 import AccountId from '../AccountId'
+import { gql, useQuery } from '@apollo/client'
 
 var utils = require('ethers').utils
 
-const NFTItemCard: React.FC<IProps> = ({
-  nft,
-  creator,
-  loading
-}) => {
-  const [bid, setBid] = useState<number | undefined>()
+const BID_QUERY = gql`
+  query Bid($item: String) {
+    bidLogs(where: { item: $item, accepted: true }) {
+      id
+      item {
+        id
+      }
+      amount
+      accepted
+      canceled
+    }
+  }
+`
+
+const NFTItemCard: React.FC<IProps> = ({ nft, creator, cardLoading }) => {
+  const [currentBid, setCurrentBid] = useState<number | undefined>()
+  const [lastSale, setLastSale] = useState<number | undefined>()
   const [forSale, setForSale] = useState(false)
+
+  const { loading, error, data } = useQuery(BID_QUERY, {
+    variables: { item: nft.tokenId.toString() },
+  })
 
   // get current bids
   async function currentBids() {
@@ -30,9 +46,9 @@ const NFTItemCard: React.FC<IProps> = ({
     var currentBid = await contract.currentBidDetailsOfToken(nft.tokenId)
 
     if (utils.formatEther(currentBid[0]) === '0.0') {
-      setBid(undefined)
+      setCurrentBid(undefined)
     } else {
-      setBid(utils.formatEther(currentBid[0]))
+      setCurrentBid(utils.formatEther(currentBid[0]))
     }
   }
 
@@ -49,29 +65,68 @@ const NFTItemCard: React.FC<IProps> = ({
   }
 
   useEffect(() => {
-    if (loading) return;
+    if (loading) return
+
+    console.log('BID DATA', data)
+
+    if (data.bidLogs.length > 0) {
+      const sortedByMostRecentBids = data.bidLogs.sort(function (x, y) {
+        return y.timestamp - x.timestamp
+      })
+      setLastSale(utils.formatEther(sortedByMostRecentBids[0].amount))
+    }
+  }, [data])
+
+  useEffect(() => {
+    if (cardLoading) return
     getApproved()
     currentBids()
   }, [])
 
-  return (
-    loading ? <div style={{width: '345px', height: '618px'}} ><div className={'animate-pulse w-full rounded-xl h-full'}><div className={'animation-pulse w-full rounded-xl h-full bg-gray-800'}/></div></div> :
+  return cardLoading ? (
+    <div style={{ width: '345px', height: '618px' }}>
+      <div className={'animate-pulse w-full rounded-xl h-full'}>
+        <div
+          className={'animation-pulse w-full rounded-xl h-full bg-gray-800'}
+        />
+      </div>
+    </div>
+  ) : (
     <ImageCard
       nft={nft}
       srcUrl={nft.image}
       footer={
         <div className={'py-3 bg-white bg-opacity-5 font-medium px-5'}>
           <div className={'flex flex-col h-20 justify-center'}>
-            <div className={'text-xl font-medium'}>CURRENT BID</div>
+            {!lastSale && (
+              <>
+                <div className={'text-xl font-medium'}>CURRENT BID</div>
 
-            <div className={'text-3xl font-light'}>
-              {!!bid
-                ? `${bid} MATIC`
-                : forSale
-                ? <div className={'text-xl font-light mt-2 text-gray-100'}>No bids yet</div>
-                : <div className={'text-xl font-light mt-2 text-gray-100'}>Not for sale</div>
-                }
-            </div>
+                <div className={'text-3xl font-light'}>
+                  {!!currentBid ? (
+                    `${currentBid} MATIC`
+                  ) : forSale ? (
+                    <div className={'text-xl font-light mt-2 text-gray-100'}>
+                      No bids yet
+                    </div>
+                  ) : (
+                    <div className={'text-xl font-light mt-2 text-gray-100'}>
+                      Not for sale
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+
+            {!!lastSale && (
+              <>
+                <div className={'text-xl font-medium'}>LASTEST SALE</div>
+
+                <div className={'text-3xl font-light'}>
+                  {`${lastSale} MATIC`}
+                </div>
+              </>
+            )}
           </div>
         </div>
       }

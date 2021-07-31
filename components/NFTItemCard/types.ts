@@ -8,6 +8,6 @@ export interface IProps {
   amountCollected?: number
   tokenId?: number
   nft?: NFT
-  loading?: boolean
+  cardLoading?: boolean
   key?: number
 }

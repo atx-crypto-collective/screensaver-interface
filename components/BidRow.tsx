@@ -7,6 +7,7 @@ import Modal from '../components/Modal'
 import { getNetworkLibrary } from '../connectors'
 import SetSalePrice from './SetSalePrice'
 import AccountId from './AccountId'
+import { gql, useLazyQuery } from '@apollo/client'
 
 var utils = require('ethers').utils
 
