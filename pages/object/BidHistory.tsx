@@ -8,7 +8,7 @@ var utils = require('ethers').utils
 
 const BID_QUERY = gql`
   query Bid($item: String) {
-    bidLogs(where: { item: $item, accepted: true }) {
+    bidLogs(where: { item: $item }) {
       id
       item {
         id
@@ -17,7 +17,7 @@ const BID_QUERY = gql`
       accepted
       canceled
       bidder {
-          id
+        id
       }
       timestamp
     }
@@ -31,6 +31,7 @@ type Bid = {
   bidder: string
   timestamp: string
   amount: number
+  accepted: boolean
 }
 
 const BidHistory = ({ tokenId }) => {
@@ -38,14 +39,15 @@ const BidHistory = ({ tokenId }) => {
   const { loading, error, data } = useQuery(BID_QUERY, {
     variables: { item: tokenId.toString() },
   })
-  const options = { year: "numeric", month: "long", day: "numeric" }
-
 
   useEffect(() => {
     if (loading) return
 
+    console.log("LOGS", data.bidLogs)
     if (data.bidLogs.length > 0) {
-      const sortedByMostRecentBids = data.bidLogs.sort(function (x, y) {
+        const arrayForSort = [...data.bidLogs]
+
+      const sortedByMostRecentBids = arrayForSort.sort(function (x, y) {
         return y.timestamp - x.timestamp
       })
 
@@ -53,7 +55,8 @@ const BidHistory = ({ tokenId }) => {
         return {
           bidder: bid.bidder.id,
           amount: utils.formatEther(bid.amount),
-          timestamp: moment.unix(bid.timestamp).format("MMMM D, YYYY h:mm a")
+          timestamp: moment.unix(bid.timestamp).format('MMMM D, YYYY h:mm a'),
+          accepted: bid.accepted
         }
       })
 
@@ -70,16 +73,17 @@ const BidHistory = ({ tokenId }) => {
       <ul className="divide-y divide-gray-200">
         {bidLogs.map((bid) => (
           <div className="px-2 py-4 w-full">
-              <div className="min-w-0 flex justify-between">
+            <div className="min-w-0 flex justify-between">
+              <div>
+                <AccountId address={bid.bidder} />
+                <p className="mt-2 flex items-center text-sm ">
+                  <span className="truncate">{bid.timestamp}</span>
+                </p>
+              </div>
+              <div>
                 <div>
-                  <AccountId address={bid.bidder} />
-                  <p className="mt-2 flex items-center text-sm ">
-                    <span className="truncate">{bid.timestamp}</span>
-                  </p>
-                </div>
-                <div>
-                  <div>
-                    <p className="md:text-xl font-bold">{bid.amount} MATIC</p>
+                  <p className="md:text-xl font-bold">{bid.amount} MATIC</p>
+                  {!!bid.accepted && (
                     <p className="mt-2 flex items-center text-sm ">
                       <CheckCircleIcon
                         className="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
@@ -87,7 +91,8 @@ const BidHistory = ({ tokenId }) => {
                       />
                       Bid Accepted
                     </p>
-                  </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

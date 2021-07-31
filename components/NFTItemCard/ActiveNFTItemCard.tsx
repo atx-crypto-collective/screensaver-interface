@@ -6,7 +6,7 @@ import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../../constants/gallery'
 import { getNetworkLibrary } from '../../connectors'
 import AccountId from '../AccountId'
-import { gql, useQuery } from '@apollo/client'
+import { gql, useLazyQuery } from '@apollo/client'
 
 var utils = require('ethers').utils
 
@@ -25,11 +25,11 @@ const BID_QUERY = gql`
 `
 
 const NFTItemCard: React.FC<IProps> = ({ nft, creator, cardLoading }) => {
-  const [currentBid, setCurrentBid] = useState<number | undefined>()
+  const [currentBid, setCurrentBid] = useState<number | undefined | null>()
   const [lastSale, setLastSale] = useState<number | undefined>()
   const [forSale, setForSale] = useState(false)
 
-  const { loading, error, data } = useQuery(BID_QUERY, {
+  const [loadBids, { loading, error, data }] = useLazyQuery(BID_QUERY, {
     variables: { item: nft?.tokenId.toString() },
   })
 
@@ -46,7 +46,7 @@ const NFTItemCard: React.FC<IProps> = ({ nft, creator, cardLoading }) => {
     var currentBid = await contract.currentBidDetailsOfToken(nft.tokenId)
 
     if (utils.formatEther(currentBid[0]) === '0.0') {
-      setCurrentBid(undefined)
+      setCurrentBid(null)
     } else {
       setCurrentBid(utils.formatEther(currentBid[0]))
     }
@@ -65,7 +65,12 @@ const NFTItemCard: React.FC<IProps> = ({ nft, creator, cardLoading }) => {
   }
 
   useEffect(() => {
-    if (loading) return
+    if (currentBid !== null || currentBid === undefined) return;
+    loadBids()
+  }, [currentBid])
+
+  useEffect(() => {
+    if (loading || !data) return;
 
     if (data.bidLogs.length > 0) {
       const sortedByMostRecentBids = data.bidLogs.sort(function (x, y) {
@@ -99,7 +104,6 @@ const NFTItemCard: React.FC<IProps> = ({ nft, creator, cardLoading }) => {
             {!lastSale && (
               <>
                 <div className={'text-xl font-medium'}>CURRENT BID</div>
-
                 <div className={'text-3xl font-light'}>
                   {!!currentBid ? (
                     `${currentBid} MATIC`
@@ -116,7 +120,7 @@ const NFTItemCard: React.FC<IProps> = ({ nft, creator, cardLoading }) => {
               </>
             )}
 
-            {!!lastSale && (
+            {(!!lastSale && !currentBid) && (
               <>
                 <div className={'text-xl font-medium'}>LASTEST SALE</div>
 
