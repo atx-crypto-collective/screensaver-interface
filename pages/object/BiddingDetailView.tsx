@@ -48,7 +48,7 @@ const BiddingDetailView = ({ tokenId }) => {
       console.log("OWNER OF", ownerOf)
       setNFTOwner(ownerOf)
 
-      // if (ownerOf !== account) return
+      if (ownerOf !== account) return
 
       setOwnerOf(true)
     } catch (error) {
