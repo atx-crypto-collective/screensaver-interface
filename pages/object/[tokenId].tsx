@@ -208,7 +208,7 @@ const ItemDetailPage: React.VFC = () => {
               </>
             )}
 
-            <BidHistory tokenId={tokenId} />
+            {!preview && <BidHistory tokenId={tokenId} />}
 
 
             {/* <div>METADATA URI: {!!metadata?.metadataUri && metadata.metadataUri.split('https://ipfs.io/ipfs/')[1]}</div>
