@@ -213,8 +213,8 @@ export default function Mint() {
                 Mint
               </h3>
               <p className="mt-1 max-w-2xl text-md text-gray-100 font-medium">
-                Creators will receive 15% royalties on all secondary sales with
-                5% marketplace fees.
+                Creators will receive 15% royalties on all secondary sales within SSW and SSW takes a 
+                5% marketplace fees on sales.
               </p>
             </div>
 
