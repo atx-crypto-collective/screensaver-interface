@@ -11,7 +11,7 @@ interface IProps {
 const Layout: React.FC<IProps> = ({ children }) => {
 
   return (
-    <div className={'mt-10 flex flex-col lg:pb-20 bg-black h-full relative'}>
+    <div className={'mt-10 flex flex-col lg:pb-20 bg-black h-full relative pb-20'}>
       <Navbar />
       <div>{children}</div>
     </div>

@@ -86,7 +86,7 @@ const MobileNavbar: React.FC<IProps> = () => {
           <div className={'flex items-center'}>
           <Link href={'/gallery?page=1'}>
             <a className="flex font-serif text-2xl text-red-400 font-bold">
-              <span className={'inline text-2xl mr-2'}>🌈</span>
+              {/* <span className={'inline text-2xl mr-2'}>🌈</span> */}
               <img
                 src={logoImage}
                 alt={'Screen Saver'}
@@ -117,7 +117,8 @@ const MobileNavbar: React.FC<IProps> = () => {
                 </span>
               </div>
             )}
-            <ConnectButton />
+            <div className={'fixed md:relative bottom-0 border-t md:border-t-0 border-red-100 bg-black left-0 w-full md:bg-transparent px-10 py-4 md:p-0 flex justify-center'}><ConnectButton /></div>
+            
 
             <Menu as="div" className="ml-3 relative z-20">
               {({ open }) => (
