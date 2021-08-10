@@ -33,7 +33,7 @@ export default function index() {
     <>
       <Modal status={"connect"} open={open} setOpen={setOpen} />
 
-      <div className="mr-2 max-w-32 border border-red-300 text-sm shadow-lg font-medium rounded-sm shadow-sm text-red-300 bg-gray-900 whitespace-nowrap focus:outline-none">
+      <div className="mr-2 max-w-32 border border-red-300 text-sm shadow-lg font-medium rounded-sm text-red-300 bg-gray-900 whitespace-nowrap focus:outline-none">
         {account && (
           <span className="px-6 border-r border-red-300">
             {maticBalance.toFixed(3)} MATIC

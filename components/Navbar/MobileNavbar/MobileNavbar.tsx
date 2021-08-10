@@ -117,7 +117,8 @@ const MobileNavbar: React.FC<IProps> = () => {
                 </span>
               </div>
             )}
-            <div className={'fixed md:relative bottom-0 border-t md:border-t-0 border-red-100 bg-black left-0 w-full md:bg-transparent px-10 py-4 md:p-0 flex justify-center'}><ConnectButton /></div>
+
+            <div className={'fixed md:relative bottom-0 -left-3 md:left-0 border-t md:border-t-0 border-red-100 bg-black w-full md:bg-transparent px-10 py-4 md:p-0 flex justify-center'}><ConnectButton /></div>
             
 
             <Menu as="div" className="ml-3 relative z-20">

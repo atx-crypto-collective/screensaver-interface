@@ -14,7 +14,7 @@ const VideoPlayer: React.VFC<IProps> = ({
   mimeType,
 }) => {
   return (
-    <video autoPlay controls={controls} loop muted className={'w-full h-96'}>
+    <video autoPlay controls={controls} loop muted className={'w-full min-h-96'}>
       <source src={fileUrl} type={mimeType} />
     </video>
   )

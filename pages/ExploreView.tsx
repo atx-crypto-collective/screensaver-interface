@@ -12,6 +12,10 @@ import AccountId from '../components/AccountId'
 import ReactPaginate from 'react-paginate-next'
 import { gql, useLazyQuery } from '@apollo/client'
 import { db } from '../config/firebase'
+import {
+  useWindowWidth
+} from '@react-hook/window-size'
+ 
 
 interface IProps {
   created?: boolean
@@ -43,6 +47,18 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
   const [pageCount, setPageCount] = useState< number | null>(null)
   const [totalSupply, setTotalSupply] = useState(0)
   const [totalMinted, setMintedSupply] = useState(0)
+  const width = useWindowWidth()
+  const [isMobile, setIsMobile] = useState(true)
+
+  // change pagination based on width
+  useEffect(() => {
+    if (width === null || !width) return;
+    if (width >= 400) {
+      setIsMobile(false)
+    } else {
+      setIsMobile(true)
+    }
+  }, [width])
 
   const [loadCollection, { called, error, loading, data }] = useLazyQuery(
     GALLERY_QUERY,
@@ -299,8 +315,8 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
               breakLabel={'...'}
               breakClassName={'break-me'}
               pageCount={pageCount}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={1}
+              marginPagesDisplayed={isMobile ? 2 : 2}
+              pageRangeDisplayed={isMobile ? 1 : 2}
               onPageChange={handlePageClick}
               containerClassName={
                 'flex w-full bg-red-400 justify-center items-center h-10'

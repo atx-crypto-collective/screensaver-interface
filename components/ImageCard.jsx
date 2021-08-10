@@ -16,7 +16,7 @@ const ImageCard = ({ srcUrl, nft, footer, children }) => {
   return (
     <div
       className={
-        'w-full border-white border-solid border border-gray-800 shadow-white max-w-sm text-white rounded-2xl '
+        'w-full transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-105 border-solid border border-gray-800 shadow-white max-w-sm text-white rounded-2xl '
       }
     >
       <div className={'flex flex-col mx-auto'}>
@@ -27,7 +27,7 @@ const ImageCard = ({ srcUrl, nft, footer, children }) => {
             {/* {type && <iframe className={'w-full h-96 '} src={nft.animation_url}></iframe>} */}
 
             {type === 'image' && (
-              <img src={nft.image} className={'w-full'} />
+              <img src={nft.image} className={'w-full h-96 object-cover'} />
             )}
             {type === 'video' && (
               <VideoPlayer fileUrl={nft.animation_url} controls={false} />
