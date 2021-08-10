@@ -150,6 +150,13 @@ const MobileNavbar: React.FC<IProps> = () => {
                       className="origin-top-right absolute right-0 mt-2 w-48 shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                     >
                       <Menu.Item>
+                        <Link href="https://buy.moonpay.com/">
+                          <a  target='_blank' className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Buy Matic
+                          </a>
+                        </Link>
+                      </Menu.Item>
+                      <Menu.Item>
                         <Link href="/gallery?page=1">
                           <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Gallery
@@ -203,8 +210,8 @@ const MobileNavbar: React.FC<IProps> = () => {
                         </Link>
                       </Menu.Item>
                       <Menu.Item>
-                        <Link href="https://ssw.wtf/">
-                          <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <Link  href="https://ssw.wtf/">
+                          <a target='_blank' className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Account shortlinks
                           </a>
                         </Link>
