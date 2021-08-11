@@ -12,7 +12,7 @@ interface IProps {
 }
 
 // VIBES ticker refresh in ms
-const REFRESH_VIBES_INTERVAL = 5000;
+const REFRESH_VIBES_INTERVAL = 1000;
 
 // VIBES after render
 interface VibesAtRender {
@@ -57,8 +57,7 @@ const calculateLiveInfusedVibes = (initialVibes: VibesAtRender, dailyRate: BigNu
 
 const Vibes = ({ tokenId }) => {
   const { account } = useWeb3React<Web3Provider>()
-  const [tokenInfo, setTokenInfo] = useState<Record<string, unknown>>({});
-  const [startingVibes, setStartingVibes] = useState<BigNumber | undefined>(undefined);
+  const [tokenInfo, setTokenInfo] = useState<Record<string, unknown> | undefined>();
   const [claimableVibes, setClaimableVibes] = useState<string>('');
   const [startDateTime, _] = useState<Date>(new Date());
 
@@ -71,23 +70,22 @@ const Vibes = ({ tokenId }) => {
     const tokenInfo = await contract.getToken(process.env.NEXT_PUBLIC_CONTRACT_ID, tokenId);
     if (tokenInfo) {
       setTokenInfo(tokenInfo);
-      setStartingVibes(tokenInfo.claimable);
     } 
   }
 
   function getClaimableVibes() {
-    if (tokenInfo && startingVibes) {
-      const claimableVibes = calculateLiveInfusedVibes({ initialClaimableVibes: startingVibes, initialDateTime: startDateTime }, tokenInfo.dailyRate as BigNumber );
+    if (tokenInfo) {
+      const claimableVibes = calculateLiveInfusedVibes({ initialClaimableVibes: tokenInfo.claimable as BigNumber, initialDateTime: startDateTime }, tokenInfo.dailyRate as BigNumber );
       setClaimableVibes(claimableVibes);
-    } else {
-      setClaimableVibes('')
     }
   }
 
   useEffect(() => {
     getVibes();
+
     const h = setInterval(getClaimableVibes, REFRESH_VIBES_INTERVAL);
     return () => clearInterval(h);
+
   }, [account])
 
   return (
