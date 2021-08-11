@@ -146,7 +146,7 @@ const SearchView: React.VFC<IProps> = ({ created, owned, admin }) => {
                   nft={item}
                   title={item?.name}
                   coverImageSrc={item?.image}
-                  creator={item?.creator}
+                  creator={item?.creator.id}
                   endDateTime={new Date('1/1/count00')}
                   amountCollected={count}
                   tokenId={item?.tokenId}
