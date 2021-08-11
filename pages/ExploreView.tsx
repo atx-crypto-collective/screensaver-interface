@@ -217,6 +217,17 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
           if (uri.includes(undefined)) return null
           var metadata = await axios.get(uri)
           metadata.data.tokenId = id
+          metadata.data.creator = {id: metadata.data.creator}
+          // var parsedMetadata: NFT = metadata.data
+          // parsedMetadata.creator.id = metadata.data.creator
+          if (!metadata.data.animation_url) {
+            metadata.data.mediaUri = metadata.data.image
+          } else {
+            metadata.data.mediaUri = metadata.data.animation_url
+          }
+
+          metadata.data.mimeType = metadata.data.media.mimeType
+          
           return metadata.data
         } catch (error) {
           console.log('ERROR getting token URI', error)
@@ -284,7 +295,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
                   nft={item}
                   title={item?.name}
                   coverImageSrc={item?.image}
-                  creator={item?.creator}
+                  creator={item?.creator.id}
                   endDateTime={new Date('1/1/count00')}
                   amountCollected={count}
                   tokenId={item?.tokenId}

@@ -1,13 +1,13 @@
 import React from 'react'
 import { Layout } from '../../components'
-import ExploreView from '../ExploreView'
+import GalleryView from '../GalleryView'
 
 const GalleryPage: React.VFC = () => {
   
   return (
     <Layout>
       <div className={'pb-8 w-full md:w-11/12 mx-auto'}>
-        <ExploreView />
+        <GalleryView />
       </div>
     </Layout>
   )
