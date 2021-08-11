@@ -53,14 +53,14 @@ const ItemDetailView: React.VFC<IProps> = ({ metadata, hash }) => {
 
           <div className={'text-lg py-1 mt-3'}>
             <strong>Creator: </strong>{' '}
-            <AccountId linkToCreated address={metadata.creator} />
+            <AccountId linkToCreated address={metadata.creator.id} />
           </div>
           <div className={'text-sm py-1'}>
             <strong>Minted: </strong>
             {moment(metadata.creationDate).format('MMMM Do YYYY, h:mm:ss a')}
           </div>
           <div className={'text-sm py-1'}>
-            <strong>MimeType: </strong> {metadata.media.mimeType}
+            <strong>MimeType: </strong> {metadata.mimeType}
           </div>
         </div>
       </div>
