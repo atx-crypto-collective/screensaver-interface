@@ -16,7 +16,7 @@ const ImageCard = ({ srcUrl, nft, footer, children }) => {
   return (
     <div
       className={
-        'w-full transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-105 border-solid border border-gray-800 shadow-white max-w-sm text-white rounded-2xl '
+        'w-full transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-white border-solid border border-gray-800 max-w-sm text-white rounded-2xl '
       }
     >
       <div className={'flex flex-col mx-auto'}>

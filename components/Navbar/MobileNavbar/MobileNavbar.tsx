@@ -106,7 +106,7 @@ const MobileNavbar: React.FC<IProps> = () => {
           </Link>
           </div>
           <div className={'flex space-x-3 items-center'}>
-            {connector && (
+            {/* {connector && (
               <div className="hidden lg:block px-6 w-full py-2 border border-red-300 text-sm shadow-lg font-medium rounded-sm text-red-300 bg-gray-900 focus:outline-none ">
                 {tokenBalance.toFixed(3)}{' '}
                 <span
@@ -116,7 +116,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                   SSD
                 </span>
               </div>
-            )}
+            )} */}
 
             <div className={'fixed md:relative bottom-0 -left-3 md:left-0 border-t md:border-t-0 border-red-100 bg-black w-full md:bg-transparent px-10 py-4 md:p-0 flex justify-center'}><ConnectButton /></div>
             
@@ -130,7 +130,7 @@ const MobileNavbar: React.FC<IProps> = () => {
         
                       <MenuIcon
                         className={
-                          ' text-red-300 h-8 w-8 p-2 border border-red-300 text-md font-medium rounded-sm shadow-lg hover:shadow-sm text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
+                          ' h-8 w-8 p-2 border border-red-300 text-md font-medium rounded-sm shadow-lg hover:shadow-sm text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
                         }
                       />
                     </Menu.Button>

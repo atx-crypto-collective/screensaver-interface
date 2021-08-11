@@ -7,7 +7,6 @@ import Modal from '../components/Modal'
 import { getNetworkLibrary } from '../connectors'
 import SetSalePrice from './SetSalePrice'
 import AccountId from './AccountId'
-import { gql, useLazyQuery } from '@apollo/client'
 
 var utils = require('ethers').utils
 
@@ -17,7 +16,7 @@ interface IProps {
 }
 
 const BidRow: React.VFC<IProps> = ({ tokenId }) => {
-  const [value, setValue] = useState<string>()
+
   const { chainId, account, library } = useWeb3React<Web3Provider>()
   const [bid, setBid] = useState<number | undefined>()
   const [bidder, setBidder] = useState<string | undefined>()
@@ -52,6 +51,7 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
     var currentBid = await contract.currentBidDetailsOfToken(tokenId)
 
     console.log(currentBid)
+
     if (utils.formatEther(currentBid[0]) === '0.0') {
       setBid(undefined)
       setBidder(currentBid[1])
