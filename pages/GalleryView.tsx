@@ -56,7 +56,7 @@ const GALLERY_QUERY = gql`
     }
   }
 `
-const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
+const GalleryView: React.VFC<IProps> = ({ created, owned, admin }) => {
 
   const [nfts, setNfts] = useState<NFT[]>([])
 
@@ -102,35 +102,6 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
     };
   }, [onLoadMore]);
 
-  const getNFTs = async (range: number[]) => {
-
-    const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
-      GALLERY_ABI,
-      getNetworkLibrary(),
-    )
-
-    var allMetadata = await Promise.all(
-      range.map(async (id) => {
-        try {
-          console.log("HERE")
-          var uri = await contract.tokenURI(id)
-          console.log("URI", uri)
-          if (uri.includes(undefined)) return null
-          var metadata = await axios.get(uri)
-          metadata.data.tokenId = id
-          return metadata.data
-        } catch (error) {
-          console.log('ERROR getting token URI', error)
-          return null
-        }
-      }),
-    )
-
-    const filteredMeta = allMetadata.filter((i) => i !== null)
-    setNfts(filteredMeta.reverse())
-  }
-
   if (error) {
     return (
       <Layout>
@@ -167,4 +138,4 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
   )
 }
 
-export default ExploreView
+export default GalleryView
