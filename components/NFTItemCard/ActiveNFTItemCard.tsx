@@ -140,7 +140,7 @@ const NFTItemCard: React.FC<IProps> = ({ nft, creator, cardLoading }) => {
       >
         <h1 className={'font-bold text-2xl text-white mt-1'}>{nft.name}</h1>
         <h2 className={'font-medium text-l'}>
-          <AccountId linkToCreated address={creator} />
+          <AccountId linkToCreated address={nft.creator.id} />
         </h2>
       </div>
     </ImageCard>
