@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
-import { ethers } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import VIBES_WELLSPRING_ABI from '../../constants/abis/vibes'
 import { getNetworkLibrary } from '../../connectors'
 
@@ -12,26 +12,55 @@ interface IProps {
 }
 
 // VIBES ticker refresh in ms
-const REFRESH_VIBES_INTERVAL = 1000;
+const REFRESH_VIBES_INTERVAL = 5000;
 
-const calculateLiveInfusedVibes = (startingVibes, startDateTime, tokenInfo) => {
+// VIBES after render
+interface VibesAtRender {
+  initialClaimableVibes: BigNumber
+  initialDateTime: Date
+}
+
+const formatVibes = (vibes: BigNumber, decimal = 18, toFixed = 3): string => {
+  // convert to base 10
+  const decimalVibes = vibes.toString();
+  
+  // Split into two parts
+  const indexForDecimalPoint = decimalVibes.length - decimal;
+  const wholeNumber = decimalVibes.slice(0, indexForDecimalPoint);
+  const decimalNumber = decimalVibes.slice(indexForDecimalPoint);
+
+  // Format and concatenate
+  const formattedWholeNumber = wholeNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const formattedDecimalNumber = decimalNumber.slice(0, toFixed);
+  const formattedVibes = formattedWholeNumber + '.' + formattedDecimalNumber;
+
+  // Return dat pretty boi
+  return formattedVibes;
+};
+
+/**
+ * Calculate live claimable VIBES and return in human-readable form
+ */
+const calculateLiveInfusedVibes = (initialVibes: VibesAtRender, dailyRate: BigNumber) => {
   const now = new Date();
-  const msElapsed = now.getTime() - startDateTime.getTime();
-  const { dailyRate } = tokenInfo;
-  const dailyRateReadable = parseInt(ethers.BigNumber.from(dailyRate).toString()) / 1000000000000000000;
-  const vibesToAdd = dailyRateReadable * (msElapsed / (24 * 60 * 60 * 1000));
-  const claimableReadable = parseInt(ethers.BigNumber.from(startingVibes).toString()) / 1000000000000000000;
-  const updatedVibes = (claimableReadable + vibesToAdd).toFixed(3);
-  console.log(updatedVibes)
-  return updatedVibes;
+  const { initialClaimableVibes, initialDateTime } = initialVibes;
+  const msElapsed = now.getTime() - initialDateTime.getTime();
+
+  // do math
+  const vibesToAdd = dailyRate.mul(msElapsed).div(24 * 60 * 60 * 1000);
+  const currentClaimableVibes = initialClaimableVibes.add(vibesToAdd);
+
+  // format it real cute
+  const formattedVibes = formatVibes(currentClaimableVibes);
+  return formattedVibes;
 };
 
 const Vibes = ({ tokenId }) => {
   const { account } = useWeb3React<Web3Provider>()
-  const [tokenInfo, setTokenInfo] = useState<string>('');
-  const [startingVibes, setStartingVibes] = useState<string>('');
+  const [tokenInfo, setTokenInfo] = useState<Record<string, unknown>>({});
+  const [startingVibes, setStartingVibes] = useState<BigNumber | undefined>(undefined);
   const [claimableVibes, setClaimableVibes] = useState<string>('');
-  const [startDateTime, setStartDateTime] = useState<Date>();
+  const [startDateTime, _] = useState<Date>(new Date());
 
   async function getVibes() {
     const contract = new ethers.Contract(
@@ -39,19 +68,20 @@ const Vibes = ({ tokenId }) => {
       VIBES_WELLSPRING_ABI,
       getNetworkLibrary(),
     )
-    console.log(tokenId);
     const tokenInfo = await contract.getToken(process.env.NEXT_PUBLIC_CONTRACT_ID, tokenId);
-    console.log({ tokenInfo })
     if (tokenInfo) {
       setTokenInfo(tokenInfo);
       setStartingVibes(tokenInfo.claimable);
-      setStartDateTime(new Date());
     } 
   }
 
-  async function getClaimableVibes() {
-    const claimableVibes = tokenInfo ? calculateLiveInfusedVibes(startingVibes, startDateTime, tokenInfo) : '';
-    setClaimableVibes(claimableVibes);
+  function getClaimableVibes() {
+    if (tokenInfo && startingVibes) {
+      const claimableVibes = calculateLiveInfusedVibes({ initialClaimableVibes: startingVibes, initialDateTime: startDateTime }, tokenInfo.dailyRate as BigNumber );
+      setClaimableVibes(claimableVibes);
+    } else {
+      setClaimableVibes('')
+    }
   }
 
   useEffect(() => {
