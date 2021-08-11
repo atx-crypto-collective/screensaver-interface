@@ -20,7 +20,7 @@ const ItemDetailView: React.VFC<IProps> = ({ metadata, hash }) => {
   return (
     <div className={'flex flex-col space-y-12'}>
       <div className={'flex flex-col space-y-8'}>
-        <div className={'space-y-3'}>
+        <div className={'py-10'}>
           <ImageWithActions
             src={metadata.image}
             alt={metadata.name}
@@ -35,10 +35,10 @@ const ItemDetailView: React.VFC<IProps> = ({ metadata, hash }) => {
 
           {!!preview && <MintButton hash={hash} />}
 
-          <div className={'text-4xl font-bold mt-3 mb-1 md:mt-12 mt-8'}>
+          <div className={'text-4xl font-bold mt-3 mb-1 md:mt-12'}>
             {metadata.name}
           </div>
-          <div className={'text-xl mt-4 mb-6'}>
+          <div className={'text-md mt-4 mb-6'}>
             <strong></strong>
             {metadata.description}
           </div>
@@ -48,19 +48,21 @@ const ItemDetailView: React.VFC<IProps> = ({ metadata, hash }) => {
             Share
             </button>
           </CopyToClipboard>
+
           {copied && 'copied'}
+
           <div className={'w-full border-t border-gray-800'} />
 
-          <div className={'text-lg py-1 mt-3'}>
+          <div className={'text-lg py-1 mt-3 w-full flex space-x-2'}>
             <strong>Creator: </strong>{' '}
-            <AccountId linkToCreated address={metadata.creator.id} />
+            <AccountId linkToCreated address={metadata.creator} />
           </div>
           <div className={'text-sm py-1'}>
             <strong>Minted: </strong>
             {moment(metadata.creationDate).format('MMMM Do YYYY, h:mm:ss a')}
           </div>
-          <div className={'text-sm py-1'}>
-            <strong>MimeType: </strong> {metadata.mimeType}
+          <div className={'text-sm py-1 flex flex-col'}>
+            <div><strong>MimeType: </strong> {metadata.media.mimeType}</div>
           </div>
         </div>
       </div>

@@ -85,7 +85,7 @@ const SetSalePrice: React.VFC<IProps> = ({ onUpdate, tokenId, sale = true }) => 
   open={open}
   setOpen={setOpen}
 />
-      <label htmlFor="number" className="block text-sm font-medium text-white">
+      <label htmlFor="number" className="block text-sm font-medium text-white mt-8">
         {sale ? 'Sale Price' : account && `Balance: ${maticBalance.toFixed(3)} MATIC`}
       </label>
       <form className="mt-5 sm:flex sm:items-center" onSubmit={handleSubmit}>

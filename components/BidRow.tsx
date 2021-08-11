@@ -112,7 +112,7 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
         setOpen={setOpen}
       />
       {bid ? (
-        <div className="mt-5">
+        <div className="mt-6">
           <div className="rounded-md px-6 py-5 sm:flex sm:items-start justify-between border-2 border-gray-700">
             <h4 className="sr-only">Visa</h4>
             <div className="sm:flex sm:items-start">
