@@ -50,7 +50,7 @@ export default function Mint() {
 
   // check if file size is too large
   useEffect(() => {
-    if (media?.type.includes('video') || media?.type.includes('audio')) {
+    if (media?.type.includes('video') || media?.type.includes('audio') || media?.type.includes('model') || media?.type.includes('octet')) {
       setIncludeThumbnail(true)
     }
 
