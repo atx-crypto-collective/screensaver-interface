@@ -71,7 +71,7 @@ const Vibes = ({ tokenId }: IProps) => {
       getNetworkLibrary(),
     )
     const token = await contract.getToken(process.env.NEXT_PUBLIC_CONTRACT_ID, tokenId);
-    if (token) {
+    if (token && token.isSeeded) {
       setTokenInfo(token);
     } 
   }
@@ -94,8 +94,10 @@ const Vibes = ({ tokenId }: IProps) => {
   }, [account])
 
   useEffect(() => {
-    const h = setInterval(getClaimableVibes, REFRESH_VIBES_INTERVAL);
-    return () => clearInterval(h);
+    if (tokenInfo) {
+      const h = setInterval(getClaimableVibes, REFRESH_VIBES_INTERVAL);
+      return () => clearInterval(h);
+    }
   })
 
   return claimableVibes.length ? (
