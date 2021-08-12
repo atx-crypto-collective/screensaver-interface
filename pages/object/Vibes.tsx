@@ -5,6 +5,7 @@ import { BigNumber, ethers } from 'ethers'
 
 import VIBES_WELLSPRING_ABI from '../../constants/abis/vibes'
 import { getNetworkLibrary } from '../../connectors'
+import vibesLogo from '../../assets/vibes.png';
 
 interface IProps {
   tokenId: string | string[]
@@ -28,12 +29,12 @@ const formatVibes = (vibes: BigNumber, decimal = 18, toFixed = 3): string => {
   // Split into two parts
   const indexForDecimalPoint = decimalVibes.length - decimal;
   const wholeNumber = decimalVibes.slice(0, indexForDecimalPoint);
-  const decimalNumber = decimalVibes.slice(indexForDecimalPoint);
+  const fractionalNumber = decimalVibes.slice(indexForDecimalPoint);
 
   // Format and concatenate
   const formattedWholeNumber = wholeNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  const formattedDecimalNumber = decimalNumber.slice(0, toFixed);
-  const formattedVibes = formattedWholeNumber + '.' + formattedDecimalNumber;
+  const formattedFractionalNumber = fractionalNumber.slice(0, toFixed);
+  const formattedVibes = `${formattedWholeNumber}.${formattedFractionalNumber}`;
 
   // Return dat pretty boi
   return formattedVibes;
@@ -64,7 +65,7 @@ const Vibes = ({ tokenId }: IProps) => {
 
   const vibesTokenUrl = `${SICK_VIBES_SITE_URL}/tokens/${process.env.NEXT_PUBLIC_CONTRACT_ID}/${tokenId}`;
 
-  async function getVibes() {
+  const getVibes = async () => {
     const contract = new ethers.Contract(
       process.env.NEXT_PUBLIC_VIBES_CONTRACT_ID,
       VIBES_WELLSPRING_ABI,
@@ -76,7 +77,7 @@ const Vibes = ({ tokenId }: IProps) => {
     } 
   }
 
-  function getClaimableVibes() {
+  const getClaimableVibes = () => {
     if (tokenInfo) {
       const claimableVibes = calculateLiveInfusedVibes(
         {
@@ -108,7 +109,7 @@ const Vibes = ({ tokenId }: IProps) => {
               <a target="_blank" href={vibesTokenUrl}>
                 <img
                   width={'25px'}
-                  src={require('../../assets/vibes.png')}
+                  src={vibesLogo}
                   alt={'vibes logo'}
                 />
               </a>
