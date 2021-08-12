@@ -168,7 +168,7 @@ const BiddingDetailView = ({ tokenId }) => {
 
         <div className={'text-md pl-3 flex w-full space-x-2'}>
           <strong>Collector: </strong>
-          <AccountId address={nftOwner} />
+          <AccountId address={nftOwner} link={'owned'}/>
         </div>
 
         <h2 className={'pl-3 text-sm'}>
