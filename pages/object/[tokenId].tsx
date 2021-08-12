@@ -184,7 +184,9 @@ const ItemDetailPage: React.VFC = () => {
               metadata={metadata}
               hash={preview?.toString()}
             />
+
             {(!preview && !!tokenId) && <BiddingDetailView tokenId={tokenId} />}
+
             {isSignedIn && (
               <>
                 <div className="bg-white shadow p-2 text-black sm:rounded-lg mt-10">

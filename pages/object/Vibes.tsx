@@ -7,10 +7,6 @@ import VIBES_WELLSPRING_ABI from '../../constants/abis/vibes'
 import { getNetworkLibrary } from '../../connectors'
 import vibesLogo from '../../assets/vibes.png';
 
-interface IProps {
-  tokenId: string | string[]
-}
-
 // VIBES ticker refresh in ms
 const REFRESH_VIBES_INTERVAL = 100;
 
@@ -57,7 +53,7 @@ const calculateLiveInfusedVibes = (initialVibes: VibesAtRender, dailyRate: BigNu
   return formattedVibes;
 };
 
-const Vibes = ({ tokenId }: IProps) => {
+const Vibes = ({ tokenId }) => {
   const { account } = useWeb3React<Web3Provider>()
   const [tokenInfo, setTokenInfo] = useState<Record<string, unknown> | undefined>();
   const [claimableVibes, setClaimableVibes] = useState<string>('');

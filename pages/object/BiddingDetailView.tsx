@@ -210,6 +210,7 @@ const BiddingDetailView = ({ tokenId }) => {
             {(!!ownerOf && !bidExists) && <button onClick={removeFromSale}>Remove From Sale</button>}
           </>
         )}
+
         <div className={'flex w-full mt-6'}>
           {((hasBurnerRole || ownerOf) && !bidExists) && <BurnButton />}
           <ReportButton />
