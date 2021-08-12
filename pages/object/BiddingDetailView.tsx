@@ -9,6 +9,7 @@ import { GALLERY_ABI } from '../../constants/gallery'
 import { getNetworkLibrary } from '../../connectors'
 import ReportButton from '../../components/ReportButton'
 import BurnButton from '../../components/BurnButton'
+import Vibes from './Vibes'
 
 var utils = require('ethers').utils
 
@@ -165,7 +166,7 @@ const BiddingDetailView = ({ tokenId }) => {
           <strong>Collector: </strong>
           <AccountId address={nftOwner} />
         </div>
-
+        <Vibes tokenId={tokenId} />
         <div className={'mt-12'} />
 
         {!approvalStatus ? (
@@ -209,7 +210,6 @@ const BiddingDetailView = ({ tokenId }) => {
             {(!!ownerOf && !bidExists) && <button onClick={removeFromSale}>Remove From Sale</button>}
           </>
         )}
-
         <div className={'flex w-full mt-6'}>
           {((hasBurnerRole || ownerOf) && !bidExists) && <BurnButton />}
           <ReportButton />

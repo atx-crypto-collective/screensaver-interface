@@ -13,7 +13,6 @@ import Error from '../../components/Error'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import { db, auth } from '../../config/firebase'
-import Vibes from './Vibes'
 
 const ReportItem = ({ report }) => {
   return (
@@ -165,7 +164,7 @@ const ItemDetailPage: React.VFC = () => {
     <>
       <Layout>
         <Head>
-          <title>Screensaver.world | Object #{}</title>
+          <title>Screensaver.world | Object #{tokenId}</title>
           <meta name="title" content={metadata.name} />
           <meta name="description" content={metadata.description} />
           <meta property="og:title" content={metadata.name} />
@@ -185,9 +184,7 @@ const ItemDetailPage: React.VFC = () => {
               metadata={metadata}
               hash={preview?.toString()}
             />
-            <Vibes tokenId={tokenId} />
             {(!preview && !!tokenId) && <BiddingDetailView tokenId={tokenId} />}
-            
             {isSignedIn && (
               <>
                 <div className="bg-white shadow p-2 text-black sm:rounded-lg mt-10">

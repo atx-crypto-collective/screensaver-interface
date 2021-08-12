@@ -7,11 +7,11 @@ import VIBES_WELLSPRING_ABI from '../../constants/abis/vibes'
 import { getNetworkLibrary } from '../../connectors'
 
 interface IProps {
-  tokenId: string
+  tokenId: string | string[]
 }
 
 // VIBES ticker refresh in ms
-const REFRESH_VIBES_INTERVAL = 1000;
+const REFRESH_VIBES_INTERVAL = 100;
 
 const SICK_VIBES_SITE_URL = 'https://www.sickvibes.xyz';
 
@@ -70,27 +70,35 @@ const Vibes = ({ tokenId }: IProps) => {
       VIBES_WELLSPRING_ABI,
       getNetworkLibrary(),
     )
-    const tokenInfo = await contract.getToken(process.env.NEXT_PUBLIC_CONTRACT_ID, tokenId);
-    if (tokenInfo) {
-      setTokenInfo(tokenInfo);
+    const token = await contract.getToken(process.env.NEXT_PUBLIC_CONTRACT_ID, tokenId);
+    if (token) {
+      setTokenInfo(token);
     } 
   }
 
   function getClaimableVibes() {
     if (tokenInfo) {
-      const claimableVibes = calculateLiveInfusedVibes({ initialClaimableVibes: tokenInfo.claimable as BigNumber, initialDateTime: startDateTime }, tokenInfo.dailyRate as BigNumber );
+      const claimableVibes = calculateLiveInfusedVibes(
+        {
+          initialClaimableVibes: tokenInfo.claimable as BigNumber,
+          initialDateTime: startDateTime 
+        },
+        tokenInfo.dailyRate as BigNumber,
+      );
       setClaimableVibes(claimableVibes);
     }
   }
 
   useEffect(() => {
     getVibes();
-    const h = setInterval(getClaimableVibes, REFRESH_VIBES_INTERVAL);
-    return () => clearInterval(h);
-
   }, [account])
 
-  return (
+  useEffect(() => {
+    const h = setInterval(getClaimableVibes, REFRESH_VIBES_INTERVAL);
+    return () => clearInterval(h);
+  })
+
+  return claimableVibes.length ? (
     <div className={'flex flex-col space-y-12'}>
       <div className={'flex flex-col space-y-8'}>
           <div className={'px-3 text-red-300 flex flex-row gap-x-1'}>
@@ -104,12 +112,12 @@ const Vibes = ({ tokenId }: IProps) => {
               </a>
             </div>
             <div>
-              <a target="_blank" href={vibesTokenUrl}>{claimableVibes.length ? `${claimableVibes} VIBES` : ''}</a>
+              <a target="_blank" href={vibesTokenUrl}>{claimableVibes} VIBES</a>
             </div>
           </div>
       </div>
     </div>
-  )
+  ) : <div/>
 }
 
 export default Vibes
