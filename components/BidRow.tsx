@@ -120,7 +120,7 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
                 <h3 className="text-lg leading-6 font-medium">{bid} MATIC</h3>
                 <div className="mt-1 text-sm  sm:flex sm:items-center">
                   <div>
-                    <AccountId address={bidder} />
+                    <AccountId address={bidder} link={'created'}/>
                   </div>
                 </div>
               </div>

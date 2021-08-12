@@ -221,9 +221,9 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
   }
 
   return (
-    <div className={'flex flex-col items-center space-y-8 text-2xl'}>
+    <div className={'flex flex-col items-center space-y-8'}>
     
-        <AccountId address={account.toString()} />
+        <div className={'text-2xl'}><AccountId address={account.toString()} link={'twitter'}/></div>
 
         <span className="relative z-0 justify-center rounded-md">
           <Link href={`/created/${account}`}>

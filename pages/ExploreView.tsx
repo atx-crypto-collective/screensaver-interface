@@ -265,7 +265,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
             'flex items-center justify-center text-2xl font-light h-16'
           }
         >
-          CREATED&nbsp; <AccountId address={account.toString()} />
+          CREATED&nbsp; <AccountId address={account.toString()} link={'created'} />
         </div>
       )}
       {owned && (
@@ -274,7 +274,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
             'flex items-center justify-center text-2xl font-light h-16'
           }
         >
-          OWNED&nbsp; <AccountId address={account.toString()} />
+          OWNED&nbsp; <AccountId address={account.toString()} link={'created'}/>
         </div>
       )}
 
