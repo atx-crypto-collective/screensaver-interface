@@ -24,7 +24,7 @@ const BID_QUERY = gql`
   }
 `
 
-const NFTItemCard: React.FC<IProps> = ({ nft, creator, cardLoading }) => {
+const NFTItemCard: React.FC<IProps> = ({ nft }) => {
   const [currentBid, setCurrentBid] = useState<number | undefined | null>()
   const [lastSale, setLastSale] = useState<number | undefined>()
   const [forSale, setForSale] = useState(false)
@@ -81,20 +81,11 @@ const NFTItemCard: React.FC<IProps> = ({ nft, creator, cardLoading }) => {
   }, [data])
 
   useEffect(() => {
-    if (cardLoading) return
     getApproved()
     currentBids()
   }, [])
 
-  return cardLoading ? (
-    <div style={{ width: '345px', height: '618px' }}>
-      <div className={'animate-pulse w-full rounded-xl h-full'}>
-        <div
-          className={'animation-pulse w-full rounded-xl h-full bg-gray-800'}
-        />
-      </div>
-    </div>
-  ) : (
+  return (
     <ImageCard
       nft={nft}
       srcUrl={nft.mediaUri}

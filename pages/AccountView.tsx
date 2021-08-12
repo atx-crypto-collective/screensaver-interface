@@ -270,10 +270,6 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
           <div key={key}>
             <NFTItemCard
               nft={item}
-              title={item?.name}
-              coverImageSrc={item?.mediaUri}
-              creator={item?.creator.id}
-              endDateTime={new Date('1/1/count00')}
               tokenId={item?.tokenId}
             />
           </div>

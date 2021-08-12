@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import NFTItemCard from '../../components/NFTItemCard'
 import { Layout } from '../../components'
-import { useRouter } from 'next/router'
 import axios from 'axios'
 import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../../constants/gallery'
@@ -137,11 +136,6 @@ const SearchView: React.VFC<IProps> = ({ created, owned, admin }) => {
               <div key={key}>
                 <NFTItemCard
                   nft={item}
-                  title={item?.name}
-                  coverImageSrc={item?.image}
-                  creator={item?.creator.id}
-                  endDateTime={new Date('1/1/count00')}
-                  amountCollected={count}
                   tokenId={item?.tokenId}
                 />
               </div>

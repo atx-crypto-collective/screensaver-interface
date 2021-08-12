@@ -110,7 +110,7 @@ const GalleryView: React.VFC<IProps> = ({ created, owned, admin }) => {
       >
         {nfts.map((item, key) => (
           <div key={key}>
-            <NFTItemCard nft={item} />
+            <NFTItemCard nft={item} tokenId={item?.tokenId}/>
           </div>
         ))}
       </div>
