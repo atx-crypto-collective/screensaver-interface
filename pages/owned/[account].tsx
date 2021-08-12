@@ -14,7 +14,7 @@ const CollectionPage: React.VFC = () => {
         <title>Screensaver.world | Owned by {account.toString()}</title>
       </Head>
       <div className={'md:mt-12 pb-8 w-11/12 mx-auto'}>
-        <AccountView owned={true} />
+        <AccountView state={'owned'} />
       </div>
     </Layout>
   )

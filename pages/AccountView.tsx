@@ -1,18 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import NFTItemCard from '../components/NFTItemCard'
 import { Layout } from '../components'
-import axios from 'axios'
-import { ethers } from 'ethers'
-import AccountId from '../components/AccountId'
 import { useRouter } from 'next/router'
 import NFT from '../types'
-import { gql, useLazyQuery } from '@apollo/client'
-import { useWeb3React } from '@web3-react/core'
+import { gql, useQuery } from '@apollo/client'
+import Link from 'next/link'
+import AccountId from '../components/AccountId'
+import classNames from 'classnames'
 
 interface IProps {
-  created?: boolean
-  owned?: boolean
-  admin?: boolean
+  state: string
 }
 
 const CREATOR_QUERY = gql`
@@ -100,28 +97,75 @@ const OWNER_QUERY = gql`
     }
   }
 `
-const AccountView: React.VFC<IProps> = ({ created, owned }) => {
+
+const ACTIVE_QUERY = gql`
+  query Gallery(
+    $first: Int
+    $skip: Int
+    $orderBy: String
+    $orderDirection: String
+    $account: String
+  ) {
+    artworks(
+      first: $first
+      skip: $skip
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      where: { burned: false, currentBid_not: null, creator: $account }
+      ) {
+        id
+        mimeType
+        tokenId
+        tagsString
+        currentBid {
+          id
+          bidder {
+            id
+          }
+          amount
+          accepted
+          canceled
+          timestamp
+        }
+        description
+        name
+        mediaUri
+        forSale
+        creator {
+          id
+        }
+        owner {
+          id
+        }
+      }
+  }
+`
+
+const AccountView: React.VFC<IProps> = ({ state }) => {
   const [nfts, setNfts] = useState<NFT[]>([])
   const router = useRouter()
   const { account } = router.query
 
-  const [loadAccountData, { loading, error, data, fetchMore }] = useLazyQuery(
-    created ? CREATOR_QUERY : OWNER_QUERY,
-    {
-      variables: {
-        first: 48,
-        skip: 0,
-        orderBy: 'creationDate',
-        orderDirection: 'desc',
-        account: account?.toString()?.toLowerCase(),
-      },
-    },
-  )
+  const getQuery = (state) => {
+    switch(state) {
+      case 'owned':
+        return OWNER_QUERY
+      case 'active':
+        return ACTIVE_QUERY
+      default:
+        return CREATOR_QUERY
+    }
+  }
 
-  useEffect(() => {
-    if (!account) return
-    loadAccountData()
-  }, [account])
+  const { loading, error, data, fetchMore } = useQuery(getQuery(state), {
+    variables: {
+      first: 10,
+      skip: 0,
+      orderBy: 'creationDate',
+      orderDirection: 'desc',
+      account: account?.toString()?.toLowerCase(),
+    },
+  })
 
   const getNfts = async (data) => {
     setNfts([...nfts, ...data])
@@ -149,6 +193,11 @@ const AccountView: React.VFC<IProps> = ({ created, owned }) => {
   }, [data])
 
   useEffect(() => {
+    if (!account) return
+    onLoadMore()
+  }, [account])
+
+  useEffect(() => {
     window.addEventListener('scroll', onLoadMore)
     return () => {
       window.removeEventListener('scroll', onLoadMore)
@@ -164,32 +213,48 @@ const AccountView: React.VFC<IProps> = ({ created, owned }) => {
   }
 
   return (
-    <div className={'flex flex-col space-y-4'}>
-      {created && (
-        <div
-          className={
-            'flex items-center justify-center text-2xl font-light h-12'
-          }
-        >
-          CREATED&nbsp; <AccountId address={account.toString()} />
-        </div>
-      )}
-      {owned && (
-        <div
-          className={
-            'flex items-center justify-center text-2xl font-light h-12'
-          }
-        >
-          OWNED&nbsp; <AccountId address={account.toString()} />
-        </div>
-      )}
+    <div className={'flex flex-col items-center space-y-8 text-2xl'}>
+    
+        <AccountId address={account.toString()} />
 
-      {nfts.length === 0 && (
+        <span className="relative z-0 justify-center rounded-md">
+          <Link href={`/created/${account}`}>
+            <button
+              type="button"
+              className={classNames(
+                state === 'created' ? 'bg-white text-black' : 'bg-black text-white', "relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-light hover:font-bold focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+              )}
+            >
+              Created
+            </button>
+          </Link>
+          <Link href={`/owned/${account}`}>
+            <button
+              type="button"
+              className={classNames(
+                state === 'owned' ? 'bg-white text-black' : 'bg-black text-white', "relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-light hover:font-bold focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+              )} >
+              Owned
+            </button>
+          </Link>
+          <Link href={`/active/${account}`}>
+            <button
+              type="button"
+              className={classNames(
+                state === 'active' ? 'bg-white text-black' : 'bg-black text-white', "relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-light hover:font-bold focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+              )}>
+              Active
+            </button>
+          </Link>
+        </span>
+
+      {(!loading && nfts.length === 0 && !data) && (
         <div className="flex items-center justify-center text-md font-light h-12">
-          This address has no {created ? 'created' : owned ? 'owned' : ''}{' '}
+          This address has no {state ? 'created' : state ? 'owned' : ''}{' '}
           objects.
         </div>
       )}
+
       <div
         className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-2 sm:mx-auto'}
       >

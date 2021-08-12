@@ -7,9 +7,6 @@ import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../../constants/gallery'
 import { getNetworkLibrary } from '../../connectors'
 import NFT from '../../types'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
-import AccountId from '../../components/AccountId'
-import ReactPaginate from 'react-paginate-next'
 import { gql, useLazyQuery } from '@apollo/client'
 import { db } from '../../config/firebase'
 import SearchBar from '../../components/SearchBar'
@@ -29,12 +26,8 @@ const SEARCH_QUERY = gql`
 `
 const SearchView: React.VFC<IProps> = ({ created, owned, admin }) => {
   const [nfts, setNfts] = useState<NFT[]>([])
-  const router = useRouter()
   const [loadingState, setLoadingState] = useState<boolean>(true)
   const [count] = useState<number>(12)
-  const [pageCount, setPageCount] = useState< number | null>(null)
-  const [totalSupply, setTotalSupply] = useState(0)
-  const [totalMinted, setMintedSupply] = useState(0)
   const [searchInput, setSearchInput] = useState('')
 
   const [loadCollection, { called, error, loading, data }] = useLazyQuery(
