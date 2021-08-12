@@ -141,7 +141,7 @@ const SearchView: React.VFC<IProps> = ({ created, owned, admin }) => {
               </div>
             ))
           ) : (
-            <NFTItemCard cardLoading={true} />
+            <NFTItemCard />
           )}
         </div>
 
