@@ -68,7 +68,7 @@ const OWNER_QUERY = gql`
       skip: $skip
       orderBy: $orderBy
       orderDirection: $orderDirection
-      where: { burned: false, owner: $account }
+      where: { burned: false, owner: $account, creator_not: $account}
     ) {
       id
       mimeType
@@ -159,7 +159,7 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
 
   const { loading, error, data, fetchMore } = useQuery(getQuery(state), {
     variables: {
-      first: 10,
+      first: 48,
       skip: 0,
       orderBy: 'creationDate',
       orderDirection: 'desc',
@@ -168,7 +168,15 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
   })
 
   const getNfts = async (data) => {
-    setNfts([...nfts, ...data])
+    if (state === "active") {
+      let tempData = data
+      let filteredTempData = tempData.filter( nft => nft.currentBid.accepted !== true)
+      console.log("DATA TEMP", filteredTempData)
+      setNfts([...nfts, ...filteredTempData])
+    } else {
+      setNfts([...nfts, ...data])
+    }
+
   }
 
   const onLoadMore = useCallback(() => {
