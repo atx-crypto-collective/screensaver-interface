@@ -8,6 +8,7 @@ import { GALLERY_ABI } from '../../constants/gallery'
 import { getNetworkLibrary } from '../../connectors'
 import NFT from '../../types'
 import BiddingDetailView from './BiddingDetailView'
+import BidHistory from './BidHistory'
 import Head from 'next/head'
 import Error from '../../components/Error'
 import { Web3Provider } from '@ethersproject/providers'
@@ -43,36 +44,33 @@ const ItemDetailPage: React.VFC = () => {
   useEffect(() => {
     const unregisterAuthObserver = auth().onAuthStateChanged((user) => {
       setIsSignedIn(!!user)
-      console.log('SIGN UP', user)
     })
     return () => unregisterAuthObserver()
   }, [])
 
   // ownerOf
   async function checkOwnerOf() {
-
     try {
-    const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
-      GALLERY_ABI,
-      getNetworkLibrary(),
-    )
+      const contract = new ethers.Contract(
+        process.env.NEXT_PUBLIC_CONTRACT_ID,
+        GALLERY_ABI,
+        getNetworkLibrary(),
+      )
 
-    var ownerOf = await contract.ownerOf(tokenId)
-    var contractOwner = await contract.owner()
+      var ownerOf = await contract.ownerOf(tokenId)
+      var contractOwner = await contract.owner()
 
-    const accountIsContractOwner = contractOwner === account 
+      const accountIsContractOwner = contractOwner === account
 
-    setIsContractOwner(accountIsContractOwner)
+      setIsContractOwner(accountIsContractOwner)
 
-    if (ownerOf !== account) return
+      if (ownerOf !== account) return
 
-    setOwnerOf(true)
-
-  } catch (error) {
-    console.log('error')
-    setOwnerOf(false)
-  }
+      setOwnerOf(true)
+    } catch (error) {
+      console.log('error')
+      setOwnerOf(false)
+    }
   }
 
   function getReports(tokenId) {
@@ -107,7 +105,7 @@ const ItemDetailPage: React.VFC = () => {
 
   async function getUri() {
     try {
-      setUriError(null);
+      setUriError(null)
       const contract = new ethers.Contract(
         process.env.NEXT_PUBLIC_CONTRACT_ID,
         GALLERY_ABI,
@@ -115,11 +113,10 @@ const ItemDetailPage: React.VFC = () => {
       )
       var tokenUri = await contract.tokenURI(tokenId)
       setUri(tokenUri)
-    } catch(error) {
-      console.log("error", error)
-      setUriError(error);
+    } catch (error) {
+      console.log('error', error)
+      setUriError(error)
     }
-
   }
 
   useEffect(() => {
@@ -178,14 +175,11 @@ const ItemDetailPage: React.VFC = () => {
           <meta name="twitter:card" content="summary_large_image" />
         </Head>
 
-        <div className={'md:mt-12 pb-8 w-11/12 mx-auto'}>
+        <div className={'mt-12 pb-8 w-11/12 mx-auto'}>
           <div className={'md:p-3 max-w-xl mx-auto min-h-screen'}>
-            <ItemDetailView
-              metadata={metadata}
-              hash={preview?.toString()}
-            />
+            <ItemDetailView metadata={metadata} hash={preview?.toString()} />
 
-            {(!preview && !!tokenId) && <BiddingDetailView tokenId={tokenId} />}
+            {!preview && !!tokenId && <BiddingDetailView tokenId={tokenId} />}
 
             {isSignedIn && (
               <>
@@ -193,21 +187,18 @@ const ItemDetailPage: React.VFC = () => {
                   {`Report Status: ${reportStatus}`}
                 </div>
 
-                
-                  <div className="bg-white shadow overflow-hidden sm:rounded-lg mt-10">
-                    <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
-                      {reports.map((report, key) => (
-                        <ReportItem report={report} key={key} />
-                      ))}
-                    </div>
+                <div className="bg-white shadow overflow-hidden sm:rounded-lg mt-10">
+                  <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
+                    {reports.map((report, key) => (
+                      <ReportItem report={report} key={key} />
+                    ))}
                   </div>
-                
+                </div>
               </>
             )}
 
-            <div>METADATA URI: {!!metadata?.metadataUri && metadata.metadataUri.split('https://ipfs.io/ipfs/')[1]}</div>
-            {!!metadata.image && <div>{`MEDIA URI:${metadata.image.split('https://ipfs.io/ipfs/')[1]}`}</div>}
-            {!!metadata.animation_url && <div>{`MEDIA URI: ${metadata.animation_url.split('https://ipfs.io/ipfs/')[1]}`}</div>}
+            {!preview && <BidHistory tokenId={tokenId} />}
+
           </div>
         </div>
       </Layout>

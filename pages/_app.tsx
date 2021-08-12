@@ -23,7 +23,6 @@ function MyApp({ Component, pageProps }) {
         </ApolloProvider>
       </Provider>
     </FirebaseTrackingProvider>
-
   )
 }
 

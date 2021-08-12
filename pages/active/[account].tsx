@@ -14,7 +14,7 @@ const CollectionPage: React.VFC = () => {
         <title>Screensaver.world | Created by {account.toString()}</title>
       </Head>
       <div className={'md:mt-12 pb-8 w-11/12 mx-auto'}>
-        <AccountView state={'created'}/>
+        <AccountView state={'active'}/>
       </div>
     </Layout>
   )

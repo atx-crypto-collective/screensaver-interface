@@ -16,7 +16,7 @@ interface IProps {
 }
 
 const BidRow: React.VFC<IProps> = ({ tokenId }) => {
-  const [value, setValue] = useState<string>()
+
   const { chainId, account, library } = useWeb3React<Web3Provider>()
   const [bid, setBid] = useState<number | undefined>()
   const [bidder, setBidder] = useState<string | undefined>()
@@ -51,6 +51,7 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
     var currentBid = await contract.currentBidDetailsOfToken(tokenId)
 
     console.log(currentBid)
+
     if (utils.formatEther(currentBid[0]) === '0.0') {
       setBid(undefined)
       setBidder(currentBid[1])
@@ -111,7 +112,7 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
         setOpen={setOpen}
       />
       {bid ? (
-        <div className="mt-5">
+        <div className="mt-6">
           <div className="rounded-md px-6 py-5 sm:flex sm:items-start justify-between border-2 border-gray-700">
             <h4 className="sr-only">Visa</h4>
             <div className="sm:flex sm:items-start">
@@ -119,7 +120,7 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
                 <h3 className="text-lg leading-6 font-medium">{bid} MATIC</h3>
                 <div className="mt-1 text-sm  sm:flex sm:items-center">
                   <div>
-                    <AccountId address={bidder} />
+                    <AccountId address={bidder} link={'created'}/>
                   </div>
                 </div>
               </div>

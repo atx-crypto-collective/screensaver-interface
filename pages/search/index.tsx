@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import NFTItemCard from '../../components/NFTItemCard'
 import { Layout } from '../../components'
-import { useRouter } from 'next/router'
 import axios from 'axios'
 import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../../constants/gallery'
 import { getNetworkLibrary } from '../../connectors'
 import NFT from '../../types'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
-import AccountId from '../../components/AccountId'
-import ReactPaginate from 'react-paginate-next'
 import { gql, useLazyQuery } from '@apollo/client'
 import { db } from '../../config/firebase'
 import SearchBar from '../../components/SearchBar'
@@ -29,12 +25,8 @@ const SEARCH_QUERY = gql`
 `
 const SearchView: React.VFC<IProps> = ({ created, owned, admin }) => {
   const [nfts, setNfts] = useState<NFT[]>([])
-  const router = useRouter()
   const [loadingState, setLoadingState] = useState<boolean>(true)
   const [count] = useState<number>(12)
-  const [pageCount, setPageCount] = useState< number | null>(null)
-  const [totalSupply, setTotalSupply] = useState(0)
-  const [totalMinted, setMintedSupply] = useState(0)
   const [searchInput, setSearchInput] = useState('')
 
   const [loadCollection, { called, error, loading, data }] = useLazyQuery(
@@ -76,9 +68,8 @@ const SearchView: React.VFC<IProps> = ({ created, owned, admin }) => {
   }, [searchInput])
 
   async function getCollectionIds(data) {
-    console.log("data", data.artworkSearch)
-    let ids = data.artworkSearch.map(a => a.id)
 
+    let ids = data.artworkSearch.map(a => a.id)
 
     let filteredIds = ids.filter((v, i) => ids.indexOf(v) === i)
     let ascending = filteredIds.sort(function (a, b) {
@@ -134,7 +125,7 @@ const SearchView: React.VFC<IProps> = ({ created, owned, admin }) => {
   return (
     <Layout>
 
-      <div className={'flex flex-col space-y-4 items-center'}>
+      <div className={'flex flex-col space-y-4 items-center mt-48'}>
         <SearchBar input={searchInput} onChange={value => setSearchInput(value)}/> 
         <div
           className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto mt-8'}
@@ -145,17 +136,12 @@ const SearchView: React.VFC<IProps> = ({ created, owned, admin }) => {
               <div key={key}>
                 <NFTItemCard
                   nft={item}
-                  title={item?.name}
-                  coverImageSrc={item?.image}
-                  creator={item?.creator}
-                  endDateTime={new Date('1/1/count00')}
-                  amountCollected={count}
                   tokenId={item?.tokenId}
                 />
               </div>
             ))
           ) : (
-            <NFTItemCard loading={true} />
+            <NFTItemCard />
           )}
         </div>
 

@@ -7,16 +7,15 @@ const ImageCard = ({ srcUrl, nft, footer, children }) => {
   const [type, setType] = useState('')
 
   useEffect(() => {
-    if (!nft?.media?.mimeType) return
-    const typeArray = nft?.media?.mimeType.split('/')
-    // console.log("TYPE", typeArray[0])
+    if (!nft?.mimeType) return
+    const typeArray = nft?.mimeType.split('/')
     setType(typeArray[0])
   }, [])
 
   return (
     <div
       className={
-        'w-full border-white border-solid border border-gray-800 shadow-white max-w-sm text-white rounded-2xl '
+        'w-full transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-white border-solid border border-gray-800 max-w-sm text-white rounded-2xl '
       }
     >
       <div className={'flex flex-col mx-auto'}>
@@ -27,22 +26,22 @@ const ImageCard = ({ srcUrl, nft, footer, children }) => {
             {/* {type && <iframe className={'w-full h-96 '} src={nft.animation_url}></iframe>} */}
 
             {type === 'image' && (
-              <img src={nft.image} className={'w-full'} />
+              <img src={srcUrl} className={'w-full h-96 object-cover'} />
             )}
             {type === 'video' && (
-              <VideoPlayer fileUrl={nft.animation_url} controls={false} />
+              <VideoPlayer fileUrl={srcUrl} controls={false} />
             )}
             {type === 'audio' && (
-              <AudioPlayer fileUrl={nft.animation_url} />
+              <AudioPlayer fileUrl={srcUrl} />
             )}
 
-            {(type === 'model' || type === '' || nft?.media?.mimeType === 'application/octet-stream') && (
+            {(type === 'model' || type === '' || nft?.mimeType === 'application/octet-stream') && (
               <model-viewer
                 autoplay
                 style={{ width: '100%', height: '100%' }}
                 id={nft?.tokenId}
                 alt={nft?.name + nft?.tokenId}
-                src={nft?.animation_url}
+                src={srcUrl}
                 auto-rotate
                 camera-controls
                 ar

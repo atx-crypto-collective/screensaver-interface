@@ -85,7 +85,7 @@ const SetSalePrice: React.VFC<IProps> = ({ onUpdate, tokenId, sale = true }) => 
   open={open}
   setOpen={setOpen}
 />
-      <label htmlFor="number" className="block text-sm font-medium text-white">
+      <label htmlFor="number" className="block text-sm font-medium text-white mt-8">
         {sale ? 'Sale Price' : account && `Balance: ${maticBalance.toFixed(3)} MATIC`}
       </label>
       <form className="mt-5 sm:flex sm:items-center" onSubmit={handleSubmit}>
@@ -117,7 +117,7 @@ const SetSalePrice: React.VFC<IProps> = ({ onUpdate, tokenId, sale = true }) => 
         ) : (
           <button
           onClick={!!account ? createBid : () => setOpen(true)}
-          className="button ml-3 w-1/3 justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          className="button mt-3 md:mt-0 md:ml-3 w-full md:w-1/2 justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
           disabled={!maticBalance || !value || !parseFloat(value) || hasPlaceBidError}
         >
           Place Bid

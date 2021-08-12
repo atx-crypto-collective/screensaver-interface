@@ -12,6 +12,10 @@ import AccountId from '../components/AccountId'
 import ReactPaginate from 'react-paginate-next'
 import { gql, useLazyQuery } from '@apollo/client'
 import { db } from '../config/firebase'
+import {
+  useWindowWidth
+} from '@react-hook/window-size'
+ 
 
 interface IProps {
   created?: boolean
@@ -43,6 +47,18 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
   const [pageCount, setPageCount] = useState< number | null>(null)
   const [totalSupply, setTotalSupply] = useState(0)
   const [totalMinted, setMintedSupply] = useState(0)
+  const width = useWindowWidth()
+  const [isMobile, setIsMobile] = useState(true)
+
+  // change pagination based on width
+  useEffect(() => {
+    if (width === null || !width) return;
+    if (width >= 400) {
+      setIsMobile(false)
+    } else {
+      setIsMobile(true)
+    }
+  }, [width])
 
   const [loadCollection, { called, error, loading, data }] = useLazyQuery(
     GALLERY_QUERY,
@@ -97,14 +113,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
     loadCollection()
   }, [account])
 
-  // useEffect(() => {
-  //   console.log("LOAD TOKENS PAGE", page)
-  //   if (!!created || !!owned || !!admin || pageCount !== null) return
-  //   console.log("LOAD TOKENS PAGE", page)
-  // }, [totalMinted])
-
   useEffect(() => {
-    console.log("PAGE", page)
     if (!!created || !!owned || !!admin || !page) return
     getPageCount()
   }, [page])
@@ -208,6 +217,17 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
           if (uri.includes(undefined)) return null
           var metadata = await axios.get(uri)
           metadata.data.tokenId = id
+          metadata.data.creator = {id: metadata.data.creator}
+          // var parsedMetadata: NFT = metadata.data
+          // parsedMetadata.creator.id = metadata.data.creator
+          if (!metadata.data.animation_url) {
+            metadata.data.mediaUri = metadata.data.image
+          } else {
+            metadata.data.mediaUri = metadata.data.animation_url
+          }
+
+          metadata.data.mimeType = metadata.data.media.mimeType
+          
           return metadata.data
         } catch (error) {
           console.log('ERROR getting token URI', error)
@@ -245,7 +265,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
             'flex items-center justify-center text-2xl font-light h-16'
           }
         >
-          CREATED&nbsp; <AccountId address={account.toString()} />
+          CREATED&nbsp; <AccountId address={account.toString()} link={'created'} />
         </div>
       )}
       {owned && (
@@ -254,7 +274,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
             'flex items-center justify-center text-2xl font-light h-16'
           }
         >
-          OWNED&nbsp; <AccountId address={account.toString()} />
+          OWNED&nbsp; <AccountId address={account.toString()} link={'created'}/>
         </div>
       )}
 
@@ -266,24 +286,19 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
 
       <div className={'flex flex-col space-y-4'}>
         <div
-          className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto mt-8'}
+          className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-2 sm:mx-auto mt-48 md:mt-36'}
         >
           {(!loadingState && !loading) ? (
             nfts.map((item, key) => (
               <div key={key}>
                 <NFTItemCard
                   nft={item}
-                  title={item?.name}
-                  coverImageSrc={item?.image}
-                  creator={item?.creator}
-                  endDateTime={new Date('1/1/count00')}
-                  amountCollected={count}
                   tokenId={item?.tokenId}
                 />
               </div>
             ))
           ) : (
-            <NFTItemCard loading={true} />
+            <NFTItemCard />
           )}
         </div>
 
@@ -306,8 +321,8 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
               breakLabel={'...'}
               breakClassName={'break-me'}
               pageCount={pageCount}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={5}
+              marginPagesDisplayed={isMobile ? 2 : 2}
+              pageRangeDisplayed={isMobile ? 1 : 2}
               onPageChange={handlePageClick}
               containerClassName={
                 'flex w-full bg-red-400 justify-center items-center h-10'
@@ -317,6 +332,7 @@ const ExploreView: React.VFC<IProps> = ({ created, owned, admin }) => {
               }
               activeClassName={'active'}
             />
+
             {(!!page && parseInt(page.toString()) < pageCount) && (
               <button
                 type="button"
