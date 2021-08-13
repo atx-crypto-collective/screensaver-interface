@@ -86,7 +86,7 @@ const MobileNavbar: React.FC<IProps> = () => {
           <div className={'flex items-center'}>
           <Link href={'/gallery'}>
             <a className="flex font-serif text-2xl text-red-400 font-bold">
-              {/* <span className={'inline text-2xl mr-2'}>🌈</span> */}
+              <span className={'inline text-2xl mr-2'}>🌈</span>
               <img
                 src={logoImage}
                 alt={'Screen Saver'}
@@ -170,13 +170,13 @@ const MobileNavbar: React.FC<IProps> = () => {
                           </a>
                         </Link>
                       </Menu.Item> */}
-                      <Menu.Item>
+                      {/* <Menu.Item>
                         <Link href="/leaderboard">
                           <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Leaderboard
                           </a>
                         </Link>
-                      </Menu.Item>
+                      </Menu.Item> */}
                       {!!account && (
                         <>
                           <Menu.Item>

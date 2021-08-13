@@ -216,7 +216,7 @@ const ItemDetailPage: React.VFC = () => {
               </>
             )}
 
-            {/* {!preview && <BidHistory tokenId={tokenId} />} */}
+            {!preview && <BidHistory tokenId={tokenId} />}
 
           </div>
         </div>
