@@ -15,28 +15,31 @@ module.exports = {
     boxShadow: {
       white: '0px 0px 2px 2px rgba(255, 255, 255, 0.1)',
       sm: '1px 2px #A78BFA',
-      DEFAULT: '0 1px 3px 0 rgba(255, 0, 0, 0.1), 0 1px 2px 0 rgba(255, 0, 0, 0.06)',
-      md: '0 4px 6px -1px rgba(255, 0, 0, 0.1), 0 2px 4px -1px rgba(255, 0, 0, 0.06)',
+      DEFAULT:
+        '0 1px 3px 0 rgba(255, 0, 0, 0.1), 0 1px 2px 0 rgba(255, 0, 0, 0.06)',
+      md:
+        '0 4px 6px -1px rgba(255, 0, 0, 0.1), 0 2px 4px -1px rgba(255, 0, 0, 0.06)',
       lg: '3px 4px #A78BFA',
-      xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+      xl:
+        '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
       '2xl': '0 25px 50px -12px rgba(255, 0, 0, 0.25)',
-     '3xl': '0 35px 60px -15px rgba(255, 0, 0, 0.3)',
+      '3xl': '0 35px 60px -15px rgba(255, 0, 0, 0.3)',
       inner: 'inset 0 2px 4px 0 rgba(255, 0, 0, 0.06)',
       none: 'none',
     },
     fontFamily: {
       mono: ['IBM Plex Mono', 'monospace'],
-      serif: ['ui-serif', 'Georgia']
+      serif: ['ui-serif', 'Georgia'],
     },
     extend: {
       keyframes: {
         roll: {
           '0%, 100%': { transform: 'translateX(0) rotate(10deg)' },
-          '50%': { transform: 'translateX(100vw) rotate(385deg)' }
-        }
+          '50%': { transform: 'translateX(100vw) rotate(385deg)' },
+        },
       },
       animation: {
-        roll: 'roll 60s ease-in-out infinite'
+        roll: 'roll 60s ease-in-out infinite',
       },
       colors: {
         gray: {
@@ -68,5 +71,5 @@ module.exports = {
   },
   variants: {
     extend: {},
-  }
+  },
 }

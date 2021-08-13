@@ -79,7 +79,7 @@ const BidHistory = ({ tokenId }) => {
           <div className="px-2 py-4 w-full">
             <div className="min-w-0 flex justify-between">
               <div>
-                <AccountId address={bid.bidder.id} link={'owned'}/>
+                <AccountId address={bid.bidder} link={'owned'}/>
                 <p className="mt-2 flex items-center text-sm ">
                   <span className="truncate">{bid.timestamp}</span>
                 </p>

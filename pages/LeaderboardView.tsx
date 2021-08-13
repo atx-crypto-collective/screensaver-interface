@@ -36,7 +36,7 @@ const BIDS_QUERY = gql`
     }
   }
 `
-const LeaderboardView: React.VFC = () => {
+const LeaderBoardView: React.VFC = () => {
   const [bids, setBids] = useState<Bid[]>([])
 
   const { loading, error, data, fetchMore } = useQuery(BIDS_QUERY, {
@@ -139,4 +139,4 @@ const LeaderboardView: React.VFC = () => {
   )
 }
 
-export default LeaderboardView
+export default LeaderBoardView
