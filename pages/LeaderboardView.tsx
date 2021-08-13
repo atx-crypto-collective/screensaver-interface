@@ -2,9 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Layout } from '../components'
 import { Bid } from '../types'
 import { gql, useQuery } from '@apollo/client'
-import { CheckCircleIcon } from '@heroicons/react/solid'
 import AccountId from '../components/AccountId'
-import moment from 'moment'
+import Link from 'next/link'
 
 var utils = require('ethers').utils
 
@@ -32,6 +31,7 @@ const BIDS_QUERY = gql`
           id
         }
         name
+        tokenId
       }
 
       amount
@@ -102,6 +102,7 @@ const LeaderboardView: React.VFC = () => {
         className={' grid-cols-1 mx-2 sm:mx-auto space-y-2 max-w-xl'}
       >
         {bids.map((bid, key) => (
+          <Link href={`/object/${bid.item?.tokenId}`}>
           <div key={key}>
             <div className="px-2 py-4 w-full border-2 border-gray-700">
               <div className="min-w-0 flex justify-between">
@@ -133,6 +134,7 @@ const LeaderboardView: React.VFC = () => {
               </div>
             </div>
           </div>
+          </Link>
         ))}
       </div>
 

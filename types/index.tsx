@@ -28,6 +28,7 @@ export type Bid = {
       id: string
     }
     name: string
+    tokenId: string
   }
   timestamp: number
   amount: number

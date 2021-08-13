@@ -6,7 +6,7 @@ import axios from 'axios'
 import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../../constants/gallery'
 import { getNetworkLibrary } from '../../connectors'
-import NFT from '../../types'
+// import NFT from '../../types'
 import BiddingDetailView from './BiddingDetailView'
 import BidHistory from './BidHistory'
 import Head from 'next/head'
@@ -14,6 +14,25 @@ import Error from '../../components/Error'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import { db, auth } from '../../config/firebase'
+
+type NFT = {
+  name: string
+  description: string
+  creator: string
+  creationDate: Date
+  image: string
+  animation_url: string
+  metadataUri: string
+  mediaUri: string
+  mimeType: string
+  size: string
+  media: {
+    mimeType: string
+    size: string
+  },
+  tags: string[]
+  tokenId: number
+}
 
 const ReportItem = ({ report }) => {
   return (
@@ -165,7 +184,7 @@ const ItemDetailPage: React.VFC = () => {
           <meta name="title" content={metadata.name} />
           <meta name="description" content={metadata.description} />
           <meta property="og:title" content={metadata.name} />
-          <meta property="og:image" content={metadata.image.replace('https://ipfs.io', 'https://infura-ipfs.io')}/>
+          <meta property="og:image" content={!!metadata.image && metadata.image.replace('https://ipfs.io', 'https://infura-ipfs.io')}/>
           <meta property="og:description" content={metadata.description} />
           <meta
             property="og:url"
@@ -197,7 +216,7 @@ const ItemDetailPage: React.VFC = () => {
               </>
             )}
 
-            {!preview && <BidHistory tokenId={tokenId} />}
+            {/* {!preview && <BidHistory tokenId={tokenId} />} */}
 
           </div>
         </div>

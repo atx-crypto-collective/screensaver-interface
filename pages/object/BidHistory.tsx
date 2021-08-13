@@ -53,7 +53,7 @@ const BidHistory = ({ tokenId }) => {
 
       const mappedBids = sortedByMostRecentBids.map((bid) => {
         return {
-          bidder: bid.bidder,
+          bidder: bid.bidder.id,
           amount: utils.formatEther(bid.amount),
           timestamp: moment.unix(bid.timestamp).format('MMMM D, YYYY h:mm a'),
           accepted: bid.accepted
@@ -75,7 +75,8 @@ const BidHistory = ({ tokenId }) => {
   return (
     <div className="bg-black shadow overflow-hidden sm:rounded-md mt-6">
       <ul className="divide-y divide-gray-200">
-        {bidLogs.map((bid) => (
+        {bidLogs.map((bid, key) => (
+          <div key={key}>
           <div className="px-2 py-4 w-full">
             <div className="min-w-0 flex justify-between">
               <div>
@@ -99,6 +100,7 @@ const BidHistory = ({ tokenId }) => {
                 </div>
               </div>
             </div>
+          </div>
           </div>
         ))}
       </ul>

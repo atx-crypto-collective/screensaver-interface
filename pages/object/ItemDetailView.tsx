@@ -1,11 +1,30 @@
 import React, {useState} from 'react'
 import { ImageWithActions } from '../../components'
-import NFT from '../../types'
+// import NFT from '../../types'
 import MintButton from '../../components/MintButton'
 import AccountId from '../../components/AccountId'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+
+type NFT = {
+  name: string
+  description: string
+  creator: string
+  creationDate: Date
+  image: string
+  animation_url: string
+  metadataUri: string
+  mediaUri: string
+  mimeType: string
+  size: string
+  media: {
+    mimeType: string
+    size: string
+  },
+  tags: string[]
+  tokenId: number
+}
 
 interface IProps {
   metadata: NFT
@@ -55,7 +74,7 @@ const ItemDetailView: React.VFC<IProps> = ({ metadata, hash }) => {
 
           <div className={'text-lg py-1 mt-3 w-full flex space-x-2'}>
             <strong>Creator: </strong>{' '}
-            {/* <AccountId link={'created'} address={metadata.creator.id} /> */}
+            <AccountId link={'created'} address={metadata.creator} />
           </div>
           <div className={'text-sm py-1'}>
             <strong>Minted: </strong>
