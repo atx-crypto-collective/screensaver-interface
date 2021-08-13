@@ -165,7 +165,7 @@ const ItemDetailPage: React.VFC = () => {
           <meta name="title" content={metadata.name} />
           <meta name="description" content={metadata.description} />
           <meta property="og:title" content={metadata.name} />
-          <meta property="og:image" content={metadata.image} />
+          <meta property="og:image" content={metadata.mediaUri} />
           <meta property="og:description" content={metadata.description} />
           <meta
             property="og:url"
