@@ -18,13 +18,13 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
       { type === '' && <div>Loading...</div>}
       {/* { type && <iframe className={'w-full h-96 '} src={nft.animation_url}></iframe>} */}
       { type === 'image' && (
-        <img src={nft.image} className={'w-full'} />
+        <img src={nft.image.replace('https://ipfs.io', 'https://infura-ipfs.io')} className={'w-full'} />
       )}
       {type === 'video' && (
-        <VideoPlayer fileUrl={nft.animation_url} />
+        <VideoPlayer fileUrl={nft.animation_url.replace('https://ipfs.io', 'https://infura-ipfs.io')} />
       )}
       {type === 'audio' && (
-        <AudioPlayer fileUrl={nft.animation_url} />
+        <AudioPlayer fileUrl={nft.animation_url.replace('https://ipfs.io', 'https://infura-ipfs.io')} />
       )}
       {(type === 'model' || nft?.media?.mimeType === 'application/octet-stream') && (
 
@@ -35,7 +35,7 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
             style={{ width: '100%', height: '100%' }}
             id={nft?.tokenId}
             alt={nft?.name + nft?.tokenId}
-            src={nft?.animation_url}
+            src={nft?.animation_url.replace('https://ipfs.io', 'https://infura-ipfs.io')}
             auto-rotate
             camera-controls
             ar

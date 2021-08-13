@@ -88,7 +88,7 @@ const NFTItemCard: React.FC<IProps> = ({ nft }) => {
   return (
     <ImageCard
       nft={nft}
-      srcUrl={nft.mediaUri}
+      srcUrl={nft.mediaUri.replace('https://ipfs.io', 'https://infura-ipfs.io')}
       footer={
         <div className={'py-3 bg-white bg-opacity-5 font-medium px-5'}>
           <div className={'flex flex-col h-20 justify-center'}>
