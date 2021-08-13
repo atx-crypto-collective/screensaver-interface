@@ -55,7 +55,7 @@ const ItemDetailView: React.VFC<IProps> = ({ metadata, hash }) => {
 
           <div className={'text-lg py-1 mt-3 w-full flex space-x-2'}>
             <strong>Creator: </strong>{' '}
-            <AccountId link={'created'} address={metadata.creator.id} />
+            {/* <AccountId link={'created'} address={metadata.creator.id} /> */}
           </div>
           <div className={'text-sm py-1'}>
             <strong>Minted: </strong>

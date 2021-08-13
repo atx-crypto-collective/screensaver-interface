@@ -13,13 +13,9 @@ export default function AccountId({address, link}: Props) {
         `https://us-central1-proofoftwitter.cloudfunctions.net/api/user/?address=${address}`
       )
 
-      useEffect(() => {
-          console.log("DATA", data)
-      }, [data])
-
       if (loading || !data?.twitterId) {
         return (
-          <Link href={`/${link === 'twitter' ? 'created' : link}/${address}`}>
+          <Link href={`created/${address}`}>
             <a className={'hover:bg-gray-800 p-2 -ml-2 rounded-md'}>{!!address && shortenAddress(address)}</a>
           </Link>
         )
