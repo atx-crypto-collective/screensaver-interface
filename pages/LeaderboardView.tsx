@@ -28,7 +28,12 @@ const BIDS_QUERY = gql`
       }
       item {
         id
+        creator {
+          id
+        }
+        name
       }
+
       amount
       accepted
       canceled
@@ -94,18 +99,19 @@ const LeaderboardView: React.VFC = () => {
   return (
     <div className={'flex flex-col space-y-4 md:mt-24'}>
       <div
-        className={' grid-cols-1 mx-2 sm:mx-auto space-y-2'}
+        className={' grid-cols-1 mx-2 sm:mx-auto space-y-2 max-w-xl'}
       >
         {bids.map((bid, key) => (
           <div key={key}>
             <div className="px-2 py-4 w-full border-2 border-gray-700">
               <div className="min-w-0 flex justify-between">
                 <div>
-                  <AccountId address={bid.bidder.id} link={'owned'} />
-                  <p className="mt-2 flex items-center text-sm ">
-                    <span className="truncate">
+                  <AccountId address={bid.item.creator.id} link={'owned'} />
+                  <p className="mt-2 flex items-center text-sm">
+                    {bid.item.name}
+                    {/* <span className="truncate">
                       {moment.unix(bid.timestamp).format('MMMM D, YYYY h:mm a')}
-                    </span>
+                    </span> */}
                   </p>
                 </div>
                 <div>
@@ -113,7 +119,7 @@ const LeaderboardView: React.VFC = () => {
                     <p className="md:text-xl font-bold">
                       {utils.formatEther(bid.amount)} MATIC
                     </p>
-                    {!!bid.accepted && (
+                    {/* {!!bid.accepted && (
                       <p className="mt-2 flex items-center text-sm ">
                         <CheckCircleIcon
                           className="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
@@ -121,7 +127,7 @@ const LeaderboardView: React.VFC = () => {
                         />
                         Bid Accepted
                       </p>
-                    )}
+                    )} */}
                   </div>
                 </div>
               </div>

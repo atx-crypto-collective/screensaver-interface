@@ -23,6 +23,12 @@ export type Bid = {
   bidder: {
     id: string
   }
+  item: {
+    creator: {
+      id: string
+    }
+    name: string
+  }
   timestamp: number
   amount: number
   accepted: boolean
