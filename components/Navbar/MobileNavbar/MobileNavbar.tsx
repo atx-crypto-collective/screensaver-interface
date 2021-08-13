@@ -163,10 +163,17 @@ const MobileNavbar: React.FC<IProps> = () => {
                           </a>
                         </Link>
                       </Menu.Item>
-                      <Menu.Item>
+                      {/* <Menu.Item>
                         <Link href="/search">
                           <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Search
+                          </a>
+                        </Link>
+                      </Menu.Item> */}
+                      <Menu.Item>
+                        <Link href="/leaderboard">
+                          <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Leaderboard
                           </a>
                         </Link>
                       </Menu.Item>
@@ -175,17 +182,17 @@ const MobileNavbar: React.FC<IProps> = () => {
                           <Menu.Item>
                             <Link href={`/created/${account}`}>
                               <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                Created
+                                Account
                               </a>
                             </Link>
                           </Menu.Item>
-                          <Menu.Item>
+                          {/* <Menu.Item>
                             <Link href={`/owned/${account}`}>
                               <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 Owned
                               </a>
                             </Link>
-                          </Menu.Item>
+                          </Menu.Item> */}
                         </>
                       )}
                       <Menu.Item>
@@ -195,17 +202,17 @@ const MobileNavbar: React.FC<IProps> = () => {
                           </a>
                         </Link>
                       </Menu.Item>
-                      <Menu.Item>
+                      {/* <Menu.Item>
                         <Link href="/whitelist">
                           <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Whitelist
                           </a>
                         </Link>
-                      </Menu.Item>
+                      </Menu.Item> */}
                       <Menu.Item>
                         <Link href="/">
                           <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            What is Screensaver Dao?
+                            About?
                           </a>
                         </Link>
                       </Menu.Item>

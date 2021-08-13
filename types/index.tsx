@@ -19,4 +19,13 @@ type NFT = {
     tokenId: number
 }
 
+export type Bid = {
+  bidder: {
+    id: string
+  }
+  timestamp: number
+  amount: number
+  accepted: boolean
+}
+
 export default NFT

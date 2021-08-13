@@ -35,6 +35,11 @@
   status = 200
 
 [[redirects]]
+  from = "/leaderboard/:leaderboard"
+  to = "/leaderboard/:leaderboard"
+  status = 200
+
+[[redirects]]
   from = "/admin/:admin"
   to = "/admin/:admin"
   status = 200

@@ -53,7 +53,7 @@ const BidHistory = ({ tokenId }) => {
 
       const mappedBids = sortedByMostRecentBids.map((bid) => {
         return {
-          bidder: bid.bidder.id,
+          bidder: bid.bidder,
           amount: utils.formatEther(bid.amount),
           timestamp: moment.unix(bid.timestamp).format('MMMM D, YYYY h:mm a'),
           accepted: bid.accepted
@@ -79,7 +79,7 @@ const BidHistory = ({ tokenId }) => {
           <div className="px-2 py-4 w-full">
             <div className="min-w-0 flex justify-between">
               <div>
-                <AccountId address={bid.bidder} link={'owned'}/>
+                <AccountId address={bid.bidder.id} link={'owned'}/>
                 <p className="mt-2 flex items-center text-sm ">
                   <span className="truncate">{bid.timestamp}</span>
                 </p>
