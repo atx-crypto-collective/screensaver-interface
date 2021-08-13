@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import { BigNumber, ethers } from 'ethers'
@@ -16,6 +16,24 @@ const SICK_VIBES_SITE_URL = 'https://www.sickvibes.xyz';
 interface VibesAtRender {
   initialClaimableVibes: BigNumber
   initialDateTime: Date
+}
+// VIBES token interface
+interface VibesToken {
+  balance: BigNumber
+  claimable: BigNumber
+  dailyRate: BigNumber
+  isLegacyToken: boolean
+  isSeeded: boolean
+  isValidToken: boolean
+  lastClaimAt: BigNumber
+  nft: string
+  operator: string
+  owner: string
+  seededAt: BigNumber
+  seeder: string
+  tokenId: BigNumber
+  tokenURI: string
+  unlocksAt: BigNumber
 }
 
 const formatVibes = (vibes: BigNumber, decimal = 18, toFixed = 3): string => {
@@ -55,9 +73,9 @@ const calculateLiveInfusedVibes = (initialVibes: VibesAtRender, dailyRate: BigNu
 
 const Vibes = ({ tokenId }) => {
   const { account } = useWeb3React<Web3Provider>()
-  const [tokenInfo, setTokenInfo] = useState<Record<string, unknown> | undefined>();
+  const [tokenInfo, setTokenInfo] = useState<VibesToken | undefined>();
   const [claimableVibes, setClaimableVibes] = useState<string>('');
-  const [startDateTime, _] = useState<Date>(new Date());
+  const startDateTime = useRef(new Date());
 
   const vibesTokenUrl = `${SICK_VIBES_SITE_URL}/tokens/${process.env.NEXT_PUBLIC_CONTRACT_ID}/${tokenId}`;
 
@@ -77,10 +95,10 @@ const Vibes = ({ tokenId }) => {
     if (tokenInfo) {
       const claimableVibes = calculateLiveInfusedVibes(
         {
-          initialClaimableVibes: tokenInfo.claimable as BigNumber,
-          initialDateTime: startDateTime 
+          initialClaimableVibes: tokenInfo.claimable,
+          initialDateTime: startDateTime.current 
         },
-        tokenInfo.dailyRate as BigNumber,
+        tokenInfo.dailyRate,
       );
       setClaimableVibes(claimableVibes);
     }
@@ -95,7 +113,7 @@ const Vibes = ({ tokenId }) => {
       const h = setInterval(getClaimableVibes, REFRESH_VIBES_INTERVAL);
       return () => clearInterval(h);
     }
-  })
+  }, [tokenInfo])
 
   return claimableVibes.length ? (
     <div className={'flex flex-col space-y-12'}>
