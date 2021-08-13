@@ -2,13 +2,14 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { IProps } from '../types'
 import { MenuIcon } from '@heroicons/react/outline'
+import { SearchIcon } from '@heroicons/react/outline'
 import ConnectButton from '../../ConnectButton'
 import Banner from '../../Banner'
 import { useWeb3React } from '@web3-react/core'
 import { useEffect } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-import logoImage from './SCREENSAVER.png'
+import logoImage from './logo.png'
 import { ethers } from 'ethers'
 import { ERC20_ABI } from '../../../constants/abis/erc20'
 import { auth } from '../../../config/firebase'
@@ -43,7 +44,7 @@ const MobileNavbar: React.FC<IProps> = () => {
   }, [])
 
   useEffect(() => {
-    console.log("ROUTER", router.pathname)
+    console.log('ROUTER', router.pathname)
     if (router.pathname.includes('gallery')) {
       setShowBanner(true)
     }
@@ -74,36 +75,27 @@ const MobileNavbar: React.FC<IProps> = () => {
   return (
     <div
       className={
-        'fixed z-10 bg-black right-0 top-0 w-full border-b-2 border-gray-800'
+        'fixed z-10 mx-auto bg-black right-0 top-0 w-full border-b-2 border-gray-800'
       }
     >
-      <div className={'mx-1 md:mx-4'}>
+      <div className={'mx-1 md:mx-4 flex justify-between'}>
         <div
           className={
             'flex justify-between mx-auto w-11/12 items-center h-16 z-10'
           }
         >
           <div className={'flex items-center'}>
-          <Link href={'/gallery'}>
-            <a className="flex font-serif text-2xl text-red-400 font-bold">
-              <span className={'inline text-2xl mr-2'}>🌈</span>
-              <img
-                src={logoImage}
-                alt={'Screen Saver'}
-                className={'cursor-pointer'}
-                width={200}
-              />
-            </a>
-          </Link>
-
-          <Link href={'/search'}>
-          <input
-            placeholder={'Search art titles...'}
-            className={
-              'hidden lg:block input rounded-md border cursor-pointer border-gray-800 w-0 md:w-64 text-gray-400 font-bold text-base p-0 md:h-8 md:px-6 md:mx-10'
-            }
-          />
-          </Link>
+            <Link href={'/gallery'}>
+              <a className="flex font-serif text-2xl text-red-400 font-bold mt-2">
+                {/* <span className={'inline text-2xl mr-2'}>🌈</span> */}
+                <img
+                  src={logoImage}
+                  alt={'Screen Saver'}
+                  className={'cursor-pointer'}
+                  width={120}
+                />
+              </a>
+            </Link>
           </div>
           <div className={'flex space-x-3 items-center'}>
             {/* {connector && (
@@ -117,9 +109,21 @@ const MobileNavbar: React.FC<IProps> = () => {
                 </span>
               </div>
             )} */}
+            {/* <Link href={'/search'}>
+              <SearchIcon
+                className={
+                  ' h-9 w-9 p-2 border border-red-300 text-md font-medium rounded-sm shadow-lg hover:shadow-sm text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
+                }
+              />
+            </Link> */}
 
-            <div className={'fixed md:relative bottom-0 -left-3 md:left-0 border-t md:border-t-0 border-red-100 bg-black w-full md:bg-transparent px-10 py-4 md:p-0 flex justify-center'}><ConnectButton /></div>
-            
+            <div
+              className={
+                'fixed md:relative bottom-0 -left-3 md:left-0 border-t md:border-t-0 border-red-100 bg-black w-full md:bg-transparent px-10 py-4 md:p-0 flex justify-center'
+              }
+            >
+              <ConnectButton />
+            </div>
 
             <Menu as="div" className="ml-3 relative z-20">
               {({ open }) => (
@@ -127,7 +131,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                   <div>
                     <Menu.Button className="bg-gray-800 flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                       <span className="sr-only">Open user menu</span>
-        
+
                       <MenuIcon
                         className={
                           ' h-8 w-8 p-2 border border-red-300 text-md font-medium rounded-sm shadow-lg hover:shadow-sm text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
@@ -151,7 +155,10 @@ const MobileNavbar: React.FC<IProps> = () => {
                     >
                       <Menu.Item>
                         <Link href="https://buy.moonpay.com/">
-                          <a  target='_blank' className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          <a
+                            target="_blank"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          >
                             Buy Matic
                           </a>
                         </Link>
@@ -217,8 +224,11 @@ const MobileNavbar: React.FC<IProps> = () => {
                         </Link>
                       </Menu.Item>
                       <Menu.Item>
-                        <Link  href="https://ssw.wtf/">
-                          <a target='_blank' className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <Link href="https://ssw.wtf/">
+                          <a
+                            target="_blank"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          >
                             Account shortlinks
                           </a>
                         </Link>
@@ -262,7 +272,7 @@ const MobileNavbar: React.FC<IProps> = () => {
         </div>
       </div>
 
-      { showBanner && <Banner />}
+      {showBanner && <Banner />}
     </div>
   )
 }
