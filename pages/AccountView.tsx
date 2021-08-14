@@ -225,7 +225,7 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
     <div className={'flex flex-col items-center space-y-6'}>
     
     <div className={'h-14 w-14 rounded-full focus:outline-none hover:shadow-white'}><img style={{borderRadius: '50%'}}src={makeBlockie(account)} /></div>
-        <div className={'text-2xl'}><AccountId address={account.toString()} link={'twitter'}/></div>
+        <div className={'text-2xl'}><AccountId address={`${account}`} link={'twitter'}/></div>
 
         <span className="relative z-0 justify-center rounded-md">
           <Link href={`/created/${account}`}>
