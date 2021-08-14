@@ -1,7 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-// import { CheckIcon } from '@heroicons/react/outline'
+import  Link from 'next/link'
 import { shortenAddress, getSigner } from '../utils'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
@@ -10,26 +10,23 @@ import styles from '../styles/Wallet.module.css'
 import { useGalleryContract } from '../hooks/useContract'
 import { ethers } from 'ethers'
 import { POLYGON_MAINNET_PARAMS } from '../constants/'
+import { useMaticBalance } from '../hooks/useMaticBalance'
 
 interface IProps {
-    status: string
+  status: string
   open: boolean
   setOpen: (open: boolean) => void
 }
 
 const SwitchView = () => {
-
-  const {
-    chainId,
-    account,
-  } = useWeb3React<Web3Provider>()
+  const { chainId, account } = useWeb3React<Web3Provider>()
 
   async function switchToPolygon() {
-    injected.getProvider().then(provider => {
+    injected.getProvider().then((provider) => {
       provider
         .request({
           method: 'wallet_addEthereumChain',
-          params: [POLYGON_MAINNET_PARAMS]
+          params: [POLYGON_MAINNET_PARAMS],
         })
         .catch((error: any) => {
           console.log(error)
@@ -37,107 +34,138 @@ const SwitchView = () => {
     })
   }
 
-
-    return (
-        <div className={'m-4'}>
-        <div>
-            <div className="mt-3 text-center sm:mt-5">
-            <Dialog.Title
-                as="h3"
-                className="text-xl leading-6 font-bold text-gray-900 mb-6"
-            >
+  return (
+    <div className={'m-4'}>
+      <div>
+        <div className="mt-3 text-center sm:mt-5">
+          <Dialog.Title
+            as="h3"
+            className="text-xl leading-6 font-bold text-gray-900 mb-6"
+          >
             Screensaver.world runs on Polygon
-            </Dialog.Title>
-            </div>
+          </Dialog.Title>
         </div>
-            {/* <div className="mt-5 sm:mt-5"> */}
-            <button
-          type="button"
-          onClick={switchToPolygon}
-          className="inline-flex items-center px-6 py-3 shadow-sm text-base font-medium rounded-md text-white bg-red-300"
-        >
-          Switch to Polygon
-        </button>
+      </div>
+      {/* <div className="mt-5 sm:mt-5"> */}
+      <button
+        type="button"
+        onClick={switchToPolygon}
+        className="inline-flex items-center px-6 py-3 shadow-sm text-base font-medium rounded-md text-white bg-red-300"
+      >
+        Switch to Polygon
+      </button>
 
-                <p className={"text-gray-700 mt-6"} >Screensaver.world runs on Polygon so artists can enjoy low fees and guilt free minting.</p>
-                {/* <a className={"text-gray-700 underline mt-8"}>Learn more.</a> */}
-            {/* </div> */}
-        </div>
-    )
+      <p className={'text-gray-700 mt-6'}>
+        Screensaver.world runs on Polygon so artists can enjoy low fees and
+        guilt free minting.
+      </p>
+      {/* <a className={"text-gray-700 underline mt-8"}>Learn more.</a> */}
+      {/* </div> */}
+    </div>
+  )
 }
 
 interface ConnectIProps {
   setOpen: (open: boolean) => void
 }
 
+function AccountBar() {
+  const maticBalance = useMaticBalance()
 
-const ConnectView: React.VFC<ConnectIProps>  = ({setOpen}) => {
-    const {
-        chainId,
-        account,
-        activate,
-        active,
-        deactivate,
-        library,
-      } = useWeb3React<Web3Provider>()
+  const { chainId, account } = useWeb3React<Web3Provider>()
 
-    return (
-        <div>
-        <div>
-        <div className="mt-3 text-center sm:mt-5">
-          <Dialog.Title
-            as="h3"
-            className="text-xl leading-6 font-bold text-gray-900"
-          >
-            {!account
-              ? 'Connect Your Wallet'
-              : shortenAddress(account)}
-          </Dialog.Title>
+  return (
+    <>
+      <div className="flex border h-12 focus:outline-none space-x-2">
+
+        <div className="w-full py-2 border-red-300 bg-black text-md font-medium rounded-sm text-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+          {chainId === 137 && !!account && shortenAddress(account)}
         </div>
+
+        {account && (
+        <div className="w-full py-2 border-red-300 bg-black text-md font-medium rounded-sm text-red-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+        {maticBalance.toFixed(3)} MATIC
+          </div>
+        )}
       </div>
-      <div className="mt-5 sm:mt-6">
+    </>
+  )
+}
+
+const ConnectView: React.VFC<ConnectIProps> = ({ setOpen }) => {
+  const {
+    chainId,
+    account,
+    activate,
+    active,
+    deactivate,
+    library,
+  } = useWeb3React<Web3Provider>()
+
+  return (
+        <div className="mt-3 flex flex-col text-center sm:mt-5 space-y-3">
+          {!!account && 
+            <Link href={`/created/${account}`}>
+            <a className="inline-flex mb-3 justify-center px-6 py-3 text-xl font-medium rounded-md text-white bg-green-600">
+            🎨 My collections ➡️
+            </a>
+          </Link>
+          }
+
+             <div className="mt-2">
+          <p className="text-xl text-black font-bold">Wallet</p>
+        </div>
+          {!account ? (
+            <Dialog.Title
+              as="h3"
+              className="text-xl leading-6 font-bold text-gray-900"
+            >
+              Connect Your Wallet
+            </Dialog.Title>
+          ) : (
+            <AccountBar />
+          )}
+
         <button
           type="button"
-          onClick={!account ? () => {
-              activate(injected)
-              setOpen(false)
-           } : deactivate
-        }
-          className="inline-flex items-center px-6 py-3 shadow-sm text-base font-medium rounded-md text-white bg-red-300"
+          onClick={
+            !account
+              ? () => {
+                  activate(injected)
+                  setOpen(false)
+                }
+              : deactivate
+          }
+          className="flex justify-center px-6 py-3 shadow-sm text-base font-medium rounded-md text-white bg-red-300"
         >
           {!account ? 'Connect with Metamask' : 'Deactivate'}
         </button>
 
-        <div className="mt-4">
-          <p className="text-sm text-gray-500">New to Ethereum?</p>
-          <a>Learn more about wallets</a>
-        </div>
       </div>
-      </div>
-    )
+  )
 }
 
 function ModalViews({ status, setOpen }) {
-    return (
-      <div>
-        {(() => {
-          switch (status) {
-            case 'connect':
-              return <ConnectView setOpen={setOpen} />;
-            case 'switch-network':
-                return <SwitchView />;
-                // case 'error':
-                //     return <ConnectView />;
-                    default:
-              return null;
-          }
-        })()}
-      </div>
-    );
-  }
+  return (
+    <div>
+      {(() => {
+        switch (status) {
+          case 'connect':
+            return <ConnectView setOpen={setOpen} />
+          case 'switch-network':
+            return <SwitchView />
+          // case 'error':
+          //     return <ConnectView />;
+          default:
+            return null
+        }
+      })()}
+    </div>
+  )
+}
 
 const Modal: React.VFC<IProps> = ({ status, open, setOpen }) => {
-    const { account, chainId } = useWeb3React<Web3Provider>()
+  const { account, chainId } = useWeb3React<Web3Provider>()
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -178,11 +206,15 @@ const Modal: React.VFC<IProps> = ({ status, open, setOpen }) => {
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <div className="inline-block align-bottom bg-white rounded-sm px-4 pt-5 pb-4 text-center overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
-            
-            {chainId !== 137 && <ModalViews status={"switch-network"} setOpen={setOpen} /> }
-            {(chainId === 137 && !account) && <ModalViews status={"connect"} setOpen={setOpen} />}
-            {(chainId === 137 && !!account) && <ModalViews status={status} setOpen={setOpen} />}
-            
+              {chainId !== 137 && (
+                <ModalViews status={'switch-network'} setOpen={setOpen} />
+              )}
+              {chainId === 137 && !account && (
+                <ModalViews status={'connect'} setOpen={setOpen} />
+              )}
+              {chainId === 137 && !!account && (
+                <ModalViews status={status} setOpen={setOpen} />
+              )}
             </div>
           </Transition.Child>
         </div>

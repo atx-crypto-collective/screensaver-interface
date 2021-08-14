@@ -7,6 +7,7 @@ import { gql, useQuery } from '@apollo/client'
 import Link from 'next/link'
 import AccountId from '../components/AccountId'
 import classNames from 'classnames'
+import makeBlockie from 'ethereum-blockies-base64'
 
 interface IProps {
   state: string
@@ -221,8 +222,9 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
   }
 
   return (
-    <div className={'flex flex-col items-center space-y-8'}>
+    <div className={'flex flex-col items-center space-y-6'}>
     
+    <div className={'h-14 w-14 rounded-full focus:outline-none hover:shadow-white'}><img style={{borderRadius: '50%'}}src={makeBlockie(account)} /></div>
         <div className={'text-2xl'}><AccountId address={account.toString()} link={'twitter'}/></div>
 
         <span className="relative z-0 justify-center rounded-md">

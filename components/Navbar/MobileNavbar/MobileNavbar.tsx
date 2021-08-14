@@ -75,13 +75,13 @@ const MobileNavbar: React.FC<IProps> = () => {
   return (
     <div
       className={
-        'fixed z-10 mx-auto bg-black right-0 top-0 w-full border-b-2 border-gray-800'
+        'fixed z-10 bg-black right-0 top-0 w-full backdrop-filter backdrop-blur-lg bg-opacity-30'
       }
     >
-      <div className={'mx-1 md:mx-4 flex justify-between'}>
+      <div className={' mw-auto'}>
         <div
           className={
-            'flex justify-between mx-auto w-11/12 items-center h-16 z-10'
+            'justify-between max-w-6xl flex mx-auto w-11/12 items-center h-16 z-10'
           }
         >
           <div className={'flex items-center'}>
@@ -97,46 +97,27 @@ const MobileNavbar: React.FC<IProps> = () => {
               </a>
             </Link>
           </div>
-          <div className={'flex space-x-3 items-center'}>
-            {/* {connector && (
-              <div className="hidden lg:block px-6 w-full py-2 border border-red-300 text-sm shadow-lg font-medium rounded-sm text-red-300 bg-gray-900 focus:outline-none ">
-                {tokenBalance.toFixed(3)}{' '}
-                <span
-                  onClick={() => track()}
-                  className="hover:underline cursor-pointer"
-                >
-                  SSD
-                </span>
-              </div>
-            )} */}
-            {/* <Link href={'/search'}>
+
+          <div className={'flex items-center space-x-2 md:space-x-3'}>
+            {/* <Link href={'/search'}> */}
               <SearchIcon
                 className={
-                  ' h-9 w-9 p-2 border border-red-300 text-md font-medium rounded-sm shadow-lg hover:shadow-sm text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
+                  'h-8 w-8 text-red-300 cursor-pointer'
                 }
               />
-            </Link> */}
+            {/* </Link> */}
 
-            <div
-              className={
-                'fixed md:relative bottom-0 -left-3 md:left-0 border-t md:border-t-0 border-red-100 bg-black w-full md:bg-transparent px-10 py-4 md:p-0 flex justify-center'
-              }
-            >
-              <ConnectButton />
-            </div>
+          
+            <ConnectButton />
 
-            <Menu as="div" className="ml-3 relative z-20">
+            <Menu as="div" className="relative z-20">
               {({ open }) => (
                 <>
                   <div>
-                    <Menu.Button className="bg-gray-800 flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                    <Menu.Button className="h-10 w-10 mt-1 focus:outline-none">
                       <span className="sr-only">Open user menu</span>
 
-                      <MenuIcon
-                        className={
-                          ' h-8 w-8 p-2 border border-red-300 text-md font-medium rounded-sm shadow-lg hover:shadow-sm text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
-                        }
-                      />
+                      <MenuIcon className={' text-red-300'} />
                     </Menu.Button>
                   </div>
                   <Transition
@@ -151,25 +132,16 @@ const MobileNavbar: React.FC<IProps> = () => {
                   >
                     <Menu.Items
                       static
-                      className="origin-top-right absolute right-0 mt-2 w-48 shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                      className="origin-top-right absolute right-4 mt-2 w-64 rounded py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                     >
-                      <Menu.Item>
-                        <Link href="https://buy.moonpay.com/">
-                          <a
-                            target="_blank"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          >
-                            Buy Matic
-                          </a>
-                        </Link>
-                      </Menu.Item>
-                      <Menu.Item>
+
+                      {/* <Menu.Item>
                         <Link href="/gallery">
                           <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Gallery
                           </a>
                         </Link>
-                      </Menu.Item>
+                      </Menu.Item> */}
                       {/* <Menu.Item>
                         <Link href="/search">
                           <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
@@ -186,13 +158,13 @@ const MobileNavbar: React.FC<IProps> = () => {
                       </Menu.Item> */}
                       {!!account && (
                         <>
-                          <Menu.Item>
+                          {/* <Menu.Item>
                             <Link href={`/created/${account}`}>
                               <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 Account
                               </a>
                             </Link>
-                          </Menu.Item>
+                          </Menu.Item> */}
                           {/* <Menu.Item>
                             <Link href={`/owned/${account}`}>
                               <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
@@ -204,8 +176,8 @@ const MobileNavbar: React.FC<IProps> = () => {
                       )}
                       <Menu.Item>
                         <Link href="/mint">
-                          <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Mint
+                          <a className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100">
+                          🎨 Mint
                           </a>
                         </Link>
                       </Menu.Item>
@@ -217,30 +189,43 @@ const MobileNavbar: React.FC<IProps> = () => {
                         </Link>
                       </Menu.Item> */}
                       <Menu.Item>
-                        <Link href="/">
-                          <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            About?
+
+                        <Link href="https://buy.moonpay.com/">
+                          <a
+                            target="_blank"
+                            className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100"
+                          >
+                            💸 Buy Matic
                           </a>
                         </Link>
                       </Menu.Item>
+
+                      <Menu.Item>
+                        <Link href="/">
+                          <a className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100">
+                          🧅 About
+                          </a>
+                        </Link>
+                      </Menu.Item>
+
                       <Menu.Item>
                         <Link href="https://ssw.wtf/">
                           <a
                             target="_blank"
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100"
                           >
-                            Account shortlinks
+                            🚀 Account shortlinks
                           </a>
                         </Link>
                       </Menu.Item>
-                      <Menu.Item>
+                      {/* <Menu.Item>
                         <a
                           href="https://v0.screensaver.world"
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
                           Screensaver V0
                         </a>
-                      </Menu.Item>
+                      </Menu.Item> */}
 
                       {isSignedIn && (
                         <Menu.Item>
