@@ -65,7 +65,7 @@ export default function index() {
         <button
           onClick={() => setOpen(true)}
           className={
-            'h-10 w-10 rounded-full focus:outline-none hover:shadow-white'
+            'h-8 w-8 rounded-full focus:outline-none hover:shadow-white'
           }
         >
           <img style={{ borderRadius: '50%' }} src={makeBlockie(account)} />
