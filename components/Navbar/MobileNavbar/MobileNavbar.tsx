@@ -73,12 +73,18 @@ const MobileNavbar: React.FC<IProps> = () => {
   }
 
   return (
+    <>
     <div
       className={
-        'fixed z-10 bg-black right-0 top-0 w-full backdrop-filter backdrop-blur-lg bg-opacity-30'
+        'fixed z-10 bg-black right-0 top-0 w-full h-16 backdrop-filter backdrop-blur-lg bg-opacity-30'
+      }
+    />
+    <div
+      className={
+        'fixed z-10 bg-transparent right-0 top-0 w-full'
       }
     >
-      <div className={' mw-auto'}>
+      <div className={'mw-auto'}>
         <div
           className={
             'justify-between max-w-6xl flex mx-auto w-11/12 items-center h-16 z-10'
@@ -87,7 +93,6 @@ const MobileNavbar: React.FC<IProps> = () => {
           <div className={'flex items-center'}>
             <Link href={'/gallery'}>
               <a className="flex font-serif text-2xl text-red-400 font-bold mt-2">
-                {/* <span className={'inline text-2xl mr-2'}>🌈</span> */}
                 <img
                   src={logoImage}
                   alt={'Screen Saver'}
@@ -107,8 +112,7 @@ const MobileNavbar: React.FC<IProps> = () => {
               />
             {/* </Link> */}
 
-          
-            <ConnectButton />
+          <ConnectButton />
 
             <Menu as="div" className="relative z-20">
               {({ open }) => (
@@ -256,9 +260,9 @@ const MobileNavbar: React.FC<IProps> = () => {
           </div>
         </div>
       </div>
-
       {showBanner && <Banner />}
     </div>
+    </>
   )
 }
 

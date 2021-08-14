@@ -34,7 +34,7 @@ export default function index() {
       {chainId !== 137 && (
         <div
           className={
-            'fixed md:relative flex justify-center p-6 bottom-0 left-0 border-t md:border-t-0 border-red-100 bg-black w-full md:bg-transparent'
+            'md:relative fixed flex w-full md:w-auto justify-center p-6 md:p-0 bottom-0 left-0 border-t md:border-t-0 border-red-100 bg-black md:bg-transparent'
           }
         >
           <button
@@ -49,7 +49,7 @@ export default function index() {
       {chainId === 137 && !account && (
         <div
           className={
-            'fixed md:relative flex justify-center p-6 bottom-0 left-0 border-t md:border-t-0 border-red-100 bg-black w-full md:bg-transparent'
+            'md:relative fixed flex w-full md:w-auto justify-center p-6 md:p-0 bottom-0 left-0 border-t md:border-t-0 border-red-100 bg-black md:bg-transparent'
           }
         >
           <button
@@ -65,7 +65,7 @@ export default function index() {
         <button
           onClick={() => setOpen(true)}
           className={
-            'h-8 w-8 rounded-full focus:outline-none hover:shadow-white'
+            'h-10 w-10 rounded-full focus:outline-none hover:shadow-white'
           }
         >
           <img style={{ borderRadius: '50%' }} src={makeBlockie(account)} />
