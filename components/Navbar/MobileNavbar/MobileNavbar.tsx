@@ -14,6 +14,7 @@ import { ethers } from 'ethers'
 import { ERC20_ABI } from '../../../constants/abis/erc20'
 import { auth } from '../../../config/firebase'
 import { useRouter } from 'next/router'
+import SearchModal from '../../SearchModal'
 
 var utils = require('ethers').utils
 
@@ -35,6 +36,7 @@ const MobileNavbar: React.FC<IProps> = () => {
   const [isSignedIn, setIsSignedIn] = useState(false)
   const router = useRouter()
   const [showBanner, setShowBanner] = useState(false)
+  const [open, setOpen] = useState<boolean>(false)
 
   useEffect(() => {
     const unregisterAuthObserver = auth().onAuthStateChanged((user) => {
@@ -74,6 +76,11 @@ const MobileNavbar: React.FC<IProps> = () => {
 
   return (
     <>
+    <SearchModal
+        open={open}
+        setOpen={setOpen}
+      />
+
     <div
       className={
         'fixed z-10 bg-black right-0 top-0 w-full h-16 backdrop-filter backdrop-blur-lg bg-opacity-30'
@@ -106,6 +113,7 @@ const MobileNavbar: React.FC<IProps> = () => {
           <div className={'flex items-center space-x-2 md:space-x-3'}>
             {/* <Link href={'/search'}> */}
               <SearchIcon
+                onClick={() => setOpen(true)}
                 className={
                   'h-8 w-8 text-red-300 cursor-pointer'
                 }
