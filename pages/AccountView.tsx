@@ -181,6 +181,9 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
   }
 
   const onLoadMore = useCallback(() => {
+
+    if (fetchMore === undefined) return;
+
     if (
       Math.round(window.scrollY + window.innerHeight) >=
       Math.round(document.body.scrollHeight)
@@ -198,6 +201,7 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
   }, [fetchMore, nfts.length])
 
   useEffect(() => {
+    console.log("DATA", data)
     data ? getNfts(data.artworks) : console.log('loading')
   }, [data])
 

@@ -72,8 +72,10 @@ const NFTItemCard: React.FC<IProps> = ({ nft }) => {
   useEffect(() => {
     if (loading || !data) return;
 
+    const bidLogsForSorting = [...data.bidLogs]
+
     if (data.bidLogs.length > 0) {
-      const sortedByMostRecentBids = data.bidLogs.sort(function (x, y) {
+      const sortedByMostRecentBids = bidLogsForSorting.sort(function (x, y) {
         return y.timestamp - x.timestamp
       })
       setLastSale(utils.formatEther(sortedByMostRecentBids[0].amount))
@@ -88,7 +90,7 @@ const NFTItemCard: React.FC<IProps> = ({ nft }) => {
   return (
     <ImageCard
       nft={nft}
-      srcUrl={nft.mediaUri.replace('https://ipfs.io', 'https://infura-ipfs.io')}
+      srcUrl={nft.mediaUri.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')}
       footer={
         <div className={'py-3 bg-white bg-opacity-5 font-medium px-5'}>
           <div className={'flex flex-col h-20 justify-center'}>

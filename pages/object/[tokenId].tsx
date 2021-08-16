@@ -184,7 +184,7 @@ const ItemDetailPage: React.VFC = () => {
           <meta name="title" content={metadata.name} />
           <meta name="description" content={metadata.description} />
           <meta property="og:title" content={metadata.name} />
-          <meta property="og:image" content={!!metadata.image && metadata.image.replace('https://ipfs.io', 'https://infura-ipfs.io')}/>
+          <meta property="og:image" content={!!metadata.image && metadata.image.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')}/>
           <meta property="og:description" content={metadata.description} />
           <meta
             property="og:url"
