@@ -1,6 +1,7 @@
 import React from 'react'
 import AccountId from '../../components/AccountId'
 import BidRow from '../../components/BidRow'
+import SalePriceRow from '../../components/SalePriceRow'
 import { useState, useEffect } from 'react'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
@@ -216,6 +217,7 @@ const BiddingDetailView = ({ tokenId }) => {
             )
           ) : (
             <>
+              {!!tokenId && <SalePriceRow tokenId={tokenId.toString()} />}
               {!!tokenId && <BidRow tokenId={tokenId.toString()} />}
               {!!ownerOf && !bidExists && (
                 <button onClick={removeFromSale}>Remove From Sale</button>
