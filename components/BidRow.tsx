@@ -5,7 +5,7 @@ import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../constants/gallery'
 import Modal from '../components/Modal'
 import { getNetworkLibrary } from '../connectors'
-import SetSalePrice from './SetSalePrice'
+import SetBid from './SetBid'
 import AccountId from './AccountId'
 
 var utils = require('ethers').utils
@@ -196,7 +196,7 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
       )}
 
       {!ownerOf && (
-        <SetSalePrice sale={false} tokenId={tokenId} onUpdate={currentBids} />
+        <SetBid sale={false} tokenId={tokenId} onUpdate={currentBids} />
       )}
     </>
   )
