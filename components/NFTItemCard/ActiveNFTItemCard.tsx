@@ -7,6 +7,10 @@ import { GALLERY_ABI } from '../../constants/gallery'
 import { getNetworkLibrary } from '../../connectors'
 import AccountId from '../AccountId'
 import { gql, useLazyQuery } from '@apollo/client'
+import { createOperation } from '@apollo/client/link/utils'
+import axios from 'axios'
+import NFT from '../../types'
+import NFTCardSkeleton from './'
 
 var utils = require('ethers').utils
 
@@ -28,10 +32,48 @@ const NFTItemCard: React.FC<IProps> = ({ nft }) => {
   const [currentBid, setCurrentBid] = useState<number | undefined | null>()
   const [lastSale, setLastSale] = useState<number | undefined>()
   const [forSale, setForSale] = useState(false)
+  const [safeNFT, setSafeNFT] = useState< NFT | undefined>()
 
   const [loadBids, { loading, error, data }] = useLazyQuery(BID_QUERY, {
     variables: { item: nft?.tokenId.toString() },
   })
+
+  useEffect(() => {
+    if (nft.broken) {
+      getNFTFromContract()
+    } else {
+      setSafeNFT(nft)
+    }
+  }, [nft])
+
+  async function getNFTFromContract() {
+
+    const contract = new ethers.Contract(
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      GALLERY_ABI,
+      getNetworkLibrary(),
+    )
+
+    var uri = await contract.tokenURI(nft.tokenId)
+    console.log("URI", uri)
+    if (uri.includes(undefined)) return null
+    var metadata = await axios.get(uri)
+    var itemFromContract;
+
+    itemFromContract.name = metadata.data.name
+    itemFromContract.creator.id
+    itemFromContract.mimeType = metadata.data.media.mimeType
+    itemFromContract.tokenId = metadata.data.id
+    itemFromContract.creator.id = metadata.data.creator
+
+    if (!metadata.data.animation_url) {
+      itemFromContract.mediaUri = metadata.data.image
+    } else {
+      itemFromContract.mediaUri = metadata.data.animation_url
+    }
+
+    setSafeNFT(itemFromContract)
+  }
 
   // get current bids
   async function currentBids() {
@@ -87,10 +129,14 @@ const NFTItemCard: React.FC<IProps> = ({ nft }) => {
     currentBids()
   }, [])
 
+  if (!safeNFT) {
+    return <div style={{width: '345px', height: '618px'}} ><div className={'animate-pulse w-full rounded-xl h-full'}><div className={'animation-pulse w-full rounded-xl h-full bg-gray-800'}/></div></div> 
+  }
+
   return (
     <ImageCard
-      nft={nft}
-      srcUrl={nft.mediaUri.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')}
+      nft={safeNFT}
+      srcUrl={safeNFT.mediaUri.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')}
       footer={
         <div className={'py-3 bg-white bg-opacity-5 font-medium px-5'}>
           <div className={'flex flex-col h-20 justify-center'}>
@@ -131,9 +177,9 @@ const NFTItemCard: React.FC<IProps> = ({ nft }) => {
           'flex flex-col justify-start space-y-2 px-5 overflow-hidden h-24'
         }
       >
-        <h1 className={'font-bold text-2xl text-white mt-1'}>{nft.name}</h1>
+        <h1 className={'font-bold text-2xl text-white mt-1'}>{safeNFT.name}</h1>
         <h2 className={'font-medium text-l'}>
-          <AccountId link={'created'} address={nft.creator.id} />
+          <AccountId link={'created'} address={safeNFT.creator.id} />
         </h2>
       </div>
     </ImageCard>

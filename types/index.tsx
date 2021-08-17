@@ -1,6 +1,7 @@
 type NFT = {
     name: string
     description: string
+    broken: boolean
     creator: {
       id: string
     }
@@ -17,6 +18,8 @@ type NFT = {
     },
     tags: string[]
     tokenId: number
+    id: number
+
 }
 
 export type Bid = {
