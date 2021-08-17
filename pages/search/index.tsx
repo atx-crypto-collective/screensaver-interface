@@ -120,8 +120,6 @@ const SearchView: React.VFC<IProps> = ({ created, owned, admin }) => {
     )
   }
 
-
-
   return (
     <Layout>
 

@@ -201,7 +201,6 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
   }, [fetchMore, nfts.length])
 
   useEffect(() => {
-    console.log("DATA", data)
     data ? getNfts(data.artworks) : console.log('loading')
   }, [data])
 
