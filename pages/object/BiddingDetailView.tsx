@@ -217,7 +217,7 @@ const BiddingDetailView = ({ tokenId }) => {
             )
           ) : (
             <>
-              {!!tokenId && <SalePriceRow tokenId={tokenId.toString()} />}
+              {/* {!!tokenId && <SalePriceRow tokenId={tokenId.toString()} />} */}
               {!!tokenId && <BidRow tokenId={tokenId.toString()} />}
               {!!ownerOf && !bidExists && (
                 <button onClick={removeFromSale}>Remove From Sale</button>

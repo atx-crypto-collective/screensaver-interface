@@ -7,7 +7,7 @@ import Modal from '../components/Modal'
 import { getNetworkLibrary } from '../connectors'
 import SetBid from './SetBid'
 import AccountId from './AccountId'
-import SetSalePrice from './SetSalePrice'
+// import SetSalePrice from './SetSalePrice'
 
 var utils = require('ethers').utils
 
@@ -216,7 +216,7 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
       )}
 
       {ownerOf && (
-        <SetSalePrice sale={false} tokenId={tokenId} onUpdate={currentBids} />
+        <SetBid sale={false} tokenId={tokenId} onUpdate={currentBids} />
       )}
     </>
   )
