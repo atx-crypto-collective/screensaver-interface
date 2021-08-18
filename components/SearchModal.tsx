@@ -35,6 +35,7 @@ const SEARCH_QUERY = gql`
       name
       mediaUri
       creator
+      tokenId
     }
   }
 `
