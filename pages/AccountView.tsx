@@ -69,7 +69,7 @@ const OWNER_QUERY = gql`
       skip: $skip
       orderBy: $orderBy
       orderDirection: $orderDirection
-      where: { burned: false, owner: $account, creator_not: $account}
+      where: { burned: false, owner: $account, creator_not: $account }
     ) {
       id
       mimeType
@@ -113,32 +113,32 @@ const BIDS_QUERY = gql`
       orderBy: $orderBy
       orderDirection: $orderDirection
       where: { burned: false, currentBid_not: null, creator: $account }
-      ) {
+    ) {
+      id
+      mimeType
+      tokenId
+      tagsString
+      currentBid {
         id
-        mimeType
-        tokenId
-        tagsString
-        currentBid {
-          id
-          bidder {
-            id
-          }
-          amount
-          accepted
-          canceled
-          timestamp
-        }
-        description
-        name
-        mediaUri
-        forSale
-        creator {
+        bidder {
           id
         }
-        owner {
-          id
-        }
+        amount
+        accepted
+        canceled
+        timestamp
       }
+      description
+      name
+      mediaUri
+      forSale
+      creator {
+        id
+      }
+      owner {
+        id
+      }
+    }
   }
 `
 
@@ -155,33 +155,33 @@ const FOR_SALE_QUERY = gql`
       skip: $skip
       orderBy: $orderBy
       orderDirection: $orderDirection
-      where: { burned: false, forSale: true, creator: $account }
-      ) {
+      where: { burned: false, forSale: true, owner: $account }
+    ) {
+      id
+      mimeType
+      tokenId
+      tagsString
+      currentBid {
         id
-        mimeType
-        tokenId
-        tagsString
-        currentBid {
-          id
-          bidder {
-            id
-          }
-          amount
-          accepted
-          canceled
-          timestamp
-        }
-        description
-        name
-        mediaUri
-        forSale
-        creator {
+        bidder {
           id
         }
-        owner {
-          id
-        }
+        amount
+        accepted
+        canceled
+        timestamp
       }
+      description
+      name
+      mediaUri
+      forSale
+      creator {
+        id
+      }
+      owner {
+        id
+      }
+    }
   }
 `
 
@@ -191,7 +191,7 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
   const { account } = router.query
 
   const getQuery = (state) => {
-    switch(state) {
+    switch (state) {
       case 'owned':
         return OWNER_QUERY
       case 'bids':
@@ -214,20 +214,20 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
   })
 
   const getNfts = async (data) => {
-    if (state === "active") {
+    if (state === 'active') {
       let tempData = data
-      let filteredTempData = tempData.filter( nft => nft.currentBid.accepted !== true)
-      console.log("DATA TEMP", filteredTempData)
+      let filteredTempData = tempData.filter(
+        (nft) => nft?.currentBid?.accepted !== true,
+      )
+      console.log('DATA TEMP', filteredTempData)
       setNfts([...nfts, ...filteredTempData])
     } else {
       setNfts([...nfts, ...data])
     }
-
   }
 
   const onLoadMore = useCallback(() => {
-
-    if (fetchMore === undefined) return;
+    if (fetchMore === undefined) return
 
     if (
       Math.round(window.scrollY + window.innerHeight) >=
@@ -270,52 +270,77 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
   }
 
   return (
-    <div className={'flex flex-col items-center space-y-6 mt-10 md:mt-0'}>
-    
-    <div className={'h-14 w-14 rounded-full focus:outline-none hover:shadow-white'}><img style={{borderRadius: '50%'}}src={makeBlockie(account.toString())} /></div>
-        <div className={'text-2xl'}><AccountId address={account.toString()} link={'twitter'}/></div>
+    <div className={'flex flex-col items-start space-y-6 mt-10 md:mt-0 mx-auto max-w-6xl'}>
+      <div
+        className={
+          'h-20 w-20 rounded-full focus:outline-none hover:shadow-white'
+        }
+      >
+        <img
+          style={{ borderRadius: '50%' }}
+          src={makeBlockie(account.toString())}
+        />
+      </div>
+      <div className={'text-2xl'}>
+        <AccountId address={account.toString()} link={'twitter'} />
+      </div>
 
-        <span className="relative z-0 justify-center rounded-md">
-          <Link href={`/created/${account}`}>
-            <button
-              type="button"
-              className={classNames(
-                state === 'created' ? 'bg-white text-black' : 'bg-black text-white', "relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-light hover:font-bold focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-              )}
-            >
-              Created
-            </button>
-          </Link>
-          <Link href={`/owned/${account}`}>
-            <button
-              type="button"
-              className={classNames(
-                state === 'owned' ? 'bg-white text-black' : 'bg-black text-white', "relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-light hover:font-bold focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-              )} >
-              Owned
-            </button>
-          </Link>
-          <Link href={`/forSale/${account}`}>
-            <button
-              type="button"
-              className={classNames(
-                state === 'forSale' ? 'bg-white text-black' : 'bg-black text-white', "relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-light hover:font-bold focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-              )}>
-              For Sale
-            </button>
-          </Link>
-          <Link href={`/bids/${account}`}>
-            <button
-              type="button"
-              className={classNames(
-                state === 'bids' ? 'bg-white text-black' : 'bg-black text-white', "relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-light hover:font-bold focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-              )}>
-              Bids
-            </button>
-          </Link>
-        </span>
+      <span className="flex justify-start border-gray-700 border-b text-md w-full">
+        <Link href={`/created/${account}`}>
+          <button
+            type="button"
+            className={classNames(
+              state === 'created'
+                ? 'border-b-2 font-medium'
+                : 'font-light',
+              'relative inline-flex items-center px-3 md:px-4 py-2 border-gray-300 font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
+            )}
+          >
+            CREATED
+          </button>
+        </Link>
+        <Link href={`/owned/${account}`}>
+          <button
+            type="button"
+            className={classNames(
+              state === 'owned'
+                ? 'border-b-2 font-medium'
+                : 'font-light',
+                'relative inline-flex items-center px-3 md:px-4 py-2 border-gray-300 font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
+                )}
+          >
+            OWNED
+          </button>
+        </Link>
+        <Link href={`/forSale/${account}`}>
+          <button
+            type="button"
+            className={classNames(
+              state === 'forSale'
+                ? 'border-b-2 font-medium'
+                : 'font-light',
+                'relative inline-flex items-center px-3 md:px-4 py-2 border-gray-300 font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
+                )}
+          >
+            FOR SALE
+          </button>
+        </Link>
+        <Link href={`/bids/${account}`}>
+          <button
+            type="button"
+            className={classNames(
+              state === 'bids'
+              ? 'border-b-2 font-medium'
+              : 'font-light',
+              'relative inline-flex items-center px-3 md:px-4 py-2 border-gray-300 font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
+            )}
+          >
+            BIDS
+          </button>
+        </Link>
+      </span>
 
-      {(!loading && nfts.length === 0 && !data) && (
+      {!loading && nfts.length === 0 && !data && (
         <div className="flex items-center justify-center text-md font-light h-12">
           This address has no {state ? 'created' : state ? 'owned' : ''}{' '}
           objects.
@@ -323,14 +348,11 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
       )}
 
       <div
-        className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-2 sm:mx-auto'}
+        className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 '}
       >
         {nfts.map((item, key) => (
           <div key={key}>
-            <NFTItemCard
-              nft={item}
-              tokenId={item?.tokenId}
-            />
+            <NFTItemCard nft={item} tokenId={item?.tokenId} />
           </div>
         ))}
       </div>

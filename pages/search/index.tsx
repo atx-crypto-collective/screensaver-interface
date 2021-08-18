@@ -23,6 +23,7 @@ const SEARCH_QUERY = gql`
       }
   }
 `
+
 const SearchView: React.VFC<IProps> = ({ created, owned, admin }) => {
   const [nfts, setNfts] = useState<NFT[]>([])
   const [loadingState, setLoadingState] = useState<boolean>(true)

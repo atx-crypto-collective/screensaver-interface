@@ -5,14 +5,12 @@ import Link from 'next/link'
 import { shortenAddress, getSigner } from '../utils'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
-import { injected } from '../connectors'
-import styles from '../styles/Wallet.module.css'
-import { useGalleryContract } from '../hooks/useContract'
-import { ethers } from 'ethers'
+import { gql, useLazyQuery } from '@apollo/client'
 import makeBlockie from 'ethereum-blockies-base64'
 import { SearchIcon } from '@heroicons/react/outline'
 import useAxios from 'axios-hooks'
 import classNames from 'classnames'
+import NFT from '../types'
 
 interface Props {
   address: string
@@ -24,45 +22,90 @@ interface IProps {
   setOpen: (open: boolean) => void
 }
 
+const SEARCH_QUERY = gql`
+  query SearchPage($text: String) {
+    artworkSearch(text: $text
+        first: 48
+        skip: 0
+        orderBy: creationDate
+        orderDirection: desc
+        where: { burned: false}
+      ) {
+      id
+      name
+      mediaUri
+      creator
+    }
+  }
+`
+
 const SearchModal: React.VFC<IProps> = ({ open, setOpen }) => {
   const { account, chainId } = useWeb3React<Web3Provider>()
   const [searchInput, setSearchInput] = useState('')
   const [users, setUsers] = useState([])
+  const [nfts, setNFTs] = useState< NFT[] >([])
+  const [state, setState] = useState<'creators' | 'NFTs'>('creators')
 
-  const [{ data, loading, error }, refetch] = useAxios(
+  const [
+    { data: dataCreators, loading: loadingCreators, error: errorCreators },
+    refetch,
+  ] = useAxios(
     `https://us-central1-proofoftwitter.cloudfunctions.net/api/address/?user=${searchInput}`,
   )
 
-  async function loadArtists() {
-    refetch()
-  }
+  const [
+    loadCollection,
+    { called, error: errorNFTs, loading: loadingNFTs, data: dataNFTs },
+  ] = useLazyQuery(SEARCH_QUERY, {
+    variables: { text: searchInput },
+  })
 
   useEffect(() => {
-    loadArtists()
+    setUsers([])
+    setNFTs([])
+  }, [state])
+
+  useEffect(() => {
+    if (state === 'creators') {
+      refetch()
+    } else {
+      console.log(searchInput)
+      loadCollection()
+    }
   }, [searchInput])
 
   useEffect(() => {
-    console.log("LOADING")
-  }, [loading])
+    console.log("NFTS", dataNFTs?.artworkSearch)
+
+    if (!dataNFTs?.artworkSearch) {
+      setNFTs([])
+      return
+    }
+
+    console.log("NFTS", dataNFTs?.artworkSearch)
+
+    setNFTs(dataNFTs.artworkSearch)
+  }, [dataNFTs])
 
   useEffect(() => {
-    if (!data?.twitterId || !data?.verified || !data) {
-        setUsers([])
-        return
+    if (!dataCreators?.twitterId || !dataCreators?.verified || !dataCreators) {
+      setUsers([])
+      return
     }
-    console.log('DATA', data)
-    setUsers([data])
-  }, [data])
 
-  //   if (loading || !data?.twitterId) {
-  //     return (
-  //       <Link href={`created/${address}`}>
-  //         <a className={'hover:bg-gray-800 p-2 -ml-2 rounded-md'}>{!!address && shortenAddress(address)}</a>
-  //       </Link>
-  //     )
-  //   }
+    setUsers([dataCreators])
+  }, [dataCreators])
 
-  if (error) return <p>Error!</p>
+  useEffect(() => {
+    if (!dataCreators?.twitterId || !dataCreators?.verified || !dataCreators) {
+      setUsers([])
+      return
+    }
+
+    setUsers([dataCreators])
+  }, [dataCreators])
+
+  if (errorCreators || errorNFTs) return <p>Error!</p>
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -142,31 +185,36 @@ const SearchModal: React.VFC<IProps> = ({ open, setOpen }) => {
                 }
               >
                 <div className="relative z-0 w-full border-b border-gray-700 flex justify-start ">
-                  <Link href={`/created/${account}`}>
-                    <button
-                      type="button"
-                      className={classNames(
-                        true ? 'bg-white text-black' : 'bg-black text-white',
-                        'relative inline-flex items-center px-4 py-2 border-b-2 border-black text-sm font-light hover:font-bold focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500',
-                      )}
-                    >
-                      Creators
-                    </button>
-                  </Link>
-                  {/* <Link href={`/owned/${account}`}>
-            <button
-              type="button"
-              className={classNames(
-                true ? 'bg-white text-black' : 'bg-black text-white', "relative inline-flex items-center px-4 py-2 border-b-2 border-black text-sm font-light hover:font-bold focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-              )} >
-              NFTs
-            </button>
-          </Link> */}
+                  <button
+                    type="button"
+                    onClick={() => setState('creators')}
+                    className={classNames(
+                      state === 'creators'
+                        ? 'border-black font-medium'
+                        : 'border-transparent',
+                      'text-black relative inline-flex items-center px-4 py-2 border-b-2 text-sm font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
+                    )}
+                  >
+                    Creators
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setState('NFTs')}
+                    className={classNames(
+                      state === 'NFTs'
+                        ? 'border-black font-medium'
+                        : 'border-transparent',
+                      'text-black relative inline-flex items-center px-4 py-2 border-b-2 text-sm font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
+                    )}
+                  >
+                    NFTs
+                  </button>
                 </div>
                 <div>
-                  {loading
-                    ? [1,2,3].map((i, key) => (
-                        <tr key={key}>
+                  {state === 'creators' &&
+                    (loadingCreators
+                      ? [1, 2, 3].map((i, key) => (
+                          <tr key={key}>
                             <td className="px-6 py-4 whitespace-nowrap cursor-pointer">
                               <div className="flex items-center space-x-5">
                                 {/* <div className="flex-shrink-0 h-10 w-10"> */}
@@ -177,42 +225,92 @@ const SearchModal: React.VFC<IProps> = ({ open, setOpen }) => {
                                 />
                                 {/* </div> */}
                                 <div className="ml-4">
-                                  <div className="text-sm font-medium bg-gray-800">
-                                  </div>
+                                  <div className="text-sm font-medium bg-gray-800"></div>
                                   {/* <div className="text-sm text-gray-500">{user.verified}</div> */}
                                 </div>
                               </div>
                             </td>
-                        </tr>
-                      ))
-                    : users.map((user) => (
-                        <tr key={user.twitterId}>
-                          <Link href={`/created/${user.verified}`}>
+                          </tr>
+                        ))
+                      : users.map((user) => (
+                          <tr key={user.twitterId}>
+                            <Link href={`/created/${user.verified}`}>
+                              <td className="px-6 py-4 whitespace-nowrap cursor-pointer">
+                                <div className="flex items-center space-x-5">
+                                  {/* <div className="flex-shrink-0 h-10 w-10"> */}
+                                  <div
+                                    className={
+                                      'h-8 w-8 rounded-full focus:outline-none hover:shadow-white'
+                                    }
+                                  >
+                                    <img
+                                      style={{ borderRadius: '50%' }}
+                                      src={makeBlockie(user.verified)}
+                                    />
+                                  </div>
+                                  {/* </div> */}
+                                  <div className="ml-4">
+                                    <div className="text-sm font-medium text-gray-900">
+                                      {user.twitterId}
+                                    </div>
+                                    {/* <div className="text-sm text-gray-500">{user.verified}</div> */}
+                                  </div>
+                                </div>
+                              </td>
+                            </Link>
+                          </tr>
+                        )))}
+
+                  {state === 'NFTs' &&
+                    (loadingNFTs
+                      ? [1, 2, 3].map((i, key) => (
+                          <tr key={key}>
                             <td className="px-6 py-4 whitespace-nowrap cursor-pointer">
                               <div className="flex items-center space-x-5">
                                 {/* <div className="flex-shrink-0 h-10 w-10"> */}
                                 <div
                                   className={
-                                    'h-8 w-8 rounded-full focus:outline-none hover:shadow-white'
+                                    'h-8 w-8 rounded-full focus:outline-none'
                                   }
-                                >
-                                  <img
-                                    style={{ borderRadius: '50%' }}
-                                    src={makeBlockie(user.verified)}
-                                  />
-                                </div>
+                                />
                                 {/* </div> */}
                                 <div className="ml-4">
-                                  <div className="text-sm font-medium text-gray-900">
-                                    {user.twitterId}
-                                  </div>
+                                  <div className="text-sm font-medium bg-gray-800"></div>
                                   {/* <div className="text-sm text-gray-500">{user.verified}</div> */}
                                 </div>
                               </div>
                             </td>
-                          </Link>
-                        </tr>
-                      ))}
+                          </tr>
+                        ))
+                      : 
+                      nfts.map((nft) => (
+                          <tr key={nft.tokenId + nft.name}>
+                            <Link href={`/object/${nft.tokenId}`}>
+                              <td className="px-6 py-4 whitespace-nowrap cursor-pointer">
+                                <div className="flex items-center space-x-5">
+                                  {/* <div className="flex-shrink-0 h-10 w-10"> */}
+                                  <div
+                                    className={
+                                      'h-8 w-8 rounded-full focus:outline-none hover:shadow-white'
+                                    }
+                                  >
+                                    <img
+                                      src={nft.thumbnail}
+                                      className={'w-full'} 
+                                    />
+                                  </div>
+                                  {/* </div> */}
+                                  <div className="ml-4">
+                                    <div className="text-sm font-medium text-gray-900">
+                                      {nft.name}
+                                    </div>
+                                    {/* <div className="text-sm text-gray-500">{user.verified}</div> */}
+                                  </div>
+                                </div>
+                              </td>
+                            </Link>
+                          </tr>
+                        )))}
                 </div>
               </div>
             </div>

@@ -10,6 +10,7 @@ type NFT = {
     animation_url: string
     metadataUri: string
     mediaUri: string
+    thumbnail: string
     mimeType: string
     size: string
     media: {
