@@ -155,7 +155,7 @@ const FOR_SALE_QUERY = gql`
       skip: $skip
       orderBy: $orderBy
       orderDirection: $orderDirection
-      where: { burned: false, forSale: true }
+      where: { burned: false, forSale: true, creator: $account }
       ) {
         id
         mimeType

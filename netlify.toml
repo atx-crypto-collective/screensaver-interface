@@ -15,6 +15,16 @@
   status = 200
 
 [[redirects]]
+  from = "/bids/:bids"
+  to = "/bids/[account].html?object=:account"
+  status = 200
+
+[[redirects]]
+  from = "/forSale/:forSale"
+  to = "/forSale/[account].html?object=:account"
+  status = 200
+
+[[redirects]]
   from = "/mint/:mint"
   to = "/mint/:mint"
   status = 200
