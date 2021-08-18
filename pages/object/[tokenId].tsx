@@ -115,7 +115,7 @@ const ItemDetailPage: React.VFC = () => {
   }, [account])
 
   async function getMetadata() {
-    var meta = await axios.get(uri.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud'))
+    var meta = await axios.get(uri)
     var tempMetadata = meta.data
     tempMetadata.metadataUri = uri
     tempMetadata.creationDate = new Date(meta.data.creationDate).toString()
@@ -146,7 +146,7 @@ const ItemDetailPage: React.VFC = () => {
   }, [uri])
 
   useEffect(() => {
-    console.log(metadata)
+    console.log("METADATA", metadata)
     if (!metadata) return
     setLoading(false)
   }, [metadata])
@@ -155,7 +155,7 @@ const ItemDetailPage: React.VFC = () => {
     if (!tokenId) return
     if (!!preview) {
       // add footer
-      setUri('https://screensaver.mypinata.cloudview/ipfs/' + preview.toString())
+      setUri('https://screensaver.mypinata.cloud/ipfs/' + preview.toString())
       setIsPreview(true)
     } else {
       getUri()
