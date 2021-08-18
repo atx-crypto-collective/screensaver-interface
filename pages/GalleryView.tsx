@@ -22,7 +22,7 @@ const GALLERY_QUERY = gql`
       skip: $skip
       orderBy: $orderBy
       orderDirection: $orderDirection
-      where: { burned: false }
+      where: { burned: false, forSale: true }
     ) {
       id
       mimeType
