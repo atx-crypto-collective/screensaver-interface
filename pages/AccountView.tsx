@@ -99,7 +99,7 @@ const OWNER_QUERY = gql`
   }
 `
 
-const ACTIVE_QUERY = gql`
+const BIDS_QUERY = gql`
   query Gallery(
     $first: Int
     $skip: Int
@@ -142,6 +142,49 @@ const ACTIVE_QUERY = gql`
   }
 `
 
+const FOR_SALE_QUERY = gql`
+  query Gallery(
+    $first: Int
+    $skip: Int
+    $orderBy: String
+    $orderDirection: String
+    $account: String
+  ) {
+    artworks(
+      first: $first
+      skip: $skip
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      where: { burned: false, forSale: true }
+      ) {
+        id
+        mimeType
+        tokenId
+        tagsString
+        currentBid {
+          id
+          bidder {
+            id
+          }
+          amount
+          accepted
+          canceled
+          timestamp
+        }
+        description
+        name
+        mediaUri
+        forSale
+        creator {
+          id
+        }
+        owner {
+          id
+        }
+      }
+  }
+`
+
 const AccountView: React.VFC<IProps> = ({ state }) => {
   const [nfts, setNfts] = useState<NFT[]>([])
   const router = useRouter()
@@ -151,8 +194,10 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
     switch(state) {
       case 'owned':
         return OWNER_QUERY
-      case 'active':
-        return ACTIVE_QUERY
+      case 'bids':
+        return BIDS_QUERY
+      case 'forSale':
+        return FOR_SALE_QUERY
       default:
         return CREATOR_QUERY
     }
@@ -250,13 +295,22 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
               Owned
             </button>
           </Link>
-          <Link href={`/active/${account}`}>
+          <Link href={`/forSale/${account}`}>
             <button
               type="button"
               className={classNames(
-                state === 'active' ? 'bg-white text-black' : 'bg-black text-white', "relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-light hover:font-bold focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                state === 'forSale' ? 'bg-white text-black' : 'bg-black text-white', "relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-light hover:font-bold focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
               )}>
-              Active
+              For Sale
+            </button>
+          </Link>
+          <Link href={`/bids/${account}`}>
+            <button
+              type="button"
+              className={classNames(
+                state === 'bids' ? 'bg-white text-black' : 'bg-black text-white', "relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-light hover:font-bold focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+              )}>
+              Bids
             </button>
           </Link>
         </span>
