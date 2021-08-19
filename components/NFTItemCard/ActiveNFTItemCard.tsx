@@ -39,7 +39,7 @@ const NFTItemCard: React.FC<IProps> = ({ nft }) => {
   })
 
   useEffect(() => {
-    if (nft.broken) {
+    if (nft.broken || nft.mediaUri === null) {
       getNFTFromContract()
     } else {
       setSafeNFT(nft)
@@ -58,8 +58,32 @@ const NFTItemCard: React.FC<IProps> = ({ nft }) => {
     console.log("URI", uri)
     if (uri.includes(undefined)) return null
     var metadata = await axios.get(uri)
-    var itemFromContract;
+    var itemFromContract: NFT = {
+      name: "",
+      description: "",
+      broken: true,
+      creator: {
+        id: ""
+      },
+      creationDate: new Date(),
+      image: "",
+      animation_url: "",
+      metadataUri: "",
+      mediaUri: "",
+      thumbnail: "",
+      mimeType: "",
+      size: "",
+      media: {
+        mimeType: "",
+        size: ""
+      },
+      tags: [],
+      tokenId: 0,
+      id: 0
+  
+  };
 
+    console.log(metadata.data)
     itemFromContract.name = metadata.data.name
     itemFromContract.creator.id
     itemFromContract.mimeType = metadata.data.media.mimeType

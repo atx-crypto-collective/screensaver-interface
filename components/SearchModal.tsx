@@ -34,7 +34,9 @@ const SEARCH_QUERY = gql`
       id
       name
       mediaUri
-      creator
+      creator {
+        id
+      }
       tokenId
     }
   }
