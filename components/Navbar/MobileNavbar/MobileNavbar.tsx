@@ -230,14 +230,22 @@ const MobileNavbar: React.FC<IProps> = () => {
                           </a>
                         </Link>
                       </Menu.Item>
-                      {/* <Menu.Item>
+                      <Menu.Item>
+                        <a
+                          href="https://discord.gg/UJaz7Hrq"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          Discord
+                        </a>
+                      </Menu.Item>
+                      <Menu.Item>
                         <a
                           href="https://v0.screensaver.world"
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
                           Screensaver V0
                         </a>
-                      </Menu.Item> */}
+                      </Menu.Item>
 
                       {isSignedIn && (
                         <Menu.Item>
