@@ -80,5 +80,17 @@
     },
     "componentsDefaultDirectory": "components/{name}",
     "packageManager": "npm"
-  }
+  },
+  "description": "Front-end for [Screensaver Marketplace][screensaver-marketplace]",
+  "main": "next.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Screensaver-world/screensaver-interface.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Screensaver-world/screensaver-interface/issues"
+  },
+  "homepage": "https://github.com/Screensaver-world/screensaver-interface#readme"
 }

@@ -103,41 +103,42 @@ const BIDS_QUERY = gql`
   query Gallery(
     $first: Int
     $skip: Int
-    $orderBy: String
-    $orderDirection: String
     $account: String
   ) {
-    artworks(
+    account(
       first: $first
       skip: $skip
-      orderBy: $orderBy
-      orderDirection: $orderDirection
-      where: { burned: false, currentBid_not: null, creator: $account }
+      id: $account
     ) {
-      id
-      mimeType
-      tokenId
-      tagsString
-      currentBid {
-        id
-        bidder {
+      bids{
+        item {
           id
+          mimeType
+          tokenId
+          tagsString
+          currentBid {
+            id
+            bidder {
+              id
+            }
+            amount
+            accepted
+            canceled
+            timestamp
+          }
+          description
+          name
+          mediaUri
+          forSale
+          creator {
+            id
+          }
+          owner {
+            id
+          }
         }
-        amount
-        accepted
-        canceled
-        timestamp
       }
-      description
-      name
-      mediaUri
-      forSale
-      creator {
-        id
-      }
-      owner {
-        id
-      }
+        
     }
   }
 `
@@ -214,12 +215,13 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
   })
 
   const getNfts = async (data) => {
-    if (state === 'active') {
+    console.log(data)
+    if (state === 'bids') {
+      console.log('DATA', data.bids)
       let tempData = data
-      let filteredTempData = tempData.filter(
+      let filteredTempData = tempData.items.filter(
         (nft) => nft?.currentBid?.accepted !== true,
       )
-      console.log('DATA TEMP', filteredTempData)
       setNfts([...nfts, ...filteredTempData])
     } else {
       setNfts([...nfts, ...data])
