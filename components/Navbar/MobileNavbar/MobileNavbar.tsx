@@ -104,12 +104,11 @@ const MobileNavbar: React.FC<IProps> = () => {
             </div>
 
             <div className={'flex items-center space-x-2 md:space-x-3'}>
-              {/* <Link href={'/search'}> */}
+
               <SearchIcon
                 onClick={() => setOpen(true)}
                 className={'h-8 w-8 text-red-300 cursor-pointer'}
               />
-              {/* </Link> */}
 
               <ConnectButton />
 
@@ -158,6 +157,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                           </a>
                         </Link>
                       </Menu.Item> */}
+
                         {!!account && (
                           <>
                             {/* <Menu.Item>
@@ -176,6 +176,8 @@ const MobileNavbar: React.FC<IProps> = () => {
                           </Menu.Item> */}
                           </>
                         )}
+
+                        {/* Mint */}
                         <Menu.Item>
                           <Link href="/mint">
                             <a className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100">
@@ -183,13 +185,8 @@ const MobileNavbar: React.FC<IProps> = () => {
                             </a>
                           </Link>
                         </Menu.Item>
-                        {/* <Menu.Item>
-                        <Link href="/whitelist">
-                          <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Whitelist
-                          </a>
-                        </Link>
-                      </Menu.Item> */}
+
+                        {/* Buy Matic */}
                         <Menu.Item>
                           <Link href="https://buy.moonpay.com/">
                             <a
@@ -201,6 +198,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                           </Link>
                         </Menu.Item>
 
+                        {/* About */}
                         <Menu.Item>
                           <Link href="https://docs.screensaver.world">
                             <a className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100">
@@ -209,6 +207,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                           </Link>
                         </Menu.Item>
 
+                        {/* Account shortlinks */}
                         <Menu.Item>
                           <Link href="https://ssw.wtf/">
                             <a
@@ -219,6 +218,8 @@ const MobileNavbar: React.FC<IProps> = () => {
                             </a>
                           </Link>
                         </Menu.Item>
+
+                        {/* Discord */}
                         <Menu.Item>
                           <a
                             href="https://discord.gg/UJaz7Hrq"
@@ -227,6 +228,8 @@ const MobileNavbar: React.FC<IProps> = () => {
                             Discord
                           </a>
                         </Menu.Item>
+
+                        {/* Screensaver V0 */}
                         <Menu.Item>
                           <a
                             href="https://v0.screensaver.world"
