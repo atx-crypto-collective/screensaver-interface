@@ -202,7 +202,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                         </Menu.Item>
 
                         <Menu.Item>
-                          <Link href="/">
+                          <Link href="https://docs.screensaver.world">
                             <a className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100">
                               🧅 About
                             </a>
