@@ -66,7 +66,7 @@ const SetSalePrice: React.VFC<IProps> = ({
   }
 
   return (
-    <div className={'flex flex-col space-y-3'}>
+    <div className={'flex flex-col space-y-3 mb-6'}>
       <Modal
         status={chainId !== 137 ? 'switch-network' : 'connect'}
         open={open}
@@ -99,22 +99,13 @@ const SetSalePrice: React.VFC<IProps> = ({
             </span>
           </div>
         </div>
-        {sale ? (
-          <button
-            type="submit"
-            className="mt-2/3 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-          >
-            Set Price
-          </button>
-        ) : (
+        
           <button
             onClick={!!account ? setSalePrice : () => setOpen(true)}
             className="button mt-3 md:mt-0 md:ml-3 w-full md:w-1/2 justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-            disabled={
-              !maticBalance || !value || !parseFloat(value)
-            }
+           
           >
-            Place Bid
+            Set Fixed Price
             {loading && (
               <svg
                 className="animate-spin -mr-1 ml-3 h-5 w-5 text-white"
@@ -138,7 +129,6 @@ const SetSalePrice: React.VFC<IProps> = ({
               </svg>
             )}
           </button>
-        )}
       </form>
 
     </div>

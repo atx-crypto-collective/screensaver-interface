@@ -50,10 +50,10 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
 
     console.log('Token Price', tokenPrice)
 
-    if (tokenPrice !== 0) {
+    if (utils.formatEther(tokenPrice) === 0) {
       setSalePrice(0)
     } else {
-      setSalePrice(tokenPrice)
+      setSalePrice(utils.formatEther(tokenPrice))
     }
   }
 
@@ -65,11 +65,11 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
       library.getSigner(account),
     )
 
-    const big = utils.parseEther(salePrice)
+    const big = salePrice * 10**18
     console.log('VALUE AT CREATE BID CALL', salePrice, big)
     let overrides = {
       // To convert Ether to Wei:
-      value: utils.parseEther(salePrice), // ether in this case MUST be a string
+      value: salePrice * 10**18 // ether in this case MUST be a string
     }
 
     // Pass in the overrides as the 3rd parameter to your 2-parameter function:
@@ -93,7 +93,7 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
 
     // Pass in the overrides as the 3rd parameter to your 2-parameter function:
 
-    const tx = await contract.setWeiSalePrice(tokenId.toString(), utils.parseEther(0))
+    const tx = await contract.setWeiSalePrice(tokenId.toString(), '0')
 
     setLoading(true)
 
