@@ -3,6 +3,7 @@ import NFTItemCard from '../components/NFTItemCard'
 import { Layout } from '../components'
 import NFT from '../types'
 import { gql, useQuery } from '@apollo/client'
+import classNames from 'classnames'
 
 interface IProps {
   created?: boolean
@@ -10,19 +11,50 @@ interface IProps {
   admin?: boolean
 }
 
-const GALLERY_QUERY = gql`
-  query Gallery(
-    $first: Int
-    $skip: Int
-    $orderBy: String
-    $orderDirection: String
-  ) {
+const LISTINGS_QUERY = gql`
+  query Listings($first: Int, $skip: Int, $orderDirection: String) {
     artworks(
       first: $first
       skip: $skip
-      orderBy: $orderBy
+      orderBy: "creationDate"
       orderDirection: $orderDirection
-      where: { burned: false, forSale: true }
+      where: { forSale: true }
+    ) {
+      id
+      mimeType
+      tokenId
+      tagsString
+      currentBid {
+        id
+        bidder {
+          id
+        }
+        amount
+        accepted
+        canceled
+        timestamp
+      }
+      description
+      name
+      mediaUri
+      forSale
+      creator {
+        id
+      }
+      owner {
+        id
+      }
+    }
+  }
+`
+const MINTS_QUERY = gql`
+  query Mints($first: Int, $skip: Int, $orderDirection: String) {
+    artworks(
+      first: $first
+      skip: $skip
+      orderBy: "creationDate"
+      orderDirection: $orderDirection
+      where: { burned: false }
     ) {
       id
       mimeType
@@ -53,17 +85,32 @@ const GALLERY_QUERY = gql`
 `
 const GalleryView: React.VFC<IProps> = ({ created, owned, admin }) => {
   const [nfts, setNfts] = useState<NFT[]>([])
+  const [state, setState] = useState<'mints' | 'listings'>('listings')
 
-  const { loading, error, data, fetchMore } = useQuery(GALLERY_QUERY, {
+  const getQuery = (state) => {
+    switch (state) {
+      case 'mints':
+        return MINTS_QUERY
+      default:
+        return LISTINGS_QUERY
+    }
+  }
+
+  useEffect(() => {
+    setNfts([])
+    onLoadMore()
+  }, [state])
+
+  const { loading, error, data, fetchMore } = useQuery(getQuery(state), {
     variables: {
       first: 48,
       skip: 0,
-      orderBy: 'creationDate',
       orderDirection: 'desc',
     },
   })
 
   const getNfts = async (data) => {
+    console.log('ARTWORKS', data)
     setNfts([...nfts, ...data])
   }
 
@@ -105,12 +152,34 @@ const GalleryView: React.VFC<IProps> = ({ created, owned, admin }) => {
 
   return (
     <div className={'flex flex-col space-y-4 md:mt-24'}>
+      {/* <span className="flex justify-start border-gray-700 border-b text-md w-full mt-10 md:-mt-10">
+        <button
+          onClick={() => setState('listings')}
+          type="button"
+          className={classNames(
+            state === 'listings' ? 'border-b-2 font-medium' : 'font-light',
+            'relative inline-flex items-center px-3 md:px-4 py-2 border-gray-300 font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
+          )}
+        >
+          Listings
+        </button>
+        <button
+          onClick={() => setState('mints')}
+          type="button"
+          className={classNames(
+            state === 'mints' ? 'border-b-2 font-medium' : 'font-light',
+            'relative inline-flex items-center px-3 md:px-4 py-2 border-gray-300 font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
+          )}
+        >
+          Latest Mints
+        </button>
+      </span> */}
       <div
         className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-2 sm:mx-auto'}
       >
         {nfts.map((item, key) => (
           <div key={key}>
-            <NFTItemCard nft={item} tokenId={item?.tokenId}/>
+            <NFTItemCard nft={item} tokenId={item?.tokenId} />
           </div>
         ))}
       </div>

@@ -222,7 +222,7 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
       console.log('DATA', data.bids)
       let tempData = data
       let filteredTempData = tempData.account.bids.filter(
-        (nft) => nft.item?.currentBid?.accepted !== true,
+        (nft) => nft.item?.currentBid?.accepted === false && nft.item.forSale === true,
       )
       let mappedItems = filteredTempData.map(
         nft => nft.item
