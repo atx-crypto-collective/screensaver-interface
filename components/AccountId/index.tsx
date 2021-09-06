@@ -15,7 +15,7 @@ export default function AccountId({address, link}: Props) {
 
       if (loading || !data?.twitterId) {
         return (
-          <Link href={`created/${address}`}>
+          <Link href={`https://www.screensaver.world/created/${address}`}>
             <a className={'hover:bg-gray-800 p-2 -ml-2 rounded-md'}>{!!address && shortenAddress(address)}</a>
           </Link>
         )

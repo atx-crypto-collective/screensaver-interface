@@ -76,200 +76,200 @@ const MobileNavbar: React.FC<IProps> = () => {
 
   return (
     <>
-    <SearchModal
-        open={open}
-        setOpen={setOpen}
+      <SearchModal open={open} setOpen={setOpen} />
+
+      <div
+        className={
+          'fixed z-10 bg-black right-0 top-0 w-full h-16 backdrop-filter backdrop-blur-lg bg-opacity-30'
+        }
       />
+      <div className={'fixed z-10 bg-transparent right-0 top-0 w-full'}>
+        <div className={'mw-auto'}>
+          <div
+            className={
+              'justify-between max-w-6xl flex mx-auto w-11/12 items-center h-16 z-10'
+            }
+          >
+            <div className={'flex items-center'}>
+              <Link href={'/gallery'}>
+                <a className="flex font-serif text-2xl text-red-400 font-bold mt-2">
+                  <img
+                    src={logoImage}
+                    alt={'Screen Saver'}
+                    className={'cursor-pointer'}
+                    width={120}
+                  />
+                </a>
+              </Link>
+            </div>
 
-    <div
-      className={
-        'fixed z-10 bg-black right-0 top-0 w-full h-16 backdrop-filter backdrop-blur-lg bg-opacity-30'
-      }
-    />
-    <div
-      className={
-        'fixed z-10 bg-transparent right-0 top-0 w-full'
-      }
-    >
-      <div className={'mw-auto'}>
-        <div
-          className={
-            'justify-between max-w-6xl flex mx-auto w-11/12 items-center h-16 z-10'
-          }
-        >
-          <div className={'flex items-center'}>
-            <Link href={'/gallery'}>
-              <a className="flex font-serif text-2xl text-red-400 font-bold mt-2">
-                <img
-                  src={logoImage}
-                  alt={'Screen Saver'}
-                  className={'cursor-pointer'}
-                  width={120}
-                />
-              </a>
-            </Link>
-          </div>
+            <div className={'flex items-center space-x-2 md:space-x-3'}>
 
-          <div className={'flex items-center space-x-2 md:space-x-3'}>
-            {/* <Link href={'/search'}> */}
               <SearchIcon
                 onClick={() => setOpen(true)}
-                className={
-                  'h-8 w-8 text-red-300 cursor-pointer'
-                }
+                className={'h-8 w-8 text-red-300 cursor-pointer'}
               />
-            {/* </Link> */}
 
-          <ConnectButton />
+              <ConnectButton />
 
-            <Menu as="div" className="relative z-20">
-              {({ open }) => (
-                <>
-                  <div>
-                    <Menu.Button className="h-10 w-10 mt-1 focus:outline-none">
-                      <span className="sr-only">Open user menu</span>
+              <Menu as="div" className="relative z-20">
+                {({ open }) => (
+                  <>
+                    <div>
+                      <Menu.Button className="h-10 w-10 mt-1 focus:outline-none">
+                        <span className="sr-only">Open user menu</span>
 
-                      <MenuIcon className={' text-red-300'} />
-                    </Menu.Button>
-                  </div>
-                  <Transition
-                    show={open}
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items
-                      static
-                      className="origin-top-right absolute right-4 mt-2 w-64 rounded py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                        <MenuIcon className={' text-red-300'} />
+                      </Menu.Button>
+                    </div>
+                    <Transition
+                      show={open}
+                      as={Fragment}
+                      enter="transition ease-out duration-100"
+                      enterFrom="transform opacity-0 scale-95"
+                      enterTo="transform opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="transform opacity-100 scale-100"
+                      leaveTo="transform opacity-0 scale-95"
                     >
-
-                      {/* <Menu.Item>
+                      <Menu.Items
+                        static
+                        className="origin-top-right absolute right-4 mt-2 w-64 rounded py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                      >
+                        {/* <Menu.Item>
                         <Link href="/gallery">
                           <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Gallery
                           </a>
                         </Link>
                       </Menu.Item> */}
-                      {/* <Menu.Item>
+                        {/* <Menu.Item>
                         <Link href="/search">
                           <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Search
                           </a>
                         </Link>
                       </Menu.Item> */}
-                      {/* <Menu.Item>
+                        {/* <Menu.Item>
                         <Link href="/leaderboard">
                           <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Leaderboard
                           </a>
                         </Link>
                       </Menu.Item> */}
-                      {!!account && (
-                        <>
-                          {/* <Menu.Item>
+
+                        {!!account && (
+                          <>
+                            {/* <Menu.Item>
                             <Link href={`/created/${account}`}>
                               <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 Account
                               </a>
                             </Link>
                           </Menu.Item> */}
-                          {/* <Menu.Item>
+                            {/* <Menu.Item>
                             <Link href={`/owned/${account}`}>
                               <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 Owned
                               </a>
                             </Link>
                           </Menu.Item> */}
-                        </>
-                      )}
-                      <Menu.Item>
-                        <Link href="/mint">
-                          <a className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100">
-                          🎨 Mint
-                          </a>
-                        </Link>
-                      </Menu.Item>
-                      {/* <Menu.Item>
-                        <Link href="/whitelist">
-                          <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Whitelist
-                          </a>
-                        </Link>
-                      </Menu.Item> */}
-                      <Menu.Item>
+                          </>
+                        )}
 
-                        <Link href="https://buy.moonpay.com/">
-                          <a
-                            target="_blank"
-                            className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100"
-                          >
-                            💸 Buy Matic
-                          </a>
-                        </Link>
-                      </Menu.Item>
-
-                      <Menu.Item>
-                        <Link href="/">
-                          <a className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100">
-                          🧅 About
-                          </a>
-                        </Link>
-                      </Menu.Item>
-
-                      <Menu.Item>
-                        <Link href="https://ssw.wtf/">
-                          <a
-                            target="_blank"
-                            className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100"
-                          >
-                            🚀 Account shortlinks
-                          </a>
-                        </Link>
-                      </Menu.Item>
-                      {/* <Menu.Item>
-                        <a
-                          href="https://v0.screensaver.world"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        >
-                          Screensaver V0
-                        </a>
-                      </Menu.Item> */}
-
-                      {isSignedIn && (
+                        {/* Mint */}
                         <Menu.Item>
-                          <div
-                            onClick={() => {
-                              auth()
-                                .signOut()
-                                .then(() => {
-                                  // Sign-out successful.
-                                  console.log('SIGNOUT')
-                                })
-                                .catch((error) => {
-                                  // An error happened.
-                                  console.log('SIGNOUT ERROR', error)
-                                })
-                            }}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          >
-                            Admin Logout
-                          </div>
+                          <Link href="/mint">
+                            <a className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100">
+                              🎨 Mint
+                            </a>
+                          </Link>
                         </Menu.Item>
-                      )}
-                    </Menu.Items>
-                  </Transition>
-                </>
-              )}
-            </Menu>
+
+                        {/* Buy Matic */}
+                        <Menu.Item>
+                          <Link href="https://buy.moonpay.com/">
+                            <a
+                              target="_blank"
+                              className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100"
+                            >
+                              💸 Buy Matic
+                            </a>
+                          </Link>
+                        </Menu.Item>
+
+                        {/* About */}
+                        <Menu.Item>
+                          <Link href="https://docs.screensaver.world">
+                            <a className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100">
+                              🧅 About
+                            </a>
+                          </Link>
+                        </Menu.Item>
+
+                        {/* Account shortlinks */}
+                        <Menu.Item>
+                          <Link href="https://ssw.wtf/">
+                            <a
+                              target="_blank"
+                              className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100"
+                            >
+                              🚀 Account shortlinks
+                            </a>
+                          </Link>
+                        </Menu.Item>
+
+                        {/* Discord */}
+                        <Menu.Item>
+                          <a
+                            href="https://discord.gg/UJaz7Hrq"
+                            className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100"
+                          >
+                            Discord
+                          </a>
+                        </Menu.Item>
+
+                        {/* Screensaver V0 */}
+                        <Menu.Item>
+                          <a
+                            href="https://v0.screensaver.world"
+                            className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100"
+                          >
+                            Screensaver V0
+                          </a>
+                        </Menu.Item>
+
+                        {isSignedIn && (
+                          <Menu.Item>
+                            <div
+                              onClick={() => {
+                                auth()
+                                  .signOut()
+                                  .then(() => {
+                                    // Sign-out successful.
+                                    console.log('SIGNOUT')
+                                  })
+                                  .catch((error) => {
+                                    // An error happened.
+                                    console.log('SIGNOUT ERROR', error)
+                                  })
+                              }}
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            >
+                              Admin Logout
+                            </div>
+                          </Menu.Item>
+                        )}
+                      </Menu.Items>
+                    </Transition>
+                  </>
+                )}
+              </Menu>
+            </div>
           </div>
         </div>
+        {showBanner && <Banner />}
       </div>
-      {showBanner && <Banner />}
-    </div>
     </>
   )
 }

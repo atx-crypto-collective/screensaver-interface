@@ -100,9 +100,11 @@ const OWNER_QUERY = gql`
 `
 
 const BIDS_QUERY = gql`
-  query Gallery(
+  query Bids(
     $first: Int
     $skip: Int
+    $orderBy: String
+    $orderDirection: String
     $account: String
   ) {
     account(
@@ -219,12 +221,15 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
     if (state === 'bids') {
       console.log('DATA', data.bids)
       let tempData = data
-      let filteredTempData = tempData.items.filter(
-        (nft) => nft?.currentBid?.accepted !== true,
+      let filteredTempData = tempData.account.bids.filter(
+        (nft) => nft.item?.currentBid?.accepted !== true,
       )
-      setNfts([...nfts, ...filteredTempData])
+      let mappedItems = filteredTempData.map(
+        nft => nft.item
+      )
+      setNfts([...nfts, ...mappedItems])
     } else {
-      setNfts([...nfts, ...data])
+      setNfts([...nfts, ...data.artworks])
     }
   }
 
@@ -248,7 +253,7 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
   }, [fetchMore, nfts.length])
 
   useEffect(() => {
-    data ? getNfts(data.artworks) : console.log('loading')
+    data ? getNfts(data) : console.log('loading')
   }, [data])
 
   useEffect(() => {
