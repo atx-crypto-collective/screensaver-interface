@@ -5,9 +5,8 @@ import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../constants/gallery'
 import Modal from '../components/Modal'
 import { getNetworkLibrary } from '../connectors'
-import SetBid from './SetBid'
 import AccountId from './AccountId'
-// import SetSalePrice from './SetSalePrice'
+import SetSalePrice from './SetSalePrice'
 
 var utils = require('ethers').utils
 
@@ -18,7 +17,6 @@ interface IProps {
 
 const BidRow: React.VFC<IProps> = ({ tokenId }) => {
   const { chainId, account, library } = useWeb3React<Web3Provider>()
-  const [bid, setBid] = useState<number | undefined>()
   const [bidder, setBidder] = useState<string | undefined>()
   const [ownerOf, setOwnerOf] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
@@ -59,71 +57,54 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
     }
   }
 
-  // get current bids
-  async function currentBids() {
+  // remove from sale
+  async function buyNow() {
     const contract = new ethers.Contract(
       process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
-      getNetworkLibrary(),
+      library.getSigner(account),
     )
 
-    var currentBid = await contract.currentBidDetailsOfToken(tokenId)
-
-    console.log(currentBid)
-
-    if (utils.formatEther(currentBid[0]) === '0.0') {
-      setBid(undefined)
-      setBidder(currentBid[1])
-    } else {
-      setBid(utils.formatEther(currentBid[0]))
-      setBidder(currentBid[1])
+    const big = utils.parseEther(salePrice)
+    console.log('VALUE AT CREATE BID CALL', salePrice, big)
+    let overrides = {
+      // To convert Ether to Wei:
+      value: utils.parseEther(salePrice), // ether in this case MUST be a string
     }
+
+    // Pass in the overrides as the 3rd parameter to your 2-parameter function:
+
+    const tx = await contract.buy(tokenId.toString(), overrides)
+
+    setLoading(true)
+
+    await tx.wait()
+
+    setLoading(false)
   }
 
-  // accept active bid
-  async function acceptBid() {
+  // remove from sale
+  async function removeFromSale() {
     const contract = new ethers.Contract(
       process.env.NEXT_PUBLIC_CONTRACT_ID,
       GALLERY_ABI,
       library.getSigner(account),
     )
-    const tx = await contract.acceptBid(tokenId)
-    setLoading(true)
 
-    const receipt = await tx.wait()
+    // Pass in the overrides as the 3rd parameter to your 2-parameter function:
 
-    // setTimeout(() => {
-    currentBids()
-    setLoading(false)
-    // }, 10000)
-  }
-
-  // cancel active bid
-  async function cancelBid() {
-    const contract = new ethers.Contract(
-      process.env.NEXT_PUBLIC_CONTRACT_ID,
-      GALLERY_ABI,
-      library.getSigner(account),
-    )
-    const tx = await contract.cancelBid(tokenId)
+    const tx = await contract.setWeiSalePrice(tokenId.toString(), utils.parseEther(0))
 
     setLoading(true)
 
     const receipt = await tx.wait()
 
-    currentBids()
     setLoading(false)
+
   }
-
-  // remove from sale
-  async function buyNow() {}
-
-  // remove from sale
-  async function removeFromSale() {}
 
   // component mount check for current bid
   useEffect(() => {
-    currentBids()
     checkOwnerOf()
     getSalePrice()
   }, [account])
@@ -140,22 +121,17 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
 
       {/* set sale price */}
 
-      {salePrice === 0 && (
+      {salePrice !== 0 && (
         <div className="my-6">
-          <div className="rounded-md px-6 py-5 sm:flex sm:items-start justify-between border-2 border-gray-700">
-            <h4 className="sr-only">Visa</h4>
-            <div className="sm:flex sm:items-start">
-              <div className="mt-3 sm:mt-0 sm:ml-4">
-                <h3 className="text-lg leading-6 font-medium">
+          <div className="rounded-md px-6 py-5 flex items-center justify-between border-2 border-gray-700">
+                <h3 className="text-lg font-medium">
                   {salePrice} MATIC
                 </h3>
-              </div>
-            </div>
             {/** if owner of token : accept , if bidder : cancel, if neither or if bidder : place bid*/}
             {!ownerOf ? (
               <button
                 onClick={!!account ? buyNow : () => setOpen(true)}
-                className="w-48 h-14 justify-center inline-flex items-center border border-red-300 shadow-sm text-red-300 font-medium rounded-full text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                className="w-36 md:w-48 h-14 justify-center inline-flex items-center border border-red-300 shadow-sm text-red-300 font-medium rounded-full text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
               >
                 Buy Now
                 {loading && (
@@ -216,7 +192,7 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
       )}
 
       {ownerOf && (
-        <SetBid sale={false} tokenId={tokenId} onUpdate={currentBids} />
+        <SetSalePrice sale={false} tokenId={tokenId} onUpdate={getSalePrice} />
       )}
     </>
   )
