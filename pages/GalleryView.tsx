@@ -158,8 +158,8 @@ const GalleryView: React.VFC<IProps> = ({ created, owned, admin }) => {
   }
 
   return (
-    <div className={'flex flex-col space-y-4 md:mt-24'}>
-      <span className="flex justify-start border-gray-700 border-b text-md w-full mt-20 md:mt-10">
+    <div className={'flex flex-col space-y-4 mt-32 '}>
+      <span className="flex justify-start border-gray-700 border-b text-md w-full">
         <button
           onClick={() => setState('listings')}
           className={classNames(
