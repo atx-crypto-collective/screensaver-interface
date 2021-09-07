@@ -17,7 +17,6 @@ interface IProps {
 
 const BidRow: React.VFC<IProps> = ({ tokenId }) => {
   const { chainId, account, library } = useWeb3React<Web3Provider>()
-  const [bidder, setBidder] = useState<string | undefined>()
   const [ownerOf, setOwnerOf] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [open, setOpen] = useState<boolean>(false)
@@ -65,11 +64,11 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
       library.getSigner(account),
     )
 
-    const big = salePrice * 10**18
+    const big = utils.parseEther(salePrice)
     console.log('VALUE AT CREATE BID CALL', salePrice, big)
     let overrides = {
       // To convert Ether to Wei:
-      value: salePrice * 10**18 // ether in this case MUST be a string
+      value: utils.parseEther(salePrice)// ether in this case MUST be a string
     }
 
     // Pass in the overrides as the 3rd parameter to your 2-parameter function:

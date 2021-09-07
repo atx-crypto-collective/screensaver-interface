@@ -216,12 +216,20 @@ const BiddingDetailView = ({ tokenId }) => {
                 )}
               </button>
             ) : (
-              <div className="w-full h-14 justify-center inline-flex items-center border border-gray-700 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900">
-                Not for sale
-              </div>
+              <>
+                <div className="w-full h-14 justify-center inline-flex items-center border border-gray-700 shadow-sm text-red-300 font-medium rounded-xs text-white bg-gray-900">
+                  Not for sale
+                </div>
+
+                {!!tokenId && account === bidder && (
+                  <BidRow tokenId={tokenId.toString()} />
+                )}
+              </>
             )
           ) : (
             <>
+              {!!tokenId && <BidRow tokenId={tokenId.toString()} />}
+
               {!!tokenId && <SalePriceRow tokenId={tokenId.toString()} />}
 
               {!!ownerOf && !bidExists && (
@@ -229,9 +237,6 @@ const BiddingDetailView = ({ tokenId }) => {
               )}
             </>
           )}
-
-          {(!!tokenId && account === bidder) && <BidRow tokenId={tokenId.toString()} />}
-          
         </div>
         <div className={'flex w-full mt-6'}>
           {(hasBurnerRole || ownerOf) && !bidExists && <BurnButton />}
