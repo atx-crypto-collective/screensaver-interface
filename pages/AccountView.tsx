@@ -118,6 +118,7 @@ const BIDS_QUERY = gql`
           mimeType
           tokenId
           tagsString
+          burned
           currentBid {
             id
             bidder {
@@ -222,7 +223,7 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
       console.log('DATA', data.bids)
       let tempData = data
       let filteredTempData = tempData.account.bids.filter(
-        (nft) => nft.item?.currentBid?.accepted === false && nft.item.forSale === true && nft.item.burned === false,
+        (nft) => nft.item?.currentBid?.accepted !== true && nft?.item?.forSale === true && nft?.item?.burned !== true,
       )
       let mappedItems = filteredTempData.map(
         nft => nft.item
