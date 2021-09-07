@@ -50,7 +50,7 @@ const BidRow: React.VFC<IProps> = ({ tokenId }) => {
 
     console.log('Token Price', tokenPrice)
 
-    if (utils.formatEther(tokenPrice) === 0) {
+    if (utils.formatEther(tokenPrice) === '0.0') {
       setSalePrice(0)
     } else {
       setSalePrice(utils.formatEther(tokenPrice))
