@@ -28,6 +28,7 @@ const BiddingDetailView = ({ tokenId }) => {
   const [isContractOwner, setIsContractOwner] = useState<boolean>(false)
   const [hasBurnerRole, setHasBurnerRole] = useState<boolean>(false)
   const [bidExists, setBidExists] = useState<boolean>(false)
+  const [bidder, setBidder] = useState<string | undefined>()
 
   // ownerOf
   async function checkOwnerOf() {
@@ -72,9 +73,13 @@ const BiddingDetailView = ({ tokenId }) => {
 
     var currentBid = await contract.currentBidDetailsOfToken(tokenId)
 
+    console.log(currentBid)
+
     if (utils.formatEther(currentBid[0]) === '0.0') {
+      setBidder(currentBid[1])
       setBidExists(false)
     } else {
+      setBidder(currentBid[1])
       setBidExists(true)
     }
   }
@@ -170,7 +175,7 @@ const BiddingDetailView = ({ tokenId }) => {
 
         <div className={'text-md pl-3 flex w-full space-x-2'}>
           <strong>Collector: </strong>
-          <AccountId address={nftOwner} link={'owned'}/>
+          <AccountId address={nftOwner} link={'owned'} />
         </div>
 
         <h2 className={'pl-3 text-sm'}>
@@ -219,13 +224,14 @@ const BiddingDetailView = ({ tokenId }) => {
             <>
               {!!tokenId && <SalePriceRow tokenId={tokenId.toString()} />}
 
-              {!!tokenId && <BidRow tokenId={tokenId.toString()} />}
-
               {!!ownerOf && !bidExists && (
                 <button onClick={removeFromSale}>Remove From Sale</button>
               )}
             </>
           )}
+
+          {(!!tokenId && account === bidder) && <BidRow tokenId={tokenId.toString()} />}
+          
         </div>
         <div className={'flex w-full mt-6'}>
           {(hasBurnerRole || ownerOf) && !bidExists && <BurnButton />}
