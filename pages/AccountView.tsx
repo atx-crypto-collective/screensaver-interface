@@ -222,13 +222,17 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
     if (state === 'bids') {
       console.log('DATA', data.bids)
       let tempData = data
+      let tokenIds = []
       let filteredTempData = tempData.account.bids.filter(
-        (nft) => nft.item?.currentBid?.accepted !== true && nft?.item?.forSale === true && nft?.item?.burned !== true && nft.item?.bidder === account,
+        (nft) => nft.item?.currentBid?.accepted !== true && nft?.item?.forSale === true && nft?.item?.burned !== true && nft?.item?.currentBid?.bidder?.id.toUpperCase() === account?.toString().toUpperCase()
       )
       let mappedItems = filteredTempData.map(
         nft => nft.item
       )
-      setNfts([...nfts, ...mappedItems])
+
+      let uniqueValues: NFT[] = Array.from(new Set(mappedItems))
+      console.log(uniqueValues)
+      setNfts([...nfts, ...uniqueValues])
     } else {
       setNfts([...nfts, ...data.artworks])
     }
