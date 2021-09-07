@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import NFTItemCard from '../components/NFTItemCard'
 import { Layout } from '../components'
 import NFT from '../types'
-import { gql, useQuery } from '@apollo/client'
+import { gql, useLazyQuery } from '@apollo/client'
 import classNames from 'classnames'
 
 interface IProps {
@@ -16,7 +16,7 @@ const LISTINGS_QUERY = gql`
     artworks(
       first: $first
       skip: $skip
-      orderBy: "creationDate"
+      orderBy: "latestForSaleDate"
       orderDirection: $orderDirection
       where: { forSale: true }
     ) {
@@ -97,11 +97,17 @@ const GalleryView: React.VFC<IProps> = ({ created, owned, admin }) => {
   }
 
   useEffect(() => {
+    console.log("STATE CHANGE", state, nfts)
     setNfts([])
-    onLoadMore()
   }, [state])
 
-  const { loading, error, data, fetchMore } = useQuery(getQuery(state), {
+  useEffect(() => {
+    if (nfts.length > 0) return
+    loadGallery()
+  }, [nfts])
+
+  const [ loadGallery, { loading, error, data, fetchMore }] = useLazyQuery(getQuery(state), {
+    fetchPolicy: "no-cache",
     variables: {
       first: 48,
       skip: 0,
@@ -132,6 +138,7 @@ const GalleryView: React.VFC<IProps> = ({ created, owned, admin }) => {
   }, [fetchMore, nfts.length])
 
   useEffect(() => {
+    console.log("DATA", data)
     data ? getNfts(data.artworks) : console.log('loading')
   }, [data])
 
@@ -152,10 +159,9 @@ const GalleryView: React.VFC<IProps> = ({ created, owned, admin }) => {
 
   return (
     <div className={'flex flex-col space-y-4 md:mt-24'}>
-      {/* <span className="flex justify-start border-gray-700 border-b text-md w-full mt-10 md:-mt-10">
+      <span className="flex justify-start border-gray-700 border-b text-md w-full mt-10">
         <button
           onClick={() => setState('listings')}
-          type="button"
           className={classNames(
             state === 'listings' ? 'border-b-2 font-medium' : 'font-light',
             'relative inline-flex items-center px-3 md:px-4 py-2 border-gray-300 font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
@@ -165,7 +171,6 @@ const GalleryView: React.VFC<IProps> = ({ created, owned, admin }) => {
         </button>
         <button
           onClick={() => setState('mints')}
-          type="button"
           className={classNames(
             state === 'mints' ? 'border-b-2 font-medium' : 'font-light',
             'relative inline-flex items-center px-3 md:px-4 py-2 border-gray-300 font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
@@ -173,7 +178,7 @@ const GalleryView: React.VFC<IProps> = ({ created, owned, admin }) => {
         >
           Latest Mints
         </button>
-      </span> */}
+      </span>
       <div
         className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-2 sm:mx-auto'}
       >
