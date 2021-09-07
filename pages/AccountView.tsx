@@ -222,7 +222,6 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
     if (state === 'bids') {
       console.log('DATA', data.bids)
       let tempData = data
-      let tokenIds = []
       let filteredTempData = tempData.account.bids.filter(
         (nft) => nft.item?.currentBid?.accepted !== true && nft?.item?.forSale === true && nft?.item?.burned !== true && nft?.item?.currentBid?.bidder?.id.toUpperCase() === account?.toString().toUpperCase()
       )

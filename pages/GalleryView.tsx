@@ -18,7 +18,7 @@ const LISTINGS_QUERY = gql`
       skip: $skip
       orderBy: "latestForSaleDate"
       orderDirection: $orderDirection
-      where: { forSale: true }
+      where: { forSale: true, burned: false }
     ) {
       id
       mimeType
