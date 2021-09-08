@@ -9,7 +9,7 @@
   to = "/created/[account].html?object=:account"
   status = 200
 
-  [[redirects]]
+[[redirects]]
   from = "/owned/:owned"
   to = "/owned/[account].html?object=:account"
   status = 200
@@ -27,6 +27,11 @@
 [[redirects]]
   from = "/mint/:mint"
   to = "/mint/:mint"
+  status = 200
+
+[[redirects]]
+  from = "/mints/:mints"
+  to = "/mints/:mints"
   status = 200
 
 [[redirects]]
@@ -53,6 +58,7 @@
   from = "/admin/:admin"
   to = "/admin/:admin"
   status = 200
+
 
 # you can also target a specific branch
 [context.v0.environment]

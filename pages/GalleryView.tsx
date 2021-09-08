@@ -2,13 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react'
 import NFTItemCard from '../components/NFTItemCard'
 import { Layout } from '../components'
 import NFT from '../types'
-import { gql, useLazyQuery } from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
 import classNames from 'classnames'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 interface IProps {
-  created?: boolean
-  owned?: boolean
-  admin?: boolean
+  state?: string
 }
 
 const LISTINGS_QUERY = gql`
@@ -83,9 +83,8 @@ const MINTS_QUERY = gql`
     }
   }
 `
-const GalleryView: React.VFC<IProps> = ({ created, owned, admin }) => {
+const GalleryView: React.VFC<IProps> = ({ state }) => {
   const [nfts, setNfts] = useState<NFT[]>([])
-  const [state, setState] = useState<'mints' | 'listings'>('listings')
 
   const getQuery = (state) => {
     switch (state) {
@@ -96,27 +95,18 @@ const GalleryView: React.VFC<IProps> = ({ created, owned, admin }) => {
     }
   }
 
-  useEffect(() => {
-    console.log("STATE CHANGE", state, nfts)
-    setNfts([])
-  }, [state])
-
-  useEffect(() => {
-    if (nfts.length > 0) return
-    loadGallery()
-  }, [nfts])
-
-  const [ loadGallery, { loading, error, data, fetchMore }] = useLazyQuery(getQuery(state), {
-    fetchPolicy: "no-cache",
-    variables: {
-      first: 48,
-      skip: 0,
-      orderDirection: 'desc',
+  const { loading, error, data, fetchMore } = useQuery(
+    getQuery(state),
+    {
+      variables: {
+        first: 48,
+        skip: 0,
+        orderDirection: 'desc',
+      },
     },
-  })
+  )
 
   const getNfts = async (data) => {
-    console.log('ARTWORKS', data)
     setNfts([...nfts, ...data])
   }
 
@@ -125,6 +115,8 @@ const GalleryView: React.VFC<IProps> = ({ created, owned, admin }) => {
       Math.round(window.scrollY + window.innerHeight) >=
       Math.round(document.body.scrollHeight)
     ) {
+      console.log('LOAD MORE', nfts.length)
+
       fetchMore({
         variables: {
           skip: nfts.length,
@@ -138,7 +130,7 @@ const GalleryView: React.VFC<IProps> = ({ created, owned, admin }) => {
   }, [fetchMore, nfts.length])
 
   useEffect(() => {
-    console.log("DATA", data)
+    console.log('DATA', data, nfts.length)
     data ? getNfts(data.artworks) : console.log('loading')
   }, [data])
 
@@ -158,26 +150,30 @@ const GalleryView: React.VFC<IProps> = ({ created, owned, admin }) => {
   }
 
   return (
-    <div className={'flex flex-col space-y-4 mt-32 '}>
+    <div className={'flex flex-col space-y-4 mt-32 max-w-6xl'}>
       <span className="flex justify-start border-gray-700 border-b text-md w-full">
-        <button
-          onClick={() => setState('listings')}
+      <Link href={`/`}>
+          <button
+            type="button"
           className={classNames(
-            state === 'listings' ? 'border-b-2 font-medium' : 'font-light',
+            state !== 'mints' ? 'border-b-2 font-bold' : 'font-light',
             'relative inline-flex items-center px-3 md:px-4 py-2 border-gray-300 font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
           )}
         >
           Listings
         </button>
-        <button
-          onClick={() => setState('mints')}
+        </Link>
+        <Link href={`/mints`}>
+          <button
+            type="button"
           className={classNames(
-            state === 'mints' ? 'border-b-2 font-medium' : 'font-light',
+            state === 'mints' ? 'border-b-2 font-bold' : 'font-light',
             'relative inline-flex items-center px-3 md:px-4 py-2 border-gray-300 font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
           )}
         >
           Latest Mints
         </button>
+        </Link>
       </span>
       <div
         className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-2 sm:mx-auto'}
