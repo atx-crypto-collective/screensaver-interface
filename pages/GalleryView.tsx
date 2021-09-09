@@ -150,7 +150,7 @@ const GalleryView: React.VFC<IProps> = ({ state }) => {
   }
 
   return (
-    <div className={'flex flex-col space-y-4 mt-32 max-w-6xl'}>
+    <div className={'flex flex-col space-y-4 mt-32 max-w-8xl mx-auto'}>
       <span className="flex justify-start border-gray-700 border-b text-md w-full">
       <Link href={`/`}>
           <button
@@ -176,7 +176,7 @@ const GalleryView: React.VFC<IProps> = ({ state }) => {
         </Link>
       </span>
       <div
-        className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-2 sm:mx-auto'}
+        className={'grid gap-3 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 mx-2 sm:mx-auto'}
       >
         {nfts.map((item, key) => (
           <div key={key}>

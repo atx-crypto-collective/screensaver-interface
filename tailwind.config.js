@@ -10,10 +10,11 @@ module.exports = {
   plugins: [
     // ...
     require('@tailwindcss/forms'),
+    require('@tailwindcss/line-clamp'),
   ],
   theme: {
     boxShadow: {
-      white: '0px 0px 2px 2px rgba(255, 255, 255, 0.1)',
+      white: '0px 0px 4px 4px rgba(255, 255, 255, 0.05)',
       sm: '1px 2px #A78BFA',
       DEFAULT:
         '0 1px 3px 0 rgba(255, 0, 0, 0.1), 0 1px 2px 0 rgba(255, 0, 0, 0.06)',
@@ -51,6 +52,7 @@ module.exports = {
           500: '#737373',
           600: '#595959',
           700: '#404040',
+          750: '#111111',
           800: '#262626',
           900: '#120b0d',
         },

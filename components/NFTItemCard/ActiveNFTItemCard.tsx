@@ -10,7 +10,7 @@ import { gql, useLazyQuery } from '@apollo/client'
 import { createOperation } from '@apollo/client/link/utils'
 import axios from 'axios'
 import NFT from '../../types'
-import NFTCardSkeleton from './'
+import makeBlockie from 'ethereum-blockies-base64'
 
 var utils = require('ethers').utils
 
@@ -162,20 +162,20 @@ const NFTItemCard: React.FC<IProps> = ({ nft }) => {
       nft={safeNFT}
       srcUrl={safeNFT.mediaUri}
       footer={
-        <div className={'py-3 bg-white bg-opacity-5 font-medium px-5'}>
+        <div className={'py-3 font-medium px-5 border-t border-gray-800'}>
           <div className={'flex flex-col h-20 justify-center'}>
             {!lastSale && (
               <>
-                <div className={'text-xl font-medium'}>CURRENT BID</div>
-                <div className={'text-3xl font-light'}>
+                <div className={'text-xl font-medium'}>Current Bid</div>
+                <div className={'text-2xl font-light'}>
                   {!!currentBid ? (
-                    `${currentBid} MATIC`
+                    `${currentBid} Matic`
                   ) : forSale ? (
-                    <div className={'text-xl font-light mt-2 text-gray-100'}>
+                    <div className={'text-lg font-light mt-2 text-gray-100'}>
                       No bids yet
                     </div>
                   ) : (
-                    <div className={'text-xl font-light mt-2 text-gray-100'}>
+                    <div className={'text-lg font-light mt-2 text-gray-100'}>
                       Not for sale
                     </div>
                   )}
@@ -185,10 +185,10 @@ const NFTItemCard: React.FC<IProps> = ({ nft }) => {
 
             {(!!lastSale && !currentBid) && (
               <>
-                <div className={'text-xl font-medium'}>LASTEST SALE</div>
+                <div className={'text-xl font-medium'}>Latest Sale</div>
 
-                <div className={'text-3xl font-light'}>
-                  {`${lastSale} MATIC`}
+                <div className={'text-2xl font-light'}>
+                  {`${lastSale} Matic`}
                 </div>
               </>
             )}
@@ -198,12 +198,17 @@ const NFTItemCard: React.FC<IProps> = ({ nft }) => {
     >
       <div
         className={
-          'flex flex-col justify-start space-y-2 px-5 overflow-hidden h-24'
+          'flex flex-col justify-start space-y-2 px-5 overflow-hidden h-28 mt-3'
         }
       >
-        <h1 className={'font-bold text-2xl text-white mt-1'}>{safeNFT.name}</h1>
-        <h2 className={'font-medium text-l'}>
-          <AccountId link={'created'} address={safeNFT.creator.id} />
+        <h1 className={'font-bold text-2xl text-white h-full max-h-16 line-clamp-2 overflow-ellipsis'}>{safeNFT.name}</h1>
+        <h2 className={'font-medium text-md flex items-center h-10'}>
+        <img
+        className={'h-5 w-5 mr-3'}
+          style={{ borderRadius: '50%'}}
+          src={makeBlockie(safeNFT.creator.id.toString())}
+        />
+        <AccountId link={'created'} address={safeNFT.creator.id} />
         </h2>
       </div>
     </ImageCard>

@@ -8,6 +8,9 @@ import Link from 'next/link'
 import AccountId from '../components/AccountId'
 import classNames from 'classnames'
 import makeBlockie from 'ethereum-blockies-base64'
+import { GALLERY_ABI } from '../constants/gallery'
+import { getNetworkLibrary } from '../connectors'
+import { ethers } from 'ethers'
 
 interface IProps {
   state: string
@@ -187,6 +190,7 @@ const FOR_SALE_QUERY = gql`
 const AccountView: React.VFC<IProps> = ({ state }) => {
   const [nfts, setNfts] = useState<NFT[]>([])
   const [skip, setSkip] = useState<number>(0)
+  const [totalSupply, setTotalSupply] = useState<number | undefined >()
   const router = useRouter()
   const { account } = router.query
 
@@ -213,6 +217,27 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
     },
   })
 
+  useEffect(() => {
+    getTotalSupply()
+  }, [])
+
+  async function getTotalSupply() {
+    const contract = new ethers.Contract(
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      GALLERY_ABI,
+      getNetworkLibrary(),
+    )
+
+    var supply = await contract.totalSupply()
+    setTotalSupply(supply.toNumber())
+
+  }
+
+  // bids row
+  // accepted 
+  // out bid
+  // canceled 
+
   const getNfts = async (data) => {
 
     setSkip(nfts.length + data.artworks.length)
@@ -229,6 +254,7 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
 
   const onLoadMore = useCallback(() => {
     if (fetchMore === undefined) return
+    if (skip >= totalSupply) return
 
     if (
       Math.round(window.scrollY + window.innerHeight) >=
@@ -275,7 +301,7 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
   return (
     <div
       className={
-        'flex flex-col items-start space-y-6 mt-10 md:mt-0 mx-auto max-w-6xl'
+        'flex flex-col items-start space-y-6 mt-10 md:mt-0 mx-auto max-w-8xl'
       }
     >
       <div
@@ -346,7 +372,9 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
         </div>
       )}
 
-      <div className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 '}>
+      <div 
+        className={'grid gap-3 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 mx-2 sm:mx-auto'}
+        >
         {nfts.map((item, key) => (
           <div key={key}>
             <NFTItemCard nft={item} tokenId={item?.tokenId} />
