@@ -157,7 +157,7 @@ const FOR_SALE_QUERY = gql`
       skip: $skip
       orderBy: $orderBy
       orderDirection: $orderDirection
-      where: { burned: false, forSale: true }
+      where: { burned: false, forSale: true, owner: $account }
     ) {
       id
       mimeType
@@ -191,6 +191,7 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
   const [nfts, setNfts] = useState<NFT[]>([])
   const [skip, setSkip] = useState<number>(0)
   const [totalSupply, setTotalSupply] = useState<number | undefined >()
+  const [balanceOf, setBalanceOf] = useState<number >(0)
   const router = useRouter()
   const { account } = router.query
 
@@ -219,7 +220,19 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
 
   useEffect(() => {
     getTotalSupply()
+    getBalanceOf()
   }, [])
+
+  async function getBalanceOf() {
+    const contract = new ethers.Contract(
+      process.env.NEXT_PUBLIC_CONTRACT_ID,
+      GALLERY_ABI,
+      getNetworkLibrary(),
+    )
+
+    var balance = await contract.balanceOf(account)
+    setBalanceOf(balance.toNumber())
+  }
 
   async function getTotalSupply() {
     const contract = new ethers.Contract(
@@ -372,6 +385,8 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
         </div>
       )}
 
+      {state === 'owned' && <h2 className={'text-md'}><strong>Total Owned:</strong> {balanceOf}</h2>}
+
       <div 
         className={'grid gap-3 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 mx-2 sm:mx-auto'}
         >
@@ -381,7 +396,6 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
           </div>
         ))}
       </div>
-
       {!!loading && (
         <div className={'pb-8 max-w-xl mx-auto w-fulltext-white'}>
           loading...

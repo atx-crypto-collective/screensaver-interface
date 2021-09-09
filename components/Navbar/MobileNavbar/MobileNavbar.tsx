@@ -87,7 +87,7 @@ const MobileNavbar: React.FC<IProps> = () => {
         <div className={'mw-auto'}>
           <div
             className={
-              'justify-between max-w-6xl flex mx-auto w-11/12 items-center h-16 z-10'
+              'justify-between max-w-8xl flex mx-auto w-11/12 items-center h-16 z-10'
             }
           >
             <div className={'flex items-center'}>
