@@ -100,48 +100,43 @@ const OWNER_QUERY = gql`
 `
 
 const BIDS_QUERY = gql`
-  query Bids(
-    $first: Int
+  query Gallery(
     $skip: Int
     $orderBy: String
     $orderDirection: String
     $account: String
   ) {
-    account(
-      first: $first
+    artworks(
+      first: 1000
       skip: $skip
-      id: $account
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      where: { burned: false, forSale: true }
     ) {
-      bids{
-        item {
+      id
+      mimeType
+      tokenId
+      tagsString
+      currentBid {
+        id
+        bidder {
           id
-          mimeType
-          tokenId
-          tagsString
-          burned
-          currentBid {
-            id
-            bidder {
-              id
-            }
-            amount
-            accepted
-            canceled
-            timestamp
-          }
-          description
-          name
-          mediaUri
-          forSale
-          creator {
-            id
-          }
-          owner {
-            id
-          }
         }
+        amount
+        accepted
+        canceled
+        timestamp
       }
-        
+      description
+      name
+      mediaUri
+      forSale
+      creator {
+        id
+      }
+      owner {
+        id
+      }
     }
   }
 `
@@ -159,7 +154,7 @@ const FOR_SALE_QUERY = gql`
       skip: $skip
       orderBy: $orderBy
       orderDirection: $orderDirection
-      where: { burned: false, forSale: true, owner: $account }
+      where: { burned: false, forSale: true }
     ) {
       id
       mimeType
@@ -191,6 +186,7 @@ const FOR_SALE_QUERY = gql`
 
 const AccountView: React.VFC<IProps> = ({ state }) => {
   const [nfts, setNfts] = useState<NFT[]>([])
+  const [skip, setSkip] = useState<number>(0)
   const router = useRouter()
   const { account } = router.query
 
@@ -218,20 +214,14 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
   })
 
   const getNfts = async (data) => {
-    console.log(data)
-    if (state === 'bids') {
-      console.log('DATA', data.bids)
-      let tempData = data
-      let filteredTempData = tempData.account.bids.filter(
-        (nft) => nft.item?.currentBid?.accepted !== true && nft?.item?.forSale === true && nft?.item?.burned !== true && nft?.item?.currentBid?.bidder?.id.toUpperCase() === account?.toString().toUpperCase()
-      )
-      let mappedItems = filteredTempData.map(
-        nft => nft.item
-      )
 
-      let uniqueValues: NFT[] = Array.from(new Set(mappedItems))
-      console.log(uniqueValues)
-      setNfts([...nfts, ...uniqueValues])
+    setSkip(nfts.length + data.artworks.length)
+    if (state === 'bids') {
+      let bidData = data
+      let filteredBidData = bidData.artworks.filter(
+        (nft) => nft?.currentBid?.accepted !== true && account?.toString()?.toLowerCase() === nft?.currentBid?.bidder?.id?.toLowerCase()
+      )
+      setNfts([...nfts, ...filteredBidData])
     } else {
       setNfts([...nfts, ...data.artworks])
     }
@@ -244,9 +234,11 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
       Math.round(window.scrollY + window.innerHeight) >=
       Math.round(document.body.scrollHeight)
     ) {
+      console.log('LOAD MORE', skip)
+
       fetchMore({
         variables: {
-          skip: nfts.length,
+          skip,
         },
         updateQuery: (prev, { fetchMoreResult }) => {
           if (!fetchMoreResult) return prev
@@ -281,7 +273,11 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
   }
 
   return (
-    <div className={'flex flex-col items-start space-y-6 mt-10 md:mt-0 mx-auto max-w-6xl'}>
+    <div
+      className={
+        'flex flex-col items-start space-y-6 mt-10 md:mt-0 mx-auto max-w-6xl'
+      }
+    >
       <div
         className={
           'h-20 w-20 rounded-full focus:outline-none hover:shadow-white'
@@ -301,9 +297,7 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
           <button
             type="button"
             className={classNames(
-              state === 'created'
-                ? 'border-b-2 font-medium'
-                : 'font-light',
+              state === 'created' ? 'border-b-2 font-medium' : 'font-light',
               'relative inline-flex items-center px-3 md:px-4 py-2 border-gray-300 font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
             )}
           >
@@ -314,11 +308,9 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
           <button
             type="button"
             className={classNames(
-              state === 'owned'
-                ? 'border-b-2 font-medium'
-                : 'font-light',
-                'relative inline-flex items-center px-3 md:px-4 py-2 border-gray-300 font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
-                )}
+              state === 'owned' ? 'border-b-2 font-medium' : 'font-light',
+              'relative inline-flex items-center px-3 md:px-4 py-2 border-gray-300 font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
+            )}
           >
             OWNED
           </button>
@@ -327,11 +319,9 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
           <button
             type="button"
             className={classNames(
-              state === 'forSale'
-                ? 'border-b-2 font-medium'
-                : 'font-light',
-                'relative inline-flex items-center px-3 md:px-4 py-2 border-gray-300 font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
-                )}
+              state === 'forSale' ? 'border-b-2 font-medium' : 'font-light',
+              'relative inline-flex items-center px-3 md:px-4 py-2 border-gray-300 font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
+            )}
           >
             FOR SALE
           </button>
@@ -340,9 +330,7 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
           <button
             type="button"
             className={classNames(
-              state === 'bids'
-              ? 'border-b-2 font-medium'
-              : 'font-light',
+              state === 'bids' ? 'border-b-2 font-medium' : 'font-light',
               'relative inline-flex items-center px-3 md:px-4 py-2 border-gray-300 font-light hover:font-bold focus:z-10 focus:outline-none outline-none',
             )}
           >
@@ -358,9 +346,7 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
         </div>
       )}
 
-      <div
-        className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 '}
-      >
+      <div className={'grid gap-6 md:grid-cols-2 lg:grid-cols-3 '}>
         {nfts.map((item, key) => (
           <div key={key}>
             <NFTItemCard nft={item} tokenId={item?.tokenId} />
