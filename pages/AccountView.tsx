@@ -219,7 +219,7 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
     if (state === 'bids') {
       let bidData = data
       let filteredBidData = bidData.artworks.filter(
-        (nft) => nft?.currentBid?.accepted !== true && account?.toString()?.toLowerCase() === nft?.currentBid?.bidder?.id?.toLowerCase()
+        (nft) => nft?.forSale === true && nft?.currentBid?.canceled !== true && nft?.currentBid?.accepted !== true && account?.toString()?.toLowerCase() === nft?.currentBid?.bidder?.id?.toLowerCase()
       )
       setNfts([...nfts, ...filteredBidData])
     } else {
