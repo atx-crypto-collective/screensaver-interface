@@ -35,6 +35,11 @@
   status = 200
 
 [[redirects]]
+  from = "/editAccount/:editAccount"
+  to = "/editAccount/:editAccount"
+  status = 200
+
+[[redirects]]
   from = "/whitelist/:whitelist"
   to = "/whitelist/:whitelist"
   status = 200

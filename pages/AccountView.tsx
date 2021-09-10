@@ -11,6 +11,7 @@ import makeBlockie from 'ethereum-blockies-base64'
 import { GALLERY_ABI } from '../constants/gallery'
 import { getNetworkLibrary } from '../connectors'
 import { ethers } from 'ethers'
+import useAccountData from '../hooks/useAccountData'
 
 interface IProps {
   state: string
@@ -194,6 +195,13 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
   const [balanceOf, setBalanceOf] = useState<number >(0)
   const router = useRouter()
   const { account } = router.query
+  const [accountLoading, accountData] = useAccountData({account: account.toString()});
+  const [description, setDescription] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+      if (!accountData) return;
+      setDescription(accountData.description);
+  }, [accountData])
 
   const getQuery = (state) => {
     switch (state) {
@@ -330,6 +338,8 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
       <div className={'text-2xl'}>
         <AccountId address={account.toString()} link={'twitter'} />
       </div>
+
+      {!!description && <div className={'text-md'} >{description}</div>}
 
       <span className="flex justify-start border-gray-700 border-b text-md w-full">
         <Link href={`/created/${account}`}>

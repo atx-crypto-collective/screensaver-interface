@@ -107,7 +107,15 @@ const ConnectView: React.VFC<ConnectIProps> = ({ setOpen }) => {
           {!!account && 
             <Link href={`/created/${account}`}>
             <a className="inline-flex mb-3 justify-center px-6 py-3 text-xl font-medium rounded-md text-white bg-green-600">
-            🎨 My collections ➡️
+            🎨 My Account ➡️
+            </a>
+          </Link>
+          }
+
+          {!!account && 
+            <Link href={`/editAccount`}>
+            <a className="inline-flex mb-3 justify-center px-6 py-3 text-xl font-medium rounded-md text-white bg-red-600">
+            Edit Account ➡️
             </a>
           </Link>
           }
