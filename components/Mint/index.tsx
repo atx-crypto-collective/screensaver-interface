@@ -138,8 +138,8 @@ export default function Mint() {
       const metadata = {
         name: title,
         creationDate: new Date(),
-        uri: `https://ipfs.io/ipfs/${mediaCid}`,
-        thumbnailUrl: `https://ipfs.io/ipfs/${coverCid}`,
+        animation_url: `https://ipfs.io/ipfs/${mediaCid}`,
+        image: `https://ipfs.io/ipfs/${coverCid}`,
         description: description,
         media: {
           mimeType: mediaInfo.type,
