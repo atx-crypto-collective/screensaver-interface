@@ -94,6 +94,7 @@ const NFTItemCard: React.FC<IProps> = ({ nft }) => {
       itemFromContract.mediaUri = metadata.data.image
     } else {
       itemFromContract.mediaUri = metadata.data.animation_url
+      itemFromContract.thumbnail = metadata.data.image
     }
 
     setSafeNFT(itemFromContract)

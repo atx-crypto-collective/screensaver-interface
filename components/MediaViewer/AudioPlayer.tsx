@@ -15,10 +15,10 @@ const AudioPlayer: React.VFC<IProps> = ({
 
   return (
     <div className={'relative w-full'}>
-      {/* <Waveform url={fileUrl} /> */}
+
       <img
         className={'object-fill w-full h-80'}
-        src={require('../../assets/soundwave.png')}
+        src={!!coverImageUrl ? coverImageUrl : require('../../assets/soundwave.png')}
         alt={'sound wave'}
 
       />

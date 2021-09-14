@@ -15,7 +15,8 @@ import { Switch } from '@headlessui/react'
 import classNames from 'classnames'
 
 var uri = 'https://us-central1-broccoli-df8cd.cloudfunctions.net/api/mint'
-const uriSelfPin = 'https://us-central1-broccoli-df8cd.cloudfunctions.net/api/mintSelfPin'
+const uriSelfPin =
+  'https://us-central1-broccoli-df8cd.cloudfunctions.net/api/mintSelfPin'
 
 export default function Mint() {
   const [error, setError] = useState(false)
@@ -123,17 +124,16 @@ export default function Mint() {
     setLoading(true)
 
     try {
-
       var parsedTags = parseTags(tags)
 
       const mediaInfo = await axios({
         url: `https://ipfs.io/ipfs/${mediaCid}`, //your url
         method: 'GET',
         responseType: 'blob', // important
-    }).then((response) => {
-      console.log("BLOB", response.data)
-        return {"size": response.data.size, "type": response.data.type}
-    });
+      }).then((response) => {
+        console.log('BLOB', response.data)
+        return { size: response.data.size, type: response.data.type }
+      })
 
       const metadata = {
         name: title,
@@ -146,11 +146,11 @@ export default function Mint() {
           size: mediaInfo.size,
         },
         tags: parsedTags,
-        creator: account
+        creator: account,
       }
 
-      console.log("METADATA", metadata)
-    
+      console.log('METADATA', metadata)
+
       const metadataUri = await axios.post(uriSelfPin, metadata)
 
       // get hash from returned URI
@@ -214,7 +214,7 @@ export default function Mint() {
 
         if (
           thumbnailMetadata.size > 5000000 ||
-          !thumbnailMedia.type.includes('image')
+          !thumbnailMedia.type.includes('image' || 'gif')
         ) {
           // console.log("HERE WE GO", thumbnailMetadata.size, thumbnailMedia, thumbnailMedia.type.includes('image'))
           return setError(true)
@@ -292,11 +292,9 @@ export default function Mint() {
                 within SSW and SSW takes a 5% marketplace fees on sales.
               </p>
             </div>
-            <label
-                    className="block text-xs font-bold text-white sm:mt-px sm:pt-2 mb-4"
-                  >
-                    Self Pin Mode
-                  </label>
+            <label className="block text-xs font-bold text-white sm:mt-px sm:pt-2 mb-4">
+              Self Pin Mode
+            </label>
             <Switch
               checked={selfPin}
               onChange={setSelfPin}
@@ -425,53 +423,59 @@ export default function Mint() {
                 </div>
               )}
 
-              {selfPin && <><div className={'text-white text-md font-regular mt-3'}>
-                {error && `File size too large! Keep in under 40MB please :).`}
-              </div>
-              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
-                <label
-                  htmlFor="username"
-                  className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
-                >
-                  Main Media CID
-                </label>
-                <div className="mt-1 sm:mt-0 sm:col-span-2">
-                  <div className="max-w-lg flex shadow-sm">
-                    <input
-                      type="text"
-                      name="title"
-                      id="title"
-                      value={mediaCid}
-                      onChange={(e) => setMediaCid(e.target.value)}
-                      className="flex-1 block w-full focus:ring-red-500 focus:border-red-500 min-w-0 sm:text-sm border-gray-700 bg-gray-900"
-                    />
+              {selfPin && (
+                <>
+                  <div className={'text-white text-md font-regular mt-3'}>
+                    {error &&
+                      `File size too large! Keep in under 40MB please :).`}
                   </div>
-                </div>
-              </div>
+                  <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
+                    <label
+                      htmlFor="username"
+                      className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
+                    >
+                      Main Media CID
+                    </label>
+                    <div className="mt-1 sm:mt-0 sm:col-span-2">
+                      <div className="max-w-lg flex shadow-sm">
+                        <input
+                          type="text"
+                          name="title"
+                          id="title"
+                          value={mediaCid}
+                          onChange={(e) => setMediaCid(e.target.value)}
+                          className="flex-1 block w-full focus:ring-red-500 focus:border-red-500 min-w-0 sm:text-sm border-gray-700 bg-gray-900"
+                        />
+                      </div>
+                    </div>
+                  </div>
 
-              <div className={'text-white text-md font-regular mt-3'}>
-                {error && `File size too large! Keep in under 40MB please :).`}
-              </div>
-              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
-                <label
-                  htmlFor="username"
-                  className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
-                >
-                  Cover Image CID (only necessary for video, audio, glb)
-                </label>
-                <div className="mt-1 sm:mt-0 sm:col-span-2">
-                  <div className="max-w-lg flex shadow-sm">
-                    <input
-                      type="text"
-                      name="title"
-                      id="title"
-                      value={coverCid}
-                      onChange={(e) => setCoverCid(e.target.value)}
-                      className="flex-1 block w-full focus:ring-red-500 focus:border-red-500 min-w-0 sm:text-sm border-gray-700 bg-gray-900"
-                    />
+                  <div className={'text-white text-md font-regular mt-3'}>
+                    {error &&
+                      `File size too large! Keep in under 40MB please :).`}
                   </div>
-                </div>
-              </div></>}
+                  <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
+                    <label
+                      htmlFor="username"
+                      className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
+                    >
+                      Cover Image CID (only necessary for video, audio, glb)
+                    </label>
+                    <div className="mt-1 sm:mt-0 sm:col-span-2">
+                      <div className="max-w-lg flex shadow-sm">
+                        <input
+                          type="text"
+                          name="title"
+                          id="title"
+                          value={coverCid}
+                          onChange={(e) => setCoverCid(e.target.value)}
+                          className="flex-1 block w-full focus:ring-red-500 focus:border-red-500 min-w-0 sm:text-sm border-gray-700 bg-gray-900"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
 
               <div className={'text-white text-md font-regular mt-3'}>
                 {error && `File size too large! Keep in under 40MB please :).`}

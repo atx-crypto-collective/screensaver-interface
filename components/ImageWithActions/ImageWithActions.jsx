@@ -23,9 +23,9 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
       {type === 'video' && (
         <VideoPlayer fileUrl={nft.animation_url} />
       )}
-      {type === 'audio' && (
-        <AudioPlayer fileUrl={nft.animation_url} />
-      )}
+    {type === 'audio' && (
+              <AudioPlayer fileUrl={nft.animation_url} coverImageUrl={nft?.thumbnail}/>
+       )}
       {(type === 'model' || nft?.media?.mimeType === 'application/octet-stream') && (
 
         <div className={'h-96'}>

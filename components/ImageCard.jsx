@@ -33,7 +33,7 @@ const ImageCard = ({ srcUrl, nft, footer, children }) => {
               <VideoPlayer fileUrl={srcUrl} controls={false} />
             )}
             {type === 'audio' && (
-              <AudioPlayer fileUrl={srcUrl} />
+              <AudioPlayer fileUrl={srcUrl} coverImageUrl={nft?.thumbnail}/>
             )}
 
             {(type === 'model' || type === '' || nft?.mimeType === 'application/octet-stream') && (
