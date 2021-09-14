@@ -8,6 +8,8 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
   const [type, setType] = useState('')
 
   useEffect(() => {
+    console.log('NFT IMAGE', nft)
+
     if (!nft?.media?.mimeType) return
     const typeArray = nft?.media?.mimeType.split('/')
     setType(typeArray[0])
@@ -15,17 +17,17 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
 
   return (
     <div className={'min-h-96'}>
-      { type === '' && <div>Loading...</div>}
+      {type === '' && <div>Loading...</div>}
       {/* { type && <iframe className={'w-full h-96 '} src={nft.animation_url}></iframe>} */}
-      { type === 'image' && (
-        <img src={nft.mediaUrl} className={'w-full'} />
+      {type === 'image' && (
+        <img src={nft.mediaUri} className={'w-full'} />
       )}
       {type === 'video' && (
-        <VideoPlayer fileUrl={nft.mediaUrl} />
+        <VideoPlayer fileUrl={nft.mediaUri} />
       )}
-    {type === 'audio' && (
-              <AudioPlayer fileUrl={nft.mediaUrl} coverImageUrl={nft?.thumbnail}/>
-       )}
+      {type === 'audio' && (
+        <AudioPlayer fileUrl={nft.mediaUri} coverImageUrl={nft?.thumbnail} />
+      )}
       {(type === 'model' || nft?.media?.mimeType === 'application/octet-stream') && (
 
         <div className={'h-96'}>
@@ -35,7 +37,7 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
             style={{ width: '100%', height: '100%' }}
             id={nft?.tokenId}
             alt={nft?.name + nft?.tokenId}
-            src={nft?.mediaUrl}
+            src={nft?.mediaUri}
             auto-rotate
             camera-controls
             ar
