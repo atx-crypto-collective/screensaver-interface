@@ -20,6 +20,7 @@ const uriSelfPin =
 
 export default function Mint() {
   const [error, setError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(false)
   const [loading, setLoading] = useState(false)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -45,8 +46,6 @@ export default function Mint() {
       getNetworkLibrary(),
     )
     var whitelistStatus = await contract.isWhitelisted(account)
-
-    console.log('WHITELIST', whitelistStatus)
     setIsWhitelisted(whitelistStatus)
     setWhitelistedLoading(false)
   }
@@ -213,10 +212,10 @@ export default function Mint() {
         const thumbnailMetadata = await thumbnailFileRef.getMetadata()
 
         if (
-          thumbnailMetadata.size > 10000000 ||
+          thumbnailMetadata.size > 30000000 ||
           !thumbnailMedia.type.includes('image' || 'gif')
         ) {
-          // console.log("HERE WE GO", thumbnailMetadata.size, thumbnailMedia, thumbnailMedia.type.includes('image'))
+          // setErrorMessage('Please use cover image under 10 MB')
           return setError(true)
         }
       }
