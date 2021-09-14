@@ -214,7 +214,7 @@ export default function Mint() {
 
         if (
           thumbnailMetadata.size > 10000000 ||
-          !thumbnailMedia.type.includes('image')
+          !thumbnailMedia.type.includes('image' || 'gif')
         ) {
           // console.log("HERE WE GO", thumbnailMetadata.size, thumbnailMedia, thumbnailMedia.type.includes('image'))
           return setError(true)
