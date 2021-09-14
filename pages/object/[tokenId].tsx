@@ -6,7 +6,7 @@ import axios from 'axios'
 import { ethers } from 'ethers'
 import { GALLERY_ABI } from '../../constants/gallery'
 import { getNetworkLibrary } from '../../connectors'
-// import NFT from '../../types'
+import NFT from '../../types'
 import BiddingDetailView from './BiddingDetailView'
 import BidHistory from './BidHistory'
 import Head from 'next/head'
@@ -14,26 +14,6 @@ import Error from '../../components/Error'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import { db, auth } from '../../config/firebase'
-
-type NFT = {
-  name: string
-  description: string
-  creator: string
-  creationDate: Date
-  image: string
-  animation_url: string
-  thumbnail: string
-  metadataUri: string
-  mediaUri: string
-  mimeType: string
-  size: string
-  media: {
-    mimeType: string
-    size: string
-  },
-  tags: string[]
-  tokenId: number
-}
 
 const ReportItem = ({ report }) => {
   return (
@@ -115,21 +95,53 @@ const ItemDetailPage: React.VFC = () => {
     checkOwnerOf()
   }, [account])
 
-  async function getMetadata() {
-    var meta = await axios.get(uri)
-    var tempMetadata = meta.data
-    tempMetadata.metadataUri = uri
-    tempMetadata.creationDate = new Date(meta.data.creationDate).toString()
+  async function getMetadataFromUri(uri) {
 
-    if (!meta.data.animation_url) {
-      tempMetadata.mediaUri = meta.data.image
+    if (uri.includes(undefined)) return null
+    var metadata = await axios.get(uri)
+    var itemFromContract: NFT = {
+      name: "",
+      description: "",
+      broken: true,
+      creator: {
+        id: ""
+      },
+      creationDate: new Date(),
+      image: "",
+      animation_url: "",
+      metadataUri: "",
+      mediaUri: "",
+      thumbnail: "",
+      mimeType: "",
+      size: "",
+      media: {
+        mimeType: "",
+        size: ""
+      },
+      tags: [],
+      tokenId: 0,
+      id: 0
+  
+  };
+
+    console.log("METADATA.data", metadata.data)
+    itemFromContract.name = metadata.data.name
+    itemFromContract.creator.id
+    itemFromContract.mimeType = metadata.data.media.mimeType
+    itemFromContract.tokenId = metadata.data.id
+    itemFromContract.creator.id = metadata.data.creator
+
+    if (!metadata.data.animation_url) {
+      itemFromContract.mediaUri = metadata.data.image
+      itemFromContract.mediaUri.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')
     } else {
-      tempMetadata.mediaUri = meta.data.animation_url
-      tempMetadata.thumbnail = meta.data.image
+      itemFromContract.mediaUri = metadata.data.animation_url
+      itemFromContract.thumbnail = metadata.data.image
+      itemFromContract.mediaUri.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')
+      itemFromContract.thumbnail.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')
     }
 
-    setMetadata(tempMetadata)
-    console.log("METADATA", tempMetadata)
+    setMetadata(itemFromContract)
   }
 
   async function getUri() {
@@ -151,11 +163,11 @@ const ItemDetailPage: React.VFC = () => {
   useEffect(() => {
     if (!uri) return
     console.log('URI', uri)
-    getMetadata()
+    getMetadataFromUri(uri)
   }, [uri])
 
   useEffect(() => {
-    console.log("METADATA", metadata)
+    console.log("METADATA RETURNED", metadata)
     if (!metadata) return
     setLoading(false)
   }, [metadata])

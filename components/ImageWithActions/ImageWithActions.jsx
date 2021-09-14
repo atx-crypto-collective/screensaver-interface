@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import ActionButton from './ActionButton'
-import NFT from '../../types'
 import VideoPlayer from '../MediaViewer/VideoPlayer'
 import AudioPlayer from '../MediaViewer/AudioPlayer'
 
-const ImageWithActions = ({ src, nft, alt, actions }) => {
+const ImageWithActions = ({nft}) => {
   const [type, setType] = useState('')
 
   useEffect(() => {
     console.log('NFT IMAGE', nft)
 
-    if (!nft?.media?.mimeType) return
-    const typeArray = nft?.media?.mimeType.split('/')
+    if (!nft?.mimeType) return
+    const typeArray = nft?.mimeType.split('/')
     setType(typeArray[0])
   }, [nft])
 
