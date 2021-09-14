@@ -18,13 +18,13 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
       { type === '' && <div>Loading...</div>}
       {/* { type && <iframe className={'w-full h-96 '} src={nft.animation_url}></iframe>} */}
       { type === 'image' && (
-        <img src={nft.image} className={'w-full'} />
+        <img src={nft.mediaUrl} className={'w-full'} />
       )}
       {type === 'video' && (
-        <VideoPlayer fileUrl={nft.animation_url} />
+        <VideoPlayer fileUrl={nft.mediaUrl} />
       )}
     {type === 'audio' && (
-              <AudioPlayer fileUrl={nft.animation_url} coverImageUrl={nft?.thumbnail}/>
+              <AudioPlayer fileUrl={nft.mediaUrl} coverImageUrl={nft?.thumbnail}/>
        )}
       {(type === 'model' || nft?.media?.mimeType === 'application/octet-stream') && (
 
@@ -35,7 +35,7 @@ const ImageWithActions = ({ src, nft, alt, actions }) => {
             style={{ width: '100%', height: '100%' }}
             id={nft?.tokenId}
             alt={nft?.name + nft?.tokenId}
-            src={nft?.animation_url}
+            src={nft?.mediaUrl}
             auto-rotate
             camera-controls
             ar

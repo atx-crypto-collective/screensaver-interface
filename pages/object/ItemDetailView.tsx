@@ -41,7 +41,7 @@ const ItemDetailView: React.VFC<IProps> = ({ metadata, hash }) => {
       <div className={'flex flex-col space-y-8'}>
         <div className={'py-10'}>
           <ImageWithActions
-            src={metadata.image}
+            src={metadata.mediaUri}
             alt={metadata.name}
             nft={metadata}
             actions={[]}

@@ -22,6 +22,7 @@ type NFT = {
   creationDate: Date
   image: string
   animation_url: string
+  thumbnail: string
   metadataUri: string
   mediaUri: string
   mimeType: string
@@ -119,6 +120,14 @@ const ItemDetailPage: React.VFC = () => {
     var tempMetadata = meta.data
     tempMetadata.metadataUri = uri
     tempMetadata.creationDate = new Date(meta.data.creationDate).toString()
+
+    if (!meta.data.animation_url) {
+      tempMetadata.mediaUri = meta.data.image
+    } else {
+      tempMetadata.mediaUri = meta.data.animation_url
+      tempMetadata.thumbnail = meta.data.image
+    }
+
     setMetadata(tempMetadata)
     console.log("METADATA", tempMetadata)
   }
