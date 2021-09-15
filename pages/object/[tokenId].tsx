@@ -131,15 +131,16 @@ const ItemDetailPage: React.VFC = () => {
     itemFromContract.mimeType = metadata.data.media.mimeType
     itemFromContract.tokenId = metadata.data.id
     itemFromContract.creator.id = metadata.data.creator
+    itemFromContract.image = metadata.data.image
+    itemFromContract.thumbnail = metadata.data.image
+    itemFromContract.thumbnail.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')
 
     if (!metadata.data.animation_url) {
       itemFromContract.mediaUri = metadata.data.image
       itemFromContract.mediaUri.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')
     } else {
       itemFromContract.mediaUri = metadata.data.animation_url
-      itemFromContract.thumbnail = metadata.data.image
       itemFromContract.mediaUri.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')
-      itemFromContract.thumbnail.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')
     }
 
     setMetadata(itemFromContract)
@@ -207,7 +208,7 @@ const ItemDetailPage: React.VFC = () => {
           <meta name="title" content={metadata.name} />
           <meta name="description" content={metadata.description} />
           <meta property="og:title" content={metadata.name} />
-          <meta property="og:image" content={!!metadata.image && metadata.image}/>
+          <meta property="og:image" content={!!metadata.thumbnail && metadata.thumbnail}/>
           <meta property="og:description" content={metadata.description} />
           <meta
             property="og:url"
