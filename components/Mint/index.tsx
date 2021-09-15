@@ -7,9 +7,7 @@ import Modal from '../../components/Modal'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { parseTags } from '../../utils'
-import { ethers } from 'ethers'
-import { GALLERY_ABI } from '../../constants/gallery'
-import { getNetworkLibrary } from '../../connectors'
+import {useGalleryContract} from '../../hooks/useContract'
 import { Layout } from '../../components'
 import { Switch } from '@headlessui/react'
 import classNames from 'classnames'
@@ -20,7 +18,6 @@ const uriSelfPin =
 
 export default function Mint() {
   const [error, setError] = useState(false)
-  const [errorMessage, setErrorMessage] = useState(false)
   const [loading, setLoading] = useState(false)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -36,6 +33,7 @@ export default function Mint() {
   const [selfPin, setSelfPin] = useState(false)
   const [mediaCid, setMediaCid] = useState('')
   const [coverCid, setCoverCid] = useState('')
+  const galleryContract = useGalleryContract();
 
   // ownerOf
   async function checkIsWhitelisted() {
@@ -46,6 +44,8 @@ export default function Mint() {
       getNetworkLibrary(),
     )
     var whitelistStatus = await contract.isWhitelisted(account)
+
+    console.log('WHITELIST', whitelistStatus)
     setIsWhitelisted(whitelistStatus)
     setWhitelistedLoading(false)
   }
@@ -212,10 +212,10 @@ export default function Mint() {
         const thumbnailMetadata = await thumbnailFileRef.getMetadata()
 
         if (
-          thumbnailMetadata.size > 30000000 ||
+          thumbnailMetadata.size > 15000000 ||
           !thumbnailMedia.type.includes('image' || 'gif')
         ) {
-          // setErrorMessage('Please use cover image under 10 MB')
+          // console.log("HERE WE GO", thumbnailMetadata.size, thumbnailMedia, thumbnailMedia.type.includes('image'))
           return setError(true)
         }
       }
