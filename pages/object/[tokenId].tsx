@@ -132,8 +132,11 @@ const ItemDetailPage: React.VFC = () => {
     itemFromContract.tokenId = metadata.data.id
     itemFromContract.creator.id = metadata.data.creator
     itemFromContract.image = metadata.data.image
-    itemFromContract.thumbnail = metadata.data.image
-    itemFromContract.thumbnail.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')
+    
+    if (!metadata.data.image) {
+      itemFromContract.thumbnail = metadata.data.image
+      itemFromContract.thumbnail.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')  
+    }
 
     if (!metadata.data.animation_url) {
       itemFromContract.mediaUri = metadata.data.image
