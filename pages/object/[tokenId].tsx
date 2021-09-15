@@ -124,7 +124,6 @@ const ItemDetailPage: React.VFC = () => {
   
   };
 
-    console.log("METADATA.data", metadata.data)
     itemFromContract.name = metadata.data.name
     itemFromContract.description = metadata.data.description
     itemFromContract.creator.id
@@ -132,7 +131,7 @@ const ItemDetailPage: React.VFC = () => {
     itemFromContract.tokenId = metadata.data.id
     itemFromContract.creator.id = metadata.data.creator
     itemFromContract.image = metadata.data.image
-    
+
     if (!metadata.data.image) {
       itemFromContract.thumbnail = metadata.data.image
       itemFromContract.thumbnail.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')  
@@ -211,7 +210,7 @@ const ItemDetailPage: React.VFC = () => {
           <meta name="title" content={metadata.name} />
           <meta name="description" content={metadata.description} />
           <meta property="og:title" content={metadata.name} />
-          <meta property="og:image" content={!!metadata.thumbnail && metadata.thumbnail}/>
+          <meta property="og:image" content={!!metadata.image && metadata.image}/>
           <meta property="og:description" content={metadata.description} />
           <meta
             property="og:url"
