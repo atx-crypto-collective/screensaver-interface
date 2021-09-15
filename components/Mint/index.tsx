@@ -11,6 +11,9 @@ import {useGalleryContract} from '../../hooks/useContract'
 import { Layout } from '../../components'
 import { Switch } from '@headlessui/react'
 import classNames from 'classnames'
+import { GALLERY_ABI } from '../../constants/gallery'
+import { getNetworkLibrary } from '../../connectors'
+import { ethers } from 'ethers'
 
 var uri = 'https://us-central1-broccoli-df8cd.cloudfunctions.net/api/mint'
 const uriSelfPin =
@@ -33,7 +36,6 @@ export default function Mint() {
   const [selfPin, setSelfPin] = useState(false)
   const [mediaCid, setMediaCid] = useState('')
   const [coverCid, setCoverCid] = useState('')
-  const galleryContract = useGalleryContract();
 
   // ownerOf
   async function checkIsWhitelisted() {
