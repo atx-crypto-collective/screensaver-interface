@@ -80,7 +80,7 @@ const ItemDetailView: React.VFC<IProps> = ({ metadata, hash }) => {
             {moment(metadata.creationDate).format('MMMM Do YYYY, h:mm:ss a')}
           </div>
           <div className={'text-sm py-1 flex flex-col'}>
-            <div><strong>MimeType: </strong> {metadata.media.mimeType}</div>
+            <div><strong>MimeType: </strong> {metadata.mimeType}</div>
           </div>
         </div>
       </div>
