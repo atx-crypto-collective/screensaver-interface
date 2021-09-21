@@ -13,13 +13,13 @@ const UserPage: React.VFC<IProps> = ({ account }) => {
 
   // If the page is not yet generated, this will be displayed
   // initially until getStaticProps() finishes running
-  if (router.isFallback) {
-    return (
-      <Layout>
-        <div>Loading...</div>
-      </Layout>
-    )
-  }
+  // if (router.isFallback) {
+  //   return (
+  //     <Layout>
+  //       <div>Loading...</div>
+  //     </Layout>
+  //   )
+  // }
 
   return (
     <Layout>
@@ -35,8 +35,8 @@ const UserPage: React.VFC<IProps> = ({ account }) => {
 
 export async function getStaticPaths() {
   return {
-    paths: [], //indicates that no page needs be created at build time
-    fallback: 'blocking', //indicates the type of fallback
+    paths: [] //indicates that no page needs be created at build time
+    // fallback: 'blocking', //indicates the type of fallback
   }
 }
 // This function gets called at build time on server-side.
