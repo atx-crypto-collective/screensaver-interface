@@ -39,4 +39,12 @@ export type Bid = {
   accepted: boolean
 }
 
+export type Profile = {
+  username?: string
+  profileImage?: string
+  bannerImage?: string
+  description?: string 
+  timestamp?: Date
+}
+
 export default NFT

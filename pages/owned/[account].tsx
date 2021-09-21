@@ -11,10 +11,10 @@ const CollectionPage: React.VFC = () => {
   return (
     <Layout>
       <Head>
-        <title>Screensaver.world | Owned by {account.toString()}</title>
+        <title>Screensaver.world | Created by {account.toString()}</title>
       </Head>
       <div className={'md:mt-12 pb-8 w-11/12 mx-auto'}>
-        <AccountView state={'owned'} />
+        <AccountView state={'created'} account={account.toString()}/>
       </div>
     </Layout>
   )

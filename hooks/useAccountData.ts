@@ -2,34 +2,26 @@ import { useState, useEffect } from 'react';
 import { utils } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { db } from '../config/firebase'
-
+import { Profile } from '../types'
 interface IProps {
     account: string
 }
 
-type AccountData = {
-    username?: string
-    profileImage?: string
-    bannerImage?: string
-    description?: string 
-    timestamp?: Date
-}
+function useAccountData({account}: IProps): [boolean, Profile | undefined] {
 
-function useAccountData({account}: IProps): [boolean, AccountData | undefined] {
-
-    const [accountData, setAccountData] = useState<AccountData | undefined>();
+    const [accountData, setAccountData] = useState<Profile | undefined>();
     const [loading, setLoading] = useState<boolean>(true);
 
     // check reports for
     useEffect(() => {
         if (!account) return;
         const unsubscribe = db
-          .collection('accounts')
+          .collection('profiles')
           .doc(account)
           .onSnapshot((doc) => {
             if (!doc.exists) return setLoading(false);
 
-            let accountData: AccountData = {
+            let accountData: Profile = {
                 username: '',
                 profileImage: '',
                 bannerImage: '',

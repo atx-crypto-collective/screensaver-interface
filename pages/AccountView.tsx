@@ -12,9 +12,12 @@ import { GALLERY_ABI } from '../constants/gallery'
 import { getNetworkLibrary } from '../connectors'
 import { ethers } from 'ethers'
 import useAccountData from '../hooks/useAccountData'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
+import { Profile } from '../types'
 
 interface IProps {
   state: string
+  account: string
 }
 
 const CREATOR_QUERY = gql`
@@ -188,20 +191,22 @@ const FOR_SALE_QUERY = gql`
   }
 `
 
-const AccountView: React.VFC<IProps> = ({ state }) => {
+const AccountView: React.VFC<IProps> = ({ state, account }) => {
   const [nfts, setNfts] = useState<NFT[]>([])
   const [skip, setSkip] = useState<number>(0)
-  const [totalSupply, setTotalSupply] = useState<number | undefined >()
-  const [balanceOf, setBalanceOf] = useState<number >(0)
-  const router = useRouter()
-  const { account } = router.query
-  const [accountLoading, accountData] = useAccountData({account: account.toString()});
-  const [description, setDescription] = useState<string | undefined>(undefined);
+  const [totalSupply, setTotalSupply] = useState<number | undefined>()
+  const [balanceOf, setBalanceOf] = useState<number>(0)
+  const [copied, setCopied] = useState(false)
+  const [profileLoading, storedProfile] = useAccountData({ account })
+  const [userProfile, setUserProfile] = useState<Profile | undefined>()
 
   useEffect(() => {
-      if (!accountData) return;
-      setDescription(accountData.description);
-  }, [accountData])
+    if (!storedProfile) return
+    setUserProfile({
+      username: storedProfile.username,
+      description: storedProfile.description,
+    })
+  }, [storedProfile])
 
   const getQuery = (state) => {
     switch (state) {
@@ -251,21 +256,24 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
 
     var supply = await contract.totalSupply()
     setTotalSupply(supply.toNumber())
-
   }
 
   // bids row
-  // accepted 
+  // accepted
   // out bid
-  // canceled 
+  // canceled
 
   const getNfts = async (data) => {
-
     setSkip(nfts.length + data.artworks.length)
     if (state === 'bids') {
       let bidData = data
       let filteredBidData = bidData.artworks.filter(
-        (nft) => nft?.forSale === true && nft?.currentBid?.canceled !== true && nft?.currentBid?.accepted !== true && account?.toString()?.toLowerCase() === nft?.currentBid?.bidder?.id?.toLowerCase()
+        (nft) =>
+          nft?.forSale === true &&
+          nft?.currentBid?.canceled !== true &&
+          nft?.currentBid?.accepted !== true &&
+          account?.toString()?.toLowerCase() ===
+            nft?.currentBid?.bidder?.id?.toLowerCase(),
       )
       setNfts([...nfts, ...filteredBidData])
     } else {
@@ -311,6 +319,11 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
     }
   }, [onLoadMore])
 
+  useEffect(() => {
+    if (!copied) return;
+    setTimeout(() => setCopied(false), 3000);
+  }, [copied])
+
   if (error) {
     return (
       <Layout>
@@ -335,11 +348,22 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
           src={makeBlockie(account.toString())}
         />
       </div>
-      <div className={'text-2xl'}>
+      <div className={'text-2xl flex items-center'}>
         <AccountId address={account.toString()} link={'twitter'} />
+              <CopyToClipboard
+        text={`screensaver.world/user/${userProfile?.username}`}
+        onCopy={() => setCopied(true)}
+      >
+        <button className="ml-4 text-sm rounded-full justify-center inline-flex items-center px-6 h-8 w-20 text-black font-medium bg-red-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+          {copied ? "Copied" : "Share"}
+        </button>
+      </CopyToClipboard>
       </div>
 
-      {!!description && <div className={'text-md'} >{description}</div>}
+
+      {!!userProfile?.description && (
+        <div className={'text-md'}>{userProfile?.description}</div>
+      )}
 
       <span className="flex justify-start border-gray-700 border-b text-md w-full">
         <Link href={`/created/${account}`}>
@@ -395,11 +419,17 @@ const AccountView: React.VFC<IProps> = ({ state }) => {
         </div>
       )}
 
-      {state === 'owned' && <h2 className={'text-md'}><strong>Total Owned:</strong> {balanceOf}</h2>}
+      {state === 'owned' && (
+        <h2 className={'text-md'}>
+          <strong>Total Owned:</strong> {balanceOf}
+        </h2>
+      )}
 
-      <div 
-        className={'grid gap-3 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 mx-2 sm:mx-auto'}
-        >
+      <div
+        className={
+          'grid gap-3 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 mx-2 sm:mx-auto'
+        }
+      >
         {nfts.map((item, key) => (
           <div key={key}>
             <NFTItemCard nft={item} tokenId={item?.tokenId} />
