@@ -41,7 +41,7 @@ UserPage.getInitialProps = async ({
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
   return {
-      account: address.toLowerCase(),
+      account: address?.toLowerCase(),
     }
   
 };
