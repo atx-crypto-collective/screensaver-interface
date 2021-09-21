@@ -35,8 +35,8 @@ const UserPage: React.VFC<IProps> = ({ account }) => {
 
 export async function getStaticPaths() {
   return {
-    paths: [] //indicates that no page needs be created at build time
-    // fallback: 'blocking', //indicates the type of fallback
+    paths: [], //indicates that no page needs be created at build time
+    fallback: false //indicates the type of fallback
   }
 }
 // This function gets called at build time on server-side.
