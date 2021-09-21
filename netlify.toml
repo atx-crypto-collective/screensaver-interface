@@ -20,6 +20,11 @@
   status = 200
 
 [[redirects]]
+  from = "/user/:user"
+  to = "/user/[user].html?object=:user"
+  status = 200
+
+[[redirects]]
   from = "/forSale/:forSale"
   to = "/forSale/[account].html?object=:account"
   status = 200
