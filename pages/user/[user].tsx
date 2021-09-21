@@ -46,4 +46,4 @@ UserPage.getInitialProps = async ({
   
 };
 
-export default UserPage
+export default UserPage;
