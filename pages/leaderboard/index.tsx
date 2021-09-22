@@ -1,6 +1,6 @@
 import React from 'react'
 import { Layout } from '../../components'
-import LeaderboardView from '../LeaderboardView'
+import LeaderboardView from '../../components/LeaderboardView'
 
 const LeaderBoardPage: React.VFC = () => {
   
