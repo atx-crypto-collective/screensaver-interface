@@ -1,0 +1,271 @@
+import { Layout } from '../../components'
+import React, { useState, useEffect } from 'react'
+import { Web3Provider } from '@ethersproject/providers'
+import { useWeb3React } from '@web3-react/core'
+import { useRouter } from 'next/router'
+import useCollectionData from '../../hooks/useCollectionData'
+import { db } from '../../config/firebase'
+import { Collection } from '../../types'
+import { SSW_API_URL } from '../../constants'
+
+export default function Home() {
+  const { account, library } = useWeb3React<Web3Provider>()
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const [loadingTitleCheck, setLoadingTitleCheck] = useState(false)
+  const [collectionLoading, storedCollection] = useCollectionData({ account })
+  const [error, setError] = useState<null | string>(null)
+  const [ids, setIds] = useState<string>('')
+  const [userCollection, setUserCollection] = useState<Collection | undefined>()
+  const errorMessages = {
+    username: 'Title already in use.',
+    blankTitle: 'Title cannot be blank.',
+  }
+
+  useEffect(() => {
+    if (!storedCollection) return
+    setUserCollection({
+      title: storedCollection.title,
+      description: storedCollection.description,
+      ids: storedCollection.ids,
+    })
+  }, [storedCollection])
+
+  useEffect(() => {
+    var idsString = ids.replace(/\s/g, '')
+    var parsedIdsString = idsString.split(',')
+    var filteredIds = parsedIdsString.filter(id => !isNaN(parseInt(id)))
+    var parsedIds = filteredIds.map( id => parseInt(id))
+    setUserCollection({ ...userCollection, ids: parsedIds })
+  }, [ids])
+
+  useEffect(() => {
+    setError(null)
+
+    console.log('TITLE', loadingTitleCheck)
+    if (error === errorMessages.blankTitle) {
+      setError(null)
+    }
+
+    if (!userCollection?.title || userCollection?.title === '') return
+
+    var safeTitle = userCollection?.title.replace(/[^a-zA-Z ]/g, '')
+    setUserCollection({ ...userCollection, title: safeTitle.toLowerCase() })
+
+    setLoadingTitleCheck(true)
+
+    async function checkTitle(username: string) {
+      // Create a reference to the cities collection
+      const collectionsRef = db.collection('collections')
+
+      // Create a query against the collection
+      const titleMatches = await collectionsRef
+        .where('title', '==', userCollection?.title)
+        .get()
+
+      setLoadingTitleCheck(false)
+
+      console.log('MATCHES EXIST: ', titleMatches.docs.length > 0)
+
+      const matchesCurrentUsername = titleMatches.docs.filter(
+        (match) => match?.id === account,
+      )
+
+      if (matchesCurrentUsername.length > 0) return setError(null)
+
+      setError(titleMatches.docs.length > 0 ? errorMessages.username : null)
+    }
+
+    checkTitle(userCollection?.title)
+  }, [userCollection?.title, account])
+
+  const submit = () => {
+    console.log('HERE')
+    if (!userCollection?.title || userCollection?.title === '')
+      return setError(errorMessages.blankTitle)
+    signMessage()
+  }
+
+  const signMessage = async () => {
+    try {
+      setLoading(true)
+
+      let originalMessage = userCollection
+      originalMessage.timestamp = new Date()
+
+      //   {
+      //       title: '',
+      //       description: userCollection.description,
+      //       ids: userCollection.ids,
+      //       timestamp: new Date()
+      //   }
+
+      //   originalMessage.title = originalMessage.title.replace(/ /g, "_");
+
+      const signedMessage = await library
+        .getSigner()
+        .signMessage(JSON.stringify(originalMessage))
+
+      await fetch(`${SSW_API_URL}/collection`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          signedMessage,
+          originalMessage,
+          account,
+        }),
+      })
+
+      setLoading(false)
+      router.push(`/collection/${userCollection?.title}`)
+    } catch (err) {
+      console.log('ERROR GETTING SEED', err)
+      setLoading(false)
+    }
+  }
+
+  if (!account) {
+    return (
+      <Layout>
+        <div className={'flex w-full justify-center text-2xl font-bold mt-40'}>
+          Connect with Metamask to edit your account
+        </div>{' '}
+      </Layout>
+    )
+  }
+
+  return (
+    <Layout>
+      <div className={'w-11/12 max-w-2xl mx-auto py-6'}>
+        <form className="space-y-8 divide-y divide-gray-200">
+          <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+            <div>
+              <div>
+                <h3 className="mt-10 max-w-3xl text-3xl text-white font-bold">
+                  Edit Account
+                </h3>
+              </div>
+
+              <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
+                  <label
+                    htmlFor="username"
+                    className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
+                  >
+                    Title
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <div className="max-w-lg flex shadow-sm">
+                      <input
+                        type="text"
+                        name="title"
+                        id="title"
+                        value={!!userCollection ? userCollection?.title : ''}
+                        onChange={(e) =>
+                          setUserCollection({
+                            ...userCollection,
+                            title: e.target.value.toLowerCase(),
+                          })
+                        }
+                        className="flex-1 block w-full focus:ring-red-500 focus:border-red-500 min-w-0 sm:text-sm border-gray-700 bg-gray-900"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
+                  <label
+                    htmlFor="about"
+                    className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
+                  >
+                    Description
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <textarea
+                      id="about"
+                      name="about"
+                      rows={3}
+                      className="max-w-lg shadow-sm block w-full focus:ring-red-500 focus:border-red-500 sm:text-sm border-gray-700  bg-gray-900"
+                      defaultValue={''}
+                      value={
+                        !!userCollection ? userCollection?.description : ''
+                      }
+                      onChange={(e) =>
+                        setUserCollection({
+                          ...userCollection,
+                          description: e.target.value,
+                        })
+                      }
+                    />
+                    <p className="mt-2 text-sm text-gray-300">
+                      Links, bio, whatever you want...
+                    </p>
+                  </div>
+                </div>
+
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
+                  <label
+                    htmlFor="about"
+                    className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
+                  >
+                    Token Ids
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    <textarea
+                      id="about"
+                      name="about"
+                      rows={3}
+                      className="max-w-lg shadow-sm block w-full focus:ring-red-500 focus:border-red-500 sm:text-sm border-gray-700  bg-gray-900"
+                      defaultValue={''}
+                      value={ids}
+                      onChange={(e) => setIds(e.target.value)}
+                    />
+                    <p className="mt-2 text-sm text-gray-300">
+                      Enter token ids you want to feature separated by commas - i.e. 1, 2, 3, 4
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className={'text-red-50 text-md font-regular mt-3'}>
+                {error && error}
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <button
+          onClick={submit}
+          className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          disabled={!account || loadingTitleCheck || error !== null}
+        >
+          Save
+          {loading && (
+            <svg
+              className="animate-spin -mr-1 ml-3 h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+          )}
+        </button>
+      </div>
+    </Layout>
+  )
+}
