@@ -144,7 +144,7 @@ export default function Home() {
             <div>
               <div>
                 <h3 className="mt-10 max-w-3xl text-3xl text-white font-bold">
-                  Edit Account
+                  Manage Gallery
                 </h3>
               </div>
 
