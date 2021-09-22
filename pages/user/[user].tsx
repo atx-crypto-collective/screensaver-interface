@@ -10,7 +10,8 @@ interface IProps {
 }
 
 const UserPage: NextPage <IProps> = ({account}) => {
-  const router = useRouter()
+
+  console.log("ACCOUNT", account)
   
     return (
       <main>
