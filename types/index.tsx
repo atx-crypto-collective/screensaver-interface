@@ -47,4 +47,12 @@ export type Profile = {
   timestamp?: Date
 }
 
+export type Collection = {
+  title: string
+  ids: number[]
+  description?: string 
+  timestamp?: Date
+  address?: string
+}
+
 export default NFT
