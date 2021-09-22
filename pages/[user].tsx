@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Layout, Navbar } from '../../components'
+import { Layout, Navbar } from '../components'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import AccountView from '../../components/AccountView'
+import AccountView from '../components/AccountView'
 import { NextPage, NextPageContext } from 'next';
-import { SSW_API_URL } from '../../constants';
+import { SSW_API_URL } from '../constants';
 
 interface IProps {
   account: string;

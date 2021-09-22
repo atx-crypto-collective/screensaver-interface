@@ -31,8 +31,8 @@
   status = 200
 
 [[redirects]]
-  from = "/user/:user"
-  to = "/user/[user].html?object=:user"
+  from = "/:user"
+  to = "/[user].html?object=:user"
   status = 200
 
 [[redirects]]

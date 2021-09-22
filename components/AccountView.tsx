@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import NFTItemCard from '../components/NFTItemCard'
-import { Layout } from '../components'
+import NFTItemCard from './NFTItemCard'
+import { Layout } from '.'
 import { useRouter } from 'next/router'
 import NFT from '../types'
 import { gql, useQuery } from '@apollo/client'
 import Link from 'next/link'
-import AccountId from '../components/AccountId'
+import AccountId from './AccountId'
 import classNames from 'classnames'
 import makeBlockie from 'ethereum-blockies-base64'
 import { GALLERY_ABI } from '../constants/gallery'
@@ -352,7 +352,7 @@ const AccountView: React.VFC<IProps> = ({ state, account }) => {
       <div className={'text-2xl flex items-center'}>
         <AccountId address={account.toString()} link={'twitter'} />
         <CopyToClipboard
-          text={`screensaver.world/user/${userProfile?.username}`}
+          text={`screensaver.world/${userProfile?.username}`}
           onCopy={() => setCopied(true)}
         >
           <button className="ml-4 text-sm rounded-full justify-center inline-flex items-center px-6 h-8 w-20 text-black font-medium bg-red-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
