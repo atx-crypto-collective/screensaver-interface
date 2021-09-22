@@ -24,6 +24,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!storedCollection) return
+    console.log("HERE IT IS", storedCollection)
     setUserCollection({
       title: storedCollection.title,
       description: storedCollection.description,
@@ -144,7 +145,7 @@ export default function Home() {
             <div>
               <div>
                 <h3 className="mt-10 max-w-3xl text-3xl text-white font-bold">
-                  Manage Gallery
+                  Manage Collection
                 </h3>
               </div>
 

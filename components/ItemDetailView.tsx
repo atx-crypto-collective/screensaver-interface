@@ -1,32 +1,11 @@
 import React, {useState} from 'react'
-import { ImageWithActions } from '../../components'
-// import NFT from '../../types'
-import MintButton from '../../components/MintButton'
-import AccountId from '../../components/AccountId'
+import { ImageWithActions } from '.'
+import MintButton from './MintButton'
+import AccountId from './AccountId'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import NFT from '../../types';
-
-// type NFT = {
-//   name: string
-//   description: string
-//   creator: string
-//   creationDate: Date
-//   image: string
-//   animation_url: string
-//   metadataUri: string
-//   mediaUri: string
-//   thumbnail: string
-//   mimeType: string
-//   size: string
-//   media: {
-//     mimeType: string
-//     size: string
-//   },
-//   tags: string[]
-//   tokenId: number
-// }
+import NFT from '../types';
 
 interface IProps {
   metadata: NFT

@@ -29,12 +29,20 @@ function useCollectionData({account}: IProps): [boolean, Collection | undefined]
             };
             
             console.log("DOC", doc.data())
-            if (!!doc.data().username) {
+            if (!!doc.data().title) {
                 collectionData.title = doc.data().title
             }
             
             if (!!doc.data().description) {
                 collectionData.description = doc.data().description
+            }
+
+            if (!!doc.data().ids) {
+                collectionData.ids = doc.data().ids
+            }
+
+            if (!!doc.data().address) {
+                collectionData.address = doc.data().address
             }
 
             setCollectionData(collectionData);

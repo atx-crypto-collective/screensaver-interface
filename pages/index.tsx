@@ -1,6 +1,6 @@
 import React from 'react'
 import { Layout } from '../components'
-import GalleryView from './GalleryView'
+import GalleryView from '../components/GalleryView'
 
 const Home: React.VFC = () => {
   

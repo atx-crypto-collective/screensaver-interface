@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import NFTItemCard from '../components/NFTItemCard'
-import { Layout } from '../components'
+import NFTItemCard from './NFTItemCard'
+import { Layout } from '.'
 import NFT from '../types'
 import { gql, useQuery } from '@apollo/client'
 import classNames from 'classnames'
-import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 interface IProps {

@@ -1,5 +1,5 @@
 import { CheckCircleIcon } from '@heroicons/react/solid'
-import AccountId from '../../components/AccountId'
+import AccountId from './AccountId'
 import { gql, useQuery } from '@apollo/client'
 import { useState, useEffect } from 'react'
 import moment from 'moment'

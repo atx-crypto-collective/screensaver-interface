@@ -222,7 +222,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                         {/* Discord */}
                         <Menu.Item>
                           <a
-                            href="https://discord.gg/UJaz7Hrq"
+                            href="https://discord.gg/fAGHysxKux"
                             className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100"
                           >
                             Discord

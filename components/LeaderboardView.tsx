@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Layout } from '../components'
+import { Layout } from '.'
 import { Bid } from '../types'
 import { gql, useQuery } from '@apollo/client'
-import AccountId from '../components/AccountId'
+import AccountId from './AccountId'
 import Link from 'next/link'
 
 var utils = require('ethers').utils

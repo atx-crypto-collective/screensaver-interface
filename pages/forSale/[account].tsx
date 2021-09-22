@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Layout, Navbar } from '../../components'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import AccountView from '../AccountView'
+import AccountView from '../../components/AccountView'
 
 const CollectionPage: React.VFC = () => {
   const router = useRouter()
