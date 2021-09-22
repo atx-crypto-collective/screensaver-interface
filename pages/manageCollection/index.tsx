@@ -130,7 +130,7 @@ export default function Home() {
     return (
       <Layout>
         <div className={'flex w-full justify-center text-2xl font-bold mt-40'}>
-          Connect with Metamask to edit your account
+          Connect with Metamask to manage your collection
         </div>{' '}
       </Layout>
     )
