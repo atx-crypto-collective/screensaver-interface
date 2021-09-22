@@ -1,5 +1,5 @@
 import { Layout } from '../../components'
-import ExploreView from '../ExploreView'
+import ExploreView from '../../components/ExploreView'
 import React, { useEffect, useState } from 'react'
 import { auth, db } from '../../config/firebase'
 
