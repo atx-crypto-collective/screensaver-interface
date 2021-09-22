@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { utils } from 'ethers';
-import { useWeb3React } from '@web3-react/core';
 import { db } from '../config/firebase'
 import { Profile } from '../types'
 interface IProps {

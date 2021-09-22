@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import AccountView from '../AccountView'
 import { NextPage, NextPageContext } from 'next';
+import { SSW_API_URL } from '../../constants';
 
 interface IProps {
   account: string;
@@ -35,7 +36,7 @@ UserPage.getInitialProps = async ({
   console.log('user', user)
 
   const res = await fetch(
-    `https://us-central1-broccoli-df8cd.cloudfunctions.net/api/getAddressFromUsername?username=${user}`,
+    `${SSW_API_URL}/getAddressFromUsername?username=${user}`,
   )
   const { address } = await res.json()
   console.log('ADDRESS', address, user)

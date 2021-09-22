@@ -234,6 +234,7 @@ const AccountView: React.VFC<IProps> = ({ state, account }) => {
   useEffect(() => {
     getTotalSupply()
     getBalanceOf()
+    console.log("STATE", state)
   }, [])
 
   async function getBalanceOf() {
@@ -320,8 +321,8 @@ const AccountView: React.VFC<IProps> = ({ state, account }) => {
   }, [onLoadMore])
 
   useEffect(() => {
-    if (!copied) return;
-    setTimeout(() => setCopied(false), 3000);
+    if (!copied) return
+    setTimeout(() => setCopied(false), 3000)
   }, [copied])
 
   if (error) {
@@ -350,16 +351,15 @@ const AccountView: React.VFC<IProps> = ({ state, account }) => {
       </div>
       <div className={'text-2xl flex items-center'}>
         <AccountId address={account.toString()} link={'twitter'} />
-              <CopyToClipboard
-        text={`screensaver.world/user/${userProfile?.username}`}
-        onCopy={() => setCopied(true)}
-      >
-        <button className="ml-4 text-sm rounded-full justify-center inline-flex items-center px-6 h-8 w-20 text-black font-medium bg-red-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-          {copied ? "Copied" : "Share"}
-        </button>
-      </CopyToClipboard>
+        <CopyToClipboard
+          text={`screensaver.world/user/${userProfile?.username}`}
+          onCopy={() => setCopied(true)}
+        >
+          <button className="ml-4 text-sm rounded-full justify-center inline-flex items-center px-6 h-8 w-20 text-black font-medium bg-red-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+            {copied ? 'Copied' : 'Share'}
+          </button>
+        </CopyToClipboard>
       </div>
-
 
       {!!userProfile?.description && (
         <div className={'text-md'}>{userProfile?.description}</div>

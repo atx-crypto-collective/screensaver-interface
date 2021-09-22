@@ -3,25 +3,15 @@ import React, { useState, useEffect } from 'react'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import { useRouter } from 'next/router'
-import { ethers } from 'ethers'
-import { GALLERY_ABI } from '../../constants/gallery'
-import { getNetworkLibrary } from '../../connectors'
-import { shortenAddress } from '../../utils'
 import useAccountData from '../../hooks/useAccountData'
 import { db } from '../../config/firebase'
 import { Profile } from '../../types'
-var utils = require('ethers').utils
-
-// import { db } from '../../config/firebase'
+import { SSW_API_URL } from '../../constants'
 
 export default function Home() {
   const { account, library } = useWeb3React<Web3Provider>()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const url = 'https://us-central1-broccoli-df8cd.cloudfunctions.net/api'
-  // const [username, setUsername] = useState('')
-  // const [description, setDescription] = useState('')
-  // const [usernameTaken, setUsernameTaken] = useState(false)
   const [loadingUsernameCheck, setLoadingUsernameCheck] = useState(false)
   const [profileLoading, storedProfile] = useAccountData({ account })
   const [error, setError] = useState<null | string>(null)
@@ -95,7 +85,7 @@ export default function Home() {
 
       const signedMessage = await library.getSigner().signMessage(JSON.stringify(originalMessage))
 
-      await fetch(`${url}/profile`, {
+      await fetch(`${SSW_API_URL}/profile`, {
         method: 'POST',
         headers: {
           'content-type': 'application/json',

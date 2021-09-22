@@ -9,6 +9,8 @@ export const SECONDS_PER_BLOCK = 14
 
 export const DEFAULT_TOKEN_PRECISION = 18
 
+export const SSW_API_URL = 'https://us-central1-broccoli-df8cd.cloudfunctions.net/api'
+
 export const iconUrlByProviderId: { [key: string]: string } = {
   network: '/icons/providers/coinbase.svg',
   fortmatic: '/icons/providers/fortmatic.svg',
