@@ -48,6 +48,10 @@ export default function Home() {
 
     if (!userProfile?.username || userProfile?.username === '') return
 
+    var safeUsername = userProfile?.username.replace(/[^A-Z0-9]+/ig, "_");
+
+    setUserProfile({...userProfile, username: safeUsername.toLowerCase()})
+
     setLoadingUsernameCheck(true)
 
     async function checkUsername(username: string) {
