@@ -32,6 +32,7 @@
     "avatars": "^0.9.7",
     "axios": "^0.21.1",
     "axios-hooks": "^2.6.1",
+    "carbites": "^1.0.6",
     "classnames": "^2.2.6",
     "ethereum-blockies-base64": "^1.0.2",
     "ethers": "^5.1.2",
