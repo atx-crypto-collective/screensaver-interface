@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react'
-import { storage } from '../../config/firebase'
-import axios from 'axios'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import Modal from '../../components/Modal'
@@ -8,35 +6,34 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { parseTags } from '../../utils'
 import { Layout } from '../../components'
-import { Switch } from '@headlessui/react'
-import classNames from 'classnames'
+import NFT from '../../types'
 import { GALLERY_ABI } from '../../constants/gallery'
 import { getNetworkLibrary } from '../../connectors'
 import { ethers } from 'ethers'
-
-var uri = 'https://us-central1-broccoli-df8cd.cloudfunctions.net/api/mint'
-const uriSelfPin =
-  'https://us-central1-broccoli-df8cd.cloudfunctions.net/api/mintSelfPin'
+import { NFTStorage, File } from 'nft.storage'
 
 export default function Mint() {
-  const [error, setError] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [tags, setTags] = useState('')
-  const [media, setMedia] = useState<File>()
-  const [open, setOpen] = useState(false)
   const router = useRouter()
   const { chainId, account } = useWeb3React<Web3Provider>()
-  const [isWhitelisted, setIsWhitelisted] = useState(false)
-  const [includeThumbnail, setIncludeThumbnail] = useState(false)
-  const [whitelistedLoading, setWhitelistedLoading] = useState(true)
-  const [thumbnailMedia, setThumbnailMedia] = useState<File>()
-  const [selfPin, setSelfPin] = useState(false)
-  const [mediaCid, setMediaCid] = useState('')
-  const [coverCid, setCoverCid] = useState('')
+  const apiKey = process.env.NEXT_PUBLIC_STORAGE_KEY
+  const client = new NFTStorage({
+    token:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDBGNzQwNDI4YzgwNzQ3QjE2NDI0NjZkMmI0NUNmNGJiOGI1ZEJDNGMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYzMjMzNzA5NTQxNSwibmFtZSI6InNzdyJ9.DanXCcp72bcmd-McFZS5PmLzvqvA9FV3ZcbRSKrj0U8',
+  })
 
-  // ownerOf
+  const [isWhitelisted, setIsWhitelisted] = useState(false)
+  const [whitelistedLoading, setWhitelistedLoading] = useState(true)
+  const [open, setOpen] = useState(false)
+  const [error, setError] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [isImage, setIsImage] = useState(true)
+
+  const [metadata, setMetadata] = useState<NFT | undefined>()
+  const [tags, setTags] = useState('')
+  const [media, setMedia] = useState<File>()
+  const [thumbnailMedia, setThumbnailMedia] = useState<File>()
+
+  // Check if account is whitelisted for minting
   async function checkIsWhitelisted() {
     setWhitelistedLoading(true)
     const contract = new ethers.Contract(
@@ -55,193 +52,65 @@ export default function Mint() {
     checkIsWhitelisted()
   }, [])
 
-  // check if file size is too large
+  // parse tags string
   useEffect(() => {
-    if (
-      media?.type.includes('video') ||
-      media?.type.includes('audio') ||
-      media?.type.includes('model') ||
-      media?.type.includes('octet')
-    ) {
-      setIncludeThumbnail(true)
-    }
+    if (!tags) return
+    var parsedTags = parseTags(tags)
+    setMetadata({ ...metadata, tags: parsedTags })
+  }, [tags])
 
-    if (media?.size > 40000000) {
-      return setError(true)
-    }
+  // Check if media is image
+  useEffect(() => {
+    if (!media || media?.type.includes('image')) return
+    setIsImage(false)
   }, [media])
 
-  // on preview button submit
-  const submit = (evt) => {
+  // On preview button store media on IPFS
+  // route to preview page
+  const submit = async () => {
     setError(false)
-    evt.preventDefault()
     if (chainId !== 137) {
       setOpen(true)
     } else {
-      if (selfPin) {
-        selfPinUpload()
-      } else {
-        tempFileUpload()
-      }
+      const hash = await storeMediaOnIPFS()
+      console.log('HASH', hash)
+      router.push(`/object/0?preview=${hash}`)
     }
   }
 
-  // post metadata to server then to ipfs
-  async function postMetadata(
-    imageUrl: string,
-    thumbnailUrl: string,
-    mimeType: string,
-  ) {
-    var parsedTags = parseTags(tags)
-    var creationDate = new Date()
-    const metadata = {
-      name: title,
-      creationDate: new Date(),
-      uri: imageUrl,
-      thumbnailUrl: thumbnailUrl,
-      description: description,
-      media: {
-        mimeType: mimeType,
-        size: media.size,
-      },
-      tags: parsedTags,
-      creator: account,
-    }
-
-    console.log('META', metadata)
-
-    try {
-      const metadataUri = await axios.post(uri, metadata)
-
-      return metadataUri.data.uri
-    } catch (error) {
-      console.log('ERROR', error)
-      throw new Error('error posting to ipfs')
-    }
-  }
-
-  async function selfPinUpload() {
+  // Store files on IPFS
+  // return IPFS hash
+  async function storeMediaOnIPFS() {
     setLoading(true)
-
     try {
-      var parsedTags = parseTags(tags)
-
-      const mediaInfo = await axios({
-        url: `https://ipfs.io/ipfs/${mediaCid}`, //your url
-        method: 'GET',
-        responseType: 'blob', // important
-      }).then((response) => {
-        console.log('BLOB', response.data)
-        return { size: response.data.size, type: response.data.type }
+      // store files on IPFS
+      const storedMetadata = await client.store({
+        name: metadata?.name,
+        creationDate: new Date(),
+        image: isImage ? media : thumbnailMedia,
+        animation_url: isImage ? undefined : media,
+        description: metadata?.description,
+        media: {
+          mimeType: media?.type,
+          size: media?.size,
+        },
+        mimeType: media?.type,
+        size: media?.size,
+        tags: metadata?.tags,
+        creator: account,
       })
 
-      const metadata = {
-        name: title,
-        creationDate: new Date(),
-        animation_url: `https://ipfs.io/ipfs/${mediaCid}`,
-        image: `https://ipfs.io/ipfs/${coverCid}`,
-        description: description,
-        media: {
-          mimeType: mediaInfo.type,
-          size: mediaInfo.size,
-        },
-        tags: parsedTags,
-        creator: account,
-      }
+      console.log('METADATA CID', storedMetadata?.url)
+      setLoading(false)
 
-      console.log('METADATA', metadata)
-
-      const metadataUri = await axios.post(uriSelfPin, metadata)
-
-      // get hash from returned URI
-      const hash = metadataUri.data.uri.split('/')
-
-      // push to item page in preview mode with IPFS hash
-      router.push(`/object/1?preview=${hash[hash.length - 1]}`)
-
-      // return { mediaUrl: downloadUrl, mimeType: metadata.contentType }
+      // return IPFS hash
+      return storedMetadata.url.replace('ipfs://', '')
     } catch (error) {
       console.log('ERROR', error)
     }
-
-    setLoading(false)
   }
 
-  async function tempFileUpload() {
-    setLoading(true)
-
-    try {
-      // Create a root reference
-      var storageRef = storage().ref()
-      var name = media.name
-
-      // Create a reference to 'mountains.jpg'
-      var fileRef = storageRef.child(name.split(' ').join('_'))
-
-      // upload file to temp storage
-      await fileRef.put(media)
-
-      // get download url
-      var downloadUrl = await fileRef.getDownloadURL()
-
-      // get metadata of file to get file type
-      const metadata = await fileRef.getMetadata()
-
-      if (metadata.size > 40000000) {
-        return setError(true)
-      }
-
-      let thumbnailDownloadUrl
-
-      if (includeThumbnail) {
-        // Create a root reference
-        var thumbnailStorageRef = storage().ref()
-        var thumbnailName = thumbnailMedia.name
-
-        // Create a reference to 'mountains.jpg'
-        var thumbnailFileRef = thumbnailStorageRef.child(
-          thumbnailName.split(' ').join('_'),
-        )
-
-        // upload file to temp storage
-        await thumbnailFileRef.put(thumbnailMedia)
-
-        // get download url
-        thumbnailDownloadUrl = await thumbnailFileRef.getDownloadURL()
-
-        // get metadata of file to get file type
-        const thumbnailMetadata = await thumbnailFileRef.getMetadata()
-
-        if (
-          thumbnailMetadata.size > 15000000 ||
-          !thumbnailMedia.type.includes('image' || 'gif')
-        ) {
-          // console.log("HERE WE GO", thumbnailMetadata.size, thumbnailMedia, thumbnailMedia.type.includes('image'))
-          return setError(true)
-        }
-      }
-
-      // post metadata to server which will post to IPFS
-      const uri = await postMetadata(
-        downloadUrl,
-        thumbnailDownloadUrl,
-        metadata.contentType,
-      )
-
-      // get hash from returned URI
-      const hash = uri.split('/')
-
-      // push to item page in preview mode with IPFS hash
-      router.push(`/object/1?preview=${hash[hash.length - 1]}`)
-
-      // return { mediaUrl: downloadUrl, mimeType: metadata.contentType }
-    } catch (error) {
-      console.log('ERROR', error)
-    }
-
-    setLoading(false)
-  }
-
+  // Check if account is connected
   if (!account) {
     return (
       <Layout>
@@ -252,6 +121,7 @@ export default function Mint() {
     )
   }
 
+  // Load whitelist status
   if (whitelistedLoading) {
     return (
       <Layout>
@@ -260,6 +130,7 @@ export default function Mint() {
     )
   }
 
+  // Check if is whitelisted
   if (!isWhitelisted) {
     return (
       <Layout>
@@ -268,7 +139,7 @@ export default function Mint() {
           review and accept our Terms of Service. :)
         </div>
         <Link href="/whitelist">
-          <button className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+          <button className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 text-red-300 font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
             Get Whitelisted
           </button>
         </Link>
@@ -279,8 +150,7 @@ export default function Mint() {
   return (
     <div>
       <Modal status={'switch-network'} open={open} setOpen={setOpen} />
-
-      <form className="space-y-8 divide-y divide-gray-200" onSubmit={submit}>
+      <form className="space-y-8 divide-y divide-gray-200">
         <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
           <div>
             <div>
@@ -292,83 +162,60 @@ export default function Mint() {
                 within SSW and SSW takes a 5% marketplace fees on sales.
               </p>
             </div>
-            <label className="block text-xs font-bold text-white sm:mt-px sm:pt-2 mb-4">
-              Self Pin Mode
-            </label>
-            <Switch
-              checked={selfPin}
-              onChange={setSelfPin}
-              className={classNames(
-                !selfPin ? 'bg-gray-200' : 'bg-indigo-600',
-                'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500',
-              )}
-            >
-              <span className="sr-only">Use setting</span>
-              <span
-                aria-hidden="true"
-                className={classNames(
-                  !selfPin ? 'translate-x-0' : 'translate-x-5',
-                  'pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200',
-                )}
-              />
-            </Switch>
 
             <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
-              {!selfPin && (
-                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
-                  <label
-                    htmlFor="cover_photo"
-                    className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
-                  >
-                    Upload
-                  </label>
-                  <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-700 border-dashed">
-                      {media ? (
-                        <div>{media.name} ready!</div>
-                      ) : (
-                        <div className="space-y-1 text-center">
-                          <svg
-                            className="mx-auto h-12 w-12 text-gray-400"
-                            stroke="currentColor"
-                            fill="none"
-                            viewBox="0 0 48 48"
-                            aria-hidden="true"
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
+                <label
+                  htmlFor="cover_photo"
+                  className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
+                >
+                  Upload
+                </label>
+                <div className="mt-1 sm:mt-0 sm:col-span-2">
+                  <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-700 border-dashed">
+                    {media ? (
+                      <div>{media.name} ready!</div>
+                    ) : (
+                      <div className="space-y-1 text-center">
+                        <svg
+                          className="mx-auto h-12 w-12 text-gray-400"
+                          stroke="currentColor"
+                          fill="none"
+                          viewBox="0 0 48 48"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                        <div className="flex text-sm text-gray-600">
+                          <label
+                            htmlFor="file-upload"
+                            className="mt-4 w-full justify-center inline-flex items-center px-2 py-2 mb-2 border border-red-300 text-red-300 text-sm font-medium rounded-full text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                           >
-                            <path
-                              d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                              strokeWidth={2}
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
+                            <span>Upload a file</span>
+                            <input
+                              id="file-upload"
+                              name="file-upload"
+                              type="file"
+                              className="sr-only"
+                              onChange={(e) => setMedia(e.target.files[0])}
                             />
-                          </svg>
-                          <div className="flex text-sm text-gray-600">
-                            <label
-                              htmlFor="file-upload"
-                              className="mt-4 w-full justify-center inline-flex items-center px-2 py-2 mb-2 border border-red-300 shadow-sm text-red-300 text-sm font-medium rounded-full text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                            >
-                              <span>Upload a file</span>
-                              <input
-                                id="file-upload"
-                                name="file-upload"
-                                type="file"
-                                className="sr-only"
-                                onChange={(e) => setMedia(e.target.files[0])}
-                              />
-                            </label>
-                          </div>
-                          <p className="text-lg text-gray-500">
-                            Upload .png, .jpg, .glb, .mp3, .mp4, .gif{' '}
-                            <strong className={'text-xl'}>up to 40MB.</strong>
-                          </p>
+                          </label>
                         </div>
-                      )}
-                    </div>
+                        <p className="text-lg text-gray-500">
+                          Upload .png, .jpg, .glb, .mp3, .mp4, .gif{' '}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
-              )}
+              </div>
 
-              {includeThumbnail && !selfPin && (
+              {!isImage && (
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
                   <label
                     htmlFor="cover_photo"
@@ -399,7 +246,7 @@ export default function Mint() {
                           <div className="flex text-sm text-gray-600">
                             <label
                               htmlFor="file-upload"
-                              className="mt-4 w-full justify-center inline-flex items-center px-2 py-2 mb-2 border border-red-300 shadow-sm text-red-300 text-sm font-medium rounded-full text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                              className="mt-4 w-full justify-center inline-flex items-center px-2 py-2 mb-2 border border-red-300 text-red-300 text-sm font-medium rounded-full text-red-300 bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                             >
                               <span>Upload a thumbnail</span>
                               <input
@@ -423,60 +270,6 @@ export default function Mint() {
                 </div>
               )}
 
-              {selfPin && (
-                <>
-                  <div className={'text-white text-md font-regular mt-3'}>
-                    {error &&
-                      `File size too large! Keep in under 40MB please :).`}
-                  </div>
-                  <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
-                    <label
-                      htmlFor="username"
-                      className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
-                    >
-                      Main Media CID
-                    </label>
-                    <div className="mt-1 sm:mt-0 sm:col-span-2">
-                      <div className="max-w-lg flex shadow-sm">
-                        <input
-                          type="text"
-                          name="title"
-                          id="title"
-                          value={mediaCid}
-                          onChange={(e) => setMediaCid(e.target.value)}
-                          className="flex-1 block w-full focus:ring-red-500 focus:border-red-500 min-w-0 sm:text-sm border-gray-700 bg-gray-900"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className={'text-white text-md font-regular mt-3'}>
-                    {error &&
-                      `File size too large! Keep in under 40MB please :).`}
-                  </div>
-                  <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
-                    <label
-                      htmlFor="username"
-                      className="block text-sm font-medium text-white sm:mt-px sm:pt-2"
-                    >
-                      Cover Image CID (only necessary for video, audio, glb)
-                    </label>
-                    <div className="mt-1 sm:mt-0 sm:col-span-2">
-                      <div className="max-w-lg flex shadow-sm">
-                        <input
-                          type="text"
-                          name="title"
-                          id="title"
-                          value={coverCid}
-                          onChange={(e) => setCoverCid(e.target.value)}
-                          className="flex-1 block w-full focus:ring-red-500 focus:border-red-500 min-w-0 sm:text-sm border-gray-700 bg-gray-900"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
-
               <div className={'text-white text-md font-regular mt-3'}>
                 {error && `File size too large! Keep in under 40MB please :).`}
               </div>
@@ -488,13 +281,15 @@ export default function Mint() {
                   Title
                 </label>
                 <div className="mt-1 sm:mt-0 sm:col-span-2">
-                  <div className="max-w-lg flex shadow-sm">
+                  <div className="max-w-lg flex">
                     <input
                       type="text"
                       name="title"
                       id="title"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
+                      value={!!metadata?.name ? metadata.name : ''}
+                      onChange={(e) =>
+                        setMetadata({ ...metadata, name: e.target.value })
+                      }
                       className="flex-1 block w-full focus:ring-red-500 focus:border-red-500 min-w-0 sm:text-sm border-gray-700 bg-gray-900"
                     />
                   </div>
@@ -513,10 +308,12 @@ export default function Mint() {
                     id="about"
                     name="about"
                     rows={3}
-                    className="max-w-lg shadow-sm block w-full focus:ring-red-500 focus:border-red-500 sm:text-sm border-gray-700  bg-gray-900"
+                    className="max-w-lg block w-full focus:ring-red-500 focus:border-red-500 sm:text-sm border-gray-700  bg-gray-900"
                     defaultValue={''}
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    value={!!metadata?.description ? metadata.description : ''}
+                    onChange={(e) =>
+                      setMetadata({ ...metadata, description: e.target.value })
+                    }
                   />
                   <p className="mt-2 text-sm text-gray-300">
                     Write a few sentences about your work.
@@ -537,7 +334,7 @@ export default function Mint() {
                     name="about"
                     rows={3}
                     placeholder={'music, experimental, jazz'}
-                    className="max-w-lg h-12 shadow-sm block w-full focus:ring-red-500 focus:border-red-500 sm:text-sm border-gray-700 bg-gray-900"
+                    className="max-w-lg h-12 block w-full focus:ring-red-500 focus:border-red-500 sm:text-sm border-gray-700 bg-gray-900"
                     defaultValue={''}
                     value={tags}
                     onChange={(e) => setTags(e.target.value)}
@@ -550,9 +347,11 @@ export default function Mint() {
             </div>
 
             <button
-              type="submit"
-              className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 shadow-sm text-red-300 font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              disabled={(!media && !selfPin) || loading || (error && !selfPin)}
+              onClick={submit}
+              className="mt-4 w-full justify-center inline-flex items-center px-6 py-3 border border-red-300 text-red-300 font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              disabled={
+                !media || loading || error || (!isImage && !thumbnailMedia)
+              }
             >
               Preview
               {loading && (

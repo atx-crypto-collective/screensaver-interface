@@ -83,7 +83,6 @@ const NFTItemCard: React.FC<IProps> = ({ nft }) => {
   
   };
 
-    console.log(metadata.data)
     itemFromContract.name = metadata.data.name
     itemFromContract.creator.id
     itemFromContract.mimeType = metadata.data.media.mimeType
@@ -91,14 +90,12 @@ const NFTItemCard: React.FC<IProps> = ({ nft }) => {
     itemFromContract.creator.id = metadata.data.creator
 
     if (!metadata.data.animation_url) {
-      itemFromContract.mediaUri = metadata.data.image
-      itemFromContract.mediaUri.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')
+      itemFromContract.mediaUri = metadata.data.image.replace('ipfs://', 'https://ipfs.io/ipfs/')
     } else {
-      itemFromContract.mediaUri = metadata.data.animation_url
-      itemFromContract.thumbnail = metadata.data.image
-      itemFromContract.mediaUri.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')
-      itemFromContract.thumbnail.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')
+      itemFromContract.mediaUri = metadata.data.animation_url.replace('ipfs://', 'https://ipfs.io/ipfs/')
+      itemFromContract.thumbnail = metadata.data.image.replace('ipfs://', 'https://ipfs.io/ipfs/')
     }
+    console.log("HERE", itemFromContract)
 
     setSafeNFT(itemFromContract)
   }
