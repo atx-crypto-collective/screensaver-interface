@@ -16,10 +16,7 @@ export default function Mint() {
   const router = useRouter()
   const { chainId, account } = useWeb3React<Web3Provider>()
   const apiKey = process.env.NEXT_PUBLIC_STORAGE_KEY
-  const client = new NFTStorage({
-    token:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDBGNzQwNDI4YzgwNzQ3QjE2NDI0NjZkMmI0NUNmNGJiOGI1ZEJDNGMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYzMjMzNzA5NTQxNSwibmFtZSI6InNzdyJ9.DanXCcp72bcmd-McFZS5PmLzvqvA9FV3ZcbRSKrj0U8',
-  })
+  const client = new NFTStorage({token: apiKey})
 
   const [isWhitelisted, setIsWhitelisted] = useState(false)
   const [whitelistedLoading, setWhitelistedLoading] = useState(true)
