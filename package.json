@@ -72,7 +72,7 @@
     "babel-loader": "^8.2.2",
     "eslint": "^7.22.0",
     "eslint-config-aurora": "^1.0.1",
-    "postcss": "^8.2.8",
+    "postcss": "^8.3.7",
     "prettier": "2.0.5",
     "standardx": "^7.0.0",
     "tailwindcss": "^2.0.4",
