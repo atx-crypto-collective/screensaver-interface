@@ -134,15 +134,15 @@ const ItemDetailPage: React.VFC = () => {
 
     if (!metadata.data.image) {
       itemFromContract.thumbnail = metadata.data.image
-      itemFromContract.thumbnail.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')  
+      // itemFromContract.thumbnail.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')  
     }
 
     if (!metadata.data.animation_url) {
       itemFromContract.mediaUri = metadata.data.image
-      itemFromContract.mediaUri.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')
+      // itemFromContract.mediaUri.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')
     } else {
       itemFromContract.mediaUri = metadata.data.animation_url
-      itemFromContract.mediaUri.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')
+      // itemFromContract.mediaUri.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')
     }
 
     setMetadata(itemFromContract)
