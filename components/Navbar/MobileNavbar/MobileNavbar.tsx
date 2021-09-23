@@ -268,7 +268,7 @@ const MobileNavbar: React.FC<IProps> = () => {
             </div>
           </div>
         </div>
-        {showBanner && <Banner />}
+        {/* {showBanner && <Banner />} */}
       </div>
     </>
   )

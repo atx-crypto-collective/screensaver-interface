@@ -149,7 +149,7 @@ const GalleryView: React.VFC<IProps> = ({ state }) => {
   }
 
   return (
-    <div className={'flex flex-col space-y-4 mt-32 max-w-8xl mx-auto'}>
+    <div className={'flex flex-col space-y-4 max-w-8xl mx-auto'}>
       <span className="flex justify-start border-gray-700 border-b text-md w-full">
       <Link href={`/`}>
           <button
