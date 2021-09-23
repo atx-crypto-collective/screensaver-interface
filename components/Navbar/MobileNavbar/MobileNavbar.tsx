@@ -15,6 +15,7 @@ import { ERC20_ABI } from '../../../constants/abis/erc20'
 import { auth } from '../../../config/firebase'
 import { useRouter } from 'next/router'
 import SearchModal from '../../SearchModal'
+import { FaTwitter, FaDiscord } from 'react-icons/fa'
 
 var utils = require('ethers').utils
 
@@ -104,7 +105,6 @@ const MobileNavbar: React.FC<IProps> = () => {
             </div>
 
             <div className={'flex items-center space-x-2 md:space-x-3'}>
-
               <SearchIcon
                 onClick={() => setOpen(true)}
                 className={'h-8 w-8 text-red-300 cursor-pointer'}
@@ -116,7 +116,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                 {({ open }) => (
                   <>
                     <div>
-                      <Menu.Button className="h-10 w-10 mt-1 focus:outline-none">
+                      <Menu.Button className="h-8 w-8 ml-1 p-1 focus:outline-none border border-red-200 rounded hover:bg-gray-500">
                         <span className="sr-only">Open user menu</span>
 
                         <MenuIcon className={' text-red-300'} />
@@ -193,7 +193,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                               target="_blank"
                               className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100"
                             >
-                              💸 Buy Matic
+                              💸 Buy
                             </a>
                           </Link>
                         </Menu.Item>
@@ -202,7 +202,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                         <Menu.Item>
                           <Link href="https://docs.screensaver.world">
                             <a className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100">
-                              🧅 About
+                              🧅 Docs
                             </a>
                           </Link>
                         </Menu.Item>
@@ -214,7 +214,7 @@ const MobileNavbar: React.FC<IProps> = () => {
                               target="_blank"
                               className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100"
                             >
-                              🚀 Account shortlinks
+                              🚀 Shortlinks
                             </a>
                           </Link>
                         </Menu.Item>
@@ -223,9 +223,21 @@ const MobileNavbar: React.FC<IProps> = () => {
                         <Menu.Item>
                           <a
                             href="https://discord.gg/fAGHysxKux"
-                            className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100"
+                            target="_blank"
+                            className="inline-flex px-4 py-2 text-lg text-black font-bold hover:bg-gray-100 items-center"
                           >
-                            Discord
+                            <FaDiscord className="mr-4 bg-black-500" /> Discord
+                          </a>
+                        </Menu.Item>
+
+                        {/* Discord */}
+                        <Menu.Item>
+                          <a
+                            href="https://twitter.com/screensavernft"
+                            target="_blank"
+                            className="inline-flex px-4 py-2 text-lg text-black font-bold hover:bg-gray-100 items-center"
+                          >
+                            <FaTwitter className="mr-4 text-blue-500" /> Twitter
                           </a>
                         </Menu.Item>
 
@@ -233,9 +245,9 @@ const MobileNavbar: React.FC<IProps> = () => {
                         <Menu.Item>
                           <a
                             href="https://v0.screensaver.world"
-                            className="block px-4 py-2 text-lg text-black font-bold hover:bg-gray-100"
+                            className="block px-4 py-2 text-lg text-white font-bold bg-red-200 hover:bg-gray-100"
                           >
-                            Screensaver V0
+                            SSWV0
                           </a>
                         </Menu.Item>
 
