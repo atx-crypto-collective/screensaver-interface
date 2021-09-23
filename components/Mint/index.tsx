@@ -10,7 +10,7 @@ import NFT from '../../types'
 import { GALLERY_ABI } from '../../constants/gallery'
 import { getNetworkLibrary } from '../../connectors'
 import { ethers } from 'ethers'
-import { NFTStorage, File } from 'nft.storage'
+import { NFTStorage } from 'nft.storage'
 
 export default function Mint() {
   const router = useRouter()
