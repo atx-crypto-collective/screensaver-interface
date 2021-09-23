@@ -180,7 +180,7 @@ const ItemDetailPage: React.VFC = () => {
     if (!tokenId) return
     if (!!preview) {
       // add footer
-      setUri('https://screensaver.mypinata.cloud/ipfs/' + preview.toString())
+      setUri('https://ipfs.io/ipfs/' + preview.toString())
       setIsPreview(true)
     } else {
       getUri()
