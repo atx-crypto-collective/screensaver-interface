@@ -92,7 +92,7 @@ const MobileNavbar: React.FC<IProps> = () => {
             }
           >
             <div className={'flex items-center'}>
-              <Link href={'/gallery'}>
+              <Link href={'/'}>
                 <a className="flex font-serif text-2xl text-red-400 font-bold mt-2">
                   <img
                     src={logoImage}
