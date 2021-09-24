@@ -241,6 +241,14 @@ const MobileNavbar: React.FC<IProps> = () => {
                           </a>
                         </Menu.Item>
 
+                        <Menu.Item>
+                          <Link href="/galleries">
+                            <a className="block px-4 py-2 text-lg text-white font-bold bg-green-400 hover:bg-gray-100">
+                              Galleries BETA
+                            </a>
+                          </Link>
+                        </Menu.Item>
+
                         {/* Screensaver V0 */}
                         <Menu.Item>
                           <a

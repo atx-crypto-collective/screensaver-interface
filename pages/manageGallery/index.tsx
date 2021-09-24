@@ -115,7 +115,12 @@ export default function Home() {
       })
 
       setLoading(false)
-      router.push(`/gallery/${userGallery?.title}`)
+      if (hide) {
+        router.push('/galleries')
+      } else {
+        router.push(`/gallery/${userGallery?.title}`)
+      }
+
     } catch (err) {
       console.log('ERROR GETTING SEED', err)
       setLoading(false)

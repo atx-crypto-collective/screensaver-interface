@@ -7,7 +7,7 @@ import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import { injected } from '../connectors'
 import styles from '../styles/Wallet.module.css'
-import { useGalleryContract } from '../hooks/useContract'
+import useGalleryData from '../hooks/useGalleryData'
 import { ethers } from 'ethers'
 import { POLYGON_MAINNET_PARAMS } from '../constants/'
 import { useMaticBalance } from '../hooks/useMaticBalance'
@@ -101,6 +101,7 @@ const ConnectView: React.VFC<ConnectIProps> = ({ setOpen }) => {
     deactivate,
     library,
   } = useWeb3React<Web3Provider>()
+  const [galleryDataLoading, gallery] = useGalleryData({account});
 
   return (
         <div className="mt-3 flex flex-col text-center sm:mt-5 space-y-3">
@@ -120,10 +121,18 @@ const ConnectView: React.VFC<ConnectIProps> = ({ setOpen }) => {
           </Link>
           }
 
-          {!!account && 
-            <Link href={`/manageGallery`}>
+          {(!!account && !!gallery?.title) && 
+            <Link href={`/gallery/${gallery?.title}`}>
             <a className="inline-flex mb-3 justify-center px-6 py-3 text-xl font-medium rounded-md text-white bg-red-600">
-            Manage Gallery ➡️
+            Your Gallery
+            </a>
+          </Link>
+          }
+
+{(!!account && !gallery?.title) && 
+            <Link href={'/manageGallery'}>
+            <a className="inline-flex mb-3 justify-center px-6 py-3 text-xl font-medium rounded-md text-white bg-red-600">
+            Create a Gallery
             </a>
           </Link>
           }
