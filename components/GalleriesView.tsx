@@ -9,34 +9,36 @@ const GalleriesView: React.VFC = () => {
   const [loading, setLoading] = useState<boolean>(true)
 
   async function getGalleries() {
-    const galleryRef = db.collection('galleries');
-    const snapshot = await galleryRef.get();
+    const galleryRef = db.collection('galleries')
+    const snapshot = await galleryRef.get()
     if (snapshot.empty) {
-      console.log('No matching documents.');
-      return;
-    }   
-    
+      console.log('No matching documents.')
+      return
+    }
+
     let tempGalleries = []
-    snapshot.forEach(doc => {
-      console.log('DATA', doc.data());
+    snapshot.forEach((doc) => {
+      console.log('DATA', doc.data())
       const gallery: Gallery = {
         title: doc.data()?.title,
-        ids: []
+        ids: [],
       }
 
-      tempGalleries.push(gallery)
+      if (!doc.data()?.hidden) {
+        tempGalleries.push(gallery)
+      }
 
-    });
+    })
 
     setGalleries(tempGalleries)
 
     setLoading(false)
-   }
+  }
 
   // check reports for
   useEffect(() => {
-     setGalleries([])
-     getGalleries();
+    setGalleries([])
+    getGalleries()
   }, [])
 
   if (!galleries) {
@@ -45,14 +47,14 @@ const GalleriesView: React.VFC = () => {
 
   return (
     <Layout>
-        <Link href={'/manageGallery'}>
-          <a className={'font-bold text-xl'}>Galleries</a>
-          </Link>
+      <Link href={'/manageGallery'}>
+        <a className={'font-bold text-xl'}>Galleries</a>
+      </Link>
 
       <div className={'flex flex-col space-y-2 mt-8'}>
         {galleries.map((gallery) => (
           <Link href={`/gallery/${gallery.title}`}>
-          <a className={'underline font-light'}>{gallery.title}</a>
+            <a className={'underline font-light'}>{gallery.title}</a>
           </Link>
         ))}
       </div>

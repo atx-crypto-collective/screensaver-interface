@@ -53,6 +53,7 @@ export type Gallery = {
   description?: string 
   timestamp?: Date
   address?: string
+  hidden?: boolean
 }
 
 export default NFT

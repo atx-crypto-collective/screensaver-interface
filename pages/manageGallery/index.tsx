@@ -7,12 +7,15 @@ import useGalleryData from '../../hooks/useGalleryData'
 import { db } from '../../config/firebase'
 import { Gallery } from '../../types'
 import { SSW_API_URL } from '../../constants'
+import { Switch } from '@headlessui/react'
+import classNames from 'classnames'
 
 export default function Home() {
   const { account, library } = useWeb3React<Web3Provider>()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [loadingTitleCheck, setLoadingTitleCheck] = useState(false)
+  const [hide, setHide] = useState(false)
   const [galleryLoading, storedGallery] = useGalleryData({ account })
   const [error, setError] = useState<null | string>(null)
   const [ids, setIds] = useState<string>('')
@@ -24,7 +27,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!storedGallery) return
-    console.log("HERE IT IS", storedGallery)
+    console.log('HERE IT IS', storedGallery)
     setUserGallery({
       title: storedGallery.title,
       description: storedGallery.description,
@@ -35,8 +38,8 @@ export default function Home() {
   useEffect(() => {
     var idsString = ids.replace(/\s/g, '')
     var parsedIdsString = idsString.split(',')
-    var filteredIds = parsedIdsString.filter(id => !isNaN(parseInt(id)))
-    var parsedIds = filteredIds.map( id => parseInt(id))
+    var filteredIds = parsedIdsString.filter((id) => !isNaN(parseInt(id)))
+    var parsedIds = filteredIds.map((id) => parseInt(id))
     setUserGallery({ ...userGallery, ids: parsedIds })
   }, [ids])
 
@@ -93,6 +96,7 @@ export default function Home() {
 
       let originalMessage = userGallery
       originalMessage.timestamp = new Date()
+      originalMessage.hidden = hide
 
       const signedMessage = await library
         .getSigner()
@@ -140,6 +144,27 @@ export default function Home() {
                 </h3>
               </div>
 
+              <label className="block text-xs font-bold text-white sm:mt-px sm:pt-2 mb-4">
+                Hide Gallery
+              </label>
+              <Switch
+                checked={hide}
+                onChange={setHide}
+                className={classNames(
+                  !hide ? 'bg-gray-200' : 'bg-indigo-600',
+                  'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500',
+                )}
+              >
+                <span className="sr-only">Use setting</span>
+                <span
+                  aria-hidden="true"
+                  className={classNames(
+                    !hide ? 'translate-x-0' : 'translate-x-5',
+                    'pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200',
+                  )}
+                />
+              </Switch>
+
               <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
                   <label
@@ -181,9 +206,7 @@ export default function Home() {
                       rows={3}
                       className="max-w-lg shadow-sm block w-full focus:ring-red-500 focus:border-red-500 sm:text-sm border-gray-700  bg-gray-900"
                       defaultValue={''}
-                      value={
-                        !!userGallery ? userGallery?.description : ''
-                      }
+                      value={!!userGallery ? userGallery?.description : ''}
                       onChange={(e) =>
                         setUserGallery({
                           ...userGallery,
@@ -215,7 +238,8 @@ export default function Home() {
                       onChange={(e) => setIds(e.target.value)}
                     />
                     <p className="mt-2 text-sm text-gray-300">
-                      Enter token ids you want to feature separated by commas - i.e. 1, 2, 3, 4
+                      Enter token ids you want to feature separated by commas -
+                      i.e. 1, 2, 3, 4
                     </p>
                   </div>
                 </div>

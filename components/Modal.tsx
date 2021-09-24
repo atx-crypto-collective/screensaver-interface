@@ -120,6 +120,14 @@ const ConnectView: React.VFC<ConnectIProps> = ({ setOpen }) => {
           </Link>
           }
 
+          {!!account && 
+            <Link href={`/manageGallery`}>
+            <a className="inline-flex mb-3 justify-center px-6 py-3 text-xl font-medium rounded-md text-white bg-red-600">
+            Manage Gallery ➡️
+            </a>
+          </Link>
+          }
+
              <div className="mt-2">
           <p className="text-xl text-black font-bold">Wallet</p>
         </div>
