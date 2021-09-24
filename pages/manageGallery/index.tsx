@@ -33,6 +33,11 @@ export default function Home() {
       description: storedGallery.description,
       ids: storedGallery.ids,
     })
+
+    if (storedGallery.hidden) {
+      setHide(true)
+    }
+
   }, [storedGallery])
 
   useEffect(() => {
