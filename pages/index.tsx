@@ -1,6 +1,6 @@
 import React from 'react'
 import { Layout } from '../components'
-import GalleryView from '../components/GalleryView'
+import ExploreView from '../components/ExploreView'
 import Banner from '../components/Banner'
 import Header from '../components/Header'
 
@@ -11,7 +11,7 @@ const GalleryPage: React.VFC = () => {
       <Banner/>
       <Header/>
       <div className={'pb-8 w-full md:w-11/12 mx-auto'}>
-        <GalleryView />
+        <ExploreView />
       </div>
     </Layout>
   )

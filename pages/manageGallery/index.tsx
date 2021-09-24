@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
 import { useRouter } from 'next/router'
-import useCollectionData from '../../hooks/useCollectionData'
+import useGalleryData from '../../hooks/useGalleryData'
 import { db } from '../../config/firebase'
-import { Collection } from '../../types'
+import { Gallery } from '../../types'
 import { SSW_API_URL } from '../../constants'
 
 export default function Home() {
@@ -13,31 +13,31 @@ export default function Home() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [loadingTitleCheck, setLoadingTitleCheck] = useState(false)
-  const [collectionLoading, storedCollection] = useCollectionData({ account })
+  const [galleryLoading, storedGallery] = useGalleryData({ account })
   const [error, setError] = useState<null | string>(null)
   const [ids, setIds] = useState<string>('')
-  const [userCollection, setUserCollection] = useState<Collection | undefined>()
+  const [userGallery, setUserGallery] = useState<Gallery | undefined>()
   const errorMessages = {
     username: 'Title already in use.',
     blankTitle: 'Title cannot be blank.',
   }
 
   useEffect(() => {
-    if (!storedCollection) return
-    console.log("HERE IT IS", storedCollection)
-    setUserCollection({
-      title: storedCollection.title,
-      description: storedCollection.description,
-      ids: storedCollection.ids,
+    if (!storedGallery) return
+    console.log("HERE IT IS", storedGallery)
+    setUserGallery({
+      title: storedGallery.title,
+      description: storedGallery.description,
+      ids: storedGallery.ids,
     })
-  }, [storedCollection])
+  }, [storedGallery])
 
   useEffect(() => {
     var idsString = ids.replace(/\s/g, '')
     var parsedIdsString = idsString.split(',')
     var filteredIds = parsedIdsString.filter(id => !isNaN(parseInt(id)))
     var parsedIds = filteredIds.map( id => parseInt(id))
-    setUserCollection({ ...userCollection, ids: parsedIds })
+    setUserGallery({ ...userGallery, ids: parsedIds })
   }, [ids])
 
   useEffect(() => {
@@ -48,41 +48,41 @@ export default function Home() {
       setError(null)
     }
 
-    if (!userCollection?.title || userCollection?.title === '') return
+    if (!userGallery?.title || userGallery?.title === '') return
 
-    var safeTitle = userCollection?.title.replace(/[^a-zA-Z ]/g, '')
-    setUserCollection({ ...userCollection, title: safeTitle.toLowerCase() })
+    var safeTitle = userGallery?.title.replace(/[^a-zA-Z ]/g, '')
+    setUserGallery({ ...userGallery, title: safeTitle.toLowerCase() })
 
     setLoadingTitleCheck(true)
 
     async function checkTitle(username: string) {
       // Create a reference to the cities collection
-      const collectionsRef = db.collection('collections')
+      const galleriesRef = db.collection('galleries')
 
       // Create a query against the collection
-      const titleMatches = await collectionsRef
-        .where('title', '==', userCollection?.title)
+      const titleMatches = await galleriesRef
+        .where('title', '==', userGallery?.title)
         .get()
 
       setLoadingTitleCheck(false)
 
       console.log('MATCHES EXIST: ', titleMatches.docs.length > 0)
 
-      const matchesCurrentUsername = titleMatches.docs.filter(
+      const matchesCurrentTitle = titleMatches.docs.filter(
         (match) => match?.id === account,
       )
 
-      if (matchesCurrentUsername.length > 0) return setError(null)
+      if (matchesCurrentTitle.length > 0) return setError(null)
 
       setError(titleMatches.docs.length > 0 ? errorMessages.username : null)
     }
 
-    checkTitle(userCollection?.title)
-  }, [userCollection?.title, account])
+    checkTitle(userGallery?.title)
+  }, [userGallery?.title, account])
 
   const submit = () => {
     console.log('HERE')
-    if (!userCollection?.title || userCollection?.title === '')
+    if (!userGallery?.title || userGallery?.title === '')
       return setError(errorMessages.blankTitle)
     signMessage()
   }
@@ -91,23 +91,14 @@ export default function Home() {
     try {
       setLoading(true)
 
-      let originalMessage = userCollection
+      let originalMessage = userGallery
       originalMessage.timestamp = new Date()
-
-      //   {
-      //       title: '',
-      //       description: userCollection.description,
-      //       ids: userCollection.ids,
-      //       timestamp: new Date()
-      //   }
-
-      //   originalMessage.title = originalMessage.title.replace(/ /g, "_");
 
       const signedMessage = await library
         .getSigner()
         .signMessage(JSON.stringify(originalMessage))
 
-      await fetch(`${SSW_API_URL}/collection`, {
+      await fetch(`${SSW_API_URL}/gallery`, {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
@@ -120,7 +111,7 @@ export default function Home() {
       })
 
       setLoading(false)
-      router.push(`/collection/${userCollection?.title}`)
+      router.push(`/gallery/${userGallery?.title}`)
     } catch (err) {
       console.log('ERROR GETTING SEED', err)
       setLoading(false)
@@ -131,7 +122,7 @@ export default function Home() {
     return (
       <Layout>
         <div className={'flex w-full justify-center text-2xl font-bold mt-40'}>
-          Connect with Metamask to manage your collection
+          Connect with Metamask to manage your gallery
         </div>{' '}
       </Layout>
     )
@@ -145,7 +136,7 @@ export default function Home() {
             <div>
               <div>
                 <h3 className="mt-10 max-w-3xl text-3xl text-white font-bold">
-                  Manage Collection
+                  Manage Gallery
                 </h3>
               </div>
 
@@ -163,11 +154,11 @@ export default function Home() {
                         type="text"
                         name="title"
                         id="title"
-                        value={!!userCollection ? userCollection?.title : ''}
+                        value={!!userGallery ? userGallery?.title : ''}
                         onChange={(e) =>
-                          setUserCollection({
-                            ...userCollection,
-                            title: e.target.value.toLowerCase(),
+                          setUserGallery({
+                            ...userGallery,
+                            title: e.target.value,
                           })
                         }
                         className="flex-1 block w-full focus:ring-red-500 focus:border-red-500 min-w-0 sm:text-sm border-gray-700 bg-gray-900"
@@ -191,11 +182,11 @@ export default function Home() {
                       className="max-w-lg shadow-sm block w-full focus:ring-red-500 focus:border-red-500 sm:text-sm border-gray-700  bg-gray-900"
                       defaultValue={''}
                       value={
-                        !!userCollection ? userCollection?.description : ''
+                        !!userGallery ? userGallery?.description : ''
                       }
                       onChange={(e) =>
-                        setUserCollection({
-                          ...userCollection,
+                        setUserGallery({
+                          ...userGallery,
                           description: e.target.value,
                         })
                       }

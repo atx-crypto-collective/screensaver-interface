@@ -47,7 +47,7 @@ export type Profile = {
   timestamp?: Date
 }
 
-export type Collection = {
+export type Gallery = {
   title: string
   ids: number[]
   description?: string 

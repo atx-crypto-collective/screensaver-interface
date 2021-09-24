@@ -6,8 +6,8 @@
   package = "@netlify/plugin-nextjs"
 
 [[redirects]]
-  from = "/collection/:collection"
-  to = "/collection/[title].html?object=:title"
+  from = "/gallery/:gallery"
+  to = "/gallery/[title].html?object=:title"
   status = 200
 
 [[redirects]]
@@ -66,8 +66,13 @@
   status = 200
 
 [[redirects]]
-  from = "/gallery/:gallery"
-  to = "/gallery/:gallery"
+  from = "/galleries"
+  to = "/galleries"
+  status = 200
+
+[[redirects]]
+  from = "/manageGallery"
+  to = "/manageGallery"
   status = 200
 
 [[redirects]]

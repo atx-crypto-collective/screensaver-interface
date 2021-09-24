@@ -1,26 +1,26 @@
 import { useState, useEffect } from 'react';
 import { db } from '../config/firebase'
-import { Collection } from '../types'
+import { Gallery } from '../types'
 
 interface IProps {
     account: string
 }
 
-function useCollectionData({account}: IProps): [boolean, Collection | undefined] {
+function useGalleryData({account}: IProps): [boolean, Gallery | undefined] {
 
-    const [collectionData, setCollectionData] = useState<Collection | undefined>();
+    const [galleryData, setGalleryData] = useState<Gallery | undefined>();
     const [loading, setLoading] = useState<boolean>(true);
 
     // check reports for
     useEffect(() => {
         if (!account) return;
         const unsubscribe = db
-          .collection('collections')
+          .collection('galleries')
           .doc(account)
           .onSnapshot((doc) => {
             if (!doc.exists) return setLoading(false);
 
-            let collectionData: Collection = {
+            let galleryData: Gallery = {
                 title: '',
                 address: '',
                 ids: [],
@@ -30,30 +30,30 @@ function useCollectionData({account}: IProps): [boolean, Collection | undefined]
             
             console.log("DOC", doc.data())
             if (!!doc.data().title) {
-                collectionData.title = doc.data().title
+                galleryData.title = doc.data().title
             }
             
             if (!!doc.data().description) {
-                collectionData.description = doc.data().description
+                galleryData.description = doc.data().description
             }
 
             if (!!doc.data().ids) {
-                collectionData.ids = doc.data().ids
+                galleryData.ids = doc.data().ids
             }
 
             if (!!doc.data().address) {
-                collectionData.address = doc.data().address
+                galleryData.address = doc.data().address
             }
 
-            setCollectionData(collectionData);
+            setGalleryData(galleryData);
 
             setLoading(false);
           })
         return () => unsubscribe() // Make sure we un-register Firebase observers when the component unmounts.
       }, [])
 
-  return [loading, collectionData];
+  return [loading, galleryData];
 }
 
 
-export default useCollectionData;
+export default useGalleryData;
