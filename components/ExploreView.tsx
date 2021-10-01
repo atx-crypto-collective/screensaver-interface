@@ -98,7 +98,7 @@ const ExploreView: React.VFC<IProps> = ({ state }) => {
     getQuery(state),
     {
       variables: {
-        first: 48,
+        first: 24,
         skip: 0,
         orderDirection: 'desc',
       },

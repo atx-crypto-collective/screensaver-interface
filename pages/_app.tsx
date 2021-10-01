@@ -1,8 +1,8 @@
 import 'tailwindcss/tailwind.css'
-import dynamic from 'next/dynamic'
 import '../styles/global.css'
 import { FirebaseTrackingProvider } from "../config/firebase";
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import dynamic from "next/dynamic";
 
 const Provider = dynamic(() => import("../state/StoreProvider"), {
   ssr: false,

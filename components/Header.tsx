@@ -5,7 +5,7 @@ import banner from '../assets/banner.png'
 export default function Header() {
   return (
     <div className="w-full flex flex-col sm:justify-center sm:flex-row sm:py-16 sm:px-10">
-      <div className="w-1/2 mx-auto text-left py-20 px-6 md:px-20 order-2 sm:order-1">
+      <div className="w-full max-w-4xl mx-auto text-center py-20 px-6 md:px-20 order-2 sm:order-1">
         <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
           <span className="block">Welcome to Screensaver.world!</span>
           {/* <span className="block">SSW is community first and open source NFT protocol on Polygon.</span> */}
@@ -30,9 +30,9 @@ export default function Header() {
           </a>
         </div>
       </div>
-      <a href={'https://ssw.auction'} className={'w-full cursor-pointer sm:w-1/2 h-48 min-w-3/4 object-fill sm:h-96 sm:px-5 md:px-10 order-1 sm:order-2 hidden sm:inline-block'} >
+      {/* <a href={'https://ssw.auction'} className={'w-full cursor-pointer sm:w-1/2 h-48 min-w-3/4 object-fill sm:h-96 sm:px-5 md:px-10 order-1 sm:order-2 hidden sm:inline-block'} >
       <img  src={banner} alt={'Screen Banner'} className={'w-full h-48 object-fill sm:h-96 hidden sm:inline-block'} />
-      </a>
+      </a> */}
     </div>
   )
 }
