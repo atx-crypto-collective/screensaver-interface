@@ -133,16 +133,13 @@ const ItemDetailPage: React.VFC = () => {
     itemFromContract.image = metadata.data.image
 
     if (!metadata.data.image) {
-      itemFromContract.thumbnail = metadata.data.image
-      itemFromContract.thumbnail.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')  
+      itemFromContract.thumbnail = metadata.data.image.replace('ipfs://', 'https://ipfs.io/ipfs/')  
     }
 
     if (!metadata.data.animation_url) {
-      itemFromContract.mediaUri = metadata.data.image
-      itemFromContract.mediaUri.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')
+      itemFromContract.mediaUri = metadata.data.image.replace('ipfs://', 'https://ipfs.io/ipfs/')
     } else {
-      itemFromContract.mediaUri = metadata.data.animation_url
-      itemFromContract.mediaUri.replace('https://ipfs.io', 'https://screensaver.mypinata.cloud')
+      itemFromContract.mediaUri = metadata.data.animation_url.replace('ipfs://', 'https://ipfs.io/ipfs/')
     }
 
     setMetadata(itemFromContract)
@@ -180,7 +177,7 @@ const ItemDetailPage: React.VFC = () => {
     if (!tokenId) return
     if (!!preview) {
       // add footer
-      setUri('https://screensaver.mypinata.cloud/ipfs/' + preview.toString())
+      setUri('https://ipfs.io/ipfs/' + preview.toString())
       setIsPreview(true)
     } else {
       getUri()

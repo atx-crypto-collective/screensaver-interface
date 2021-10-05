@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { db } from '../config/firebase'
 import { Profile } from '../types'
+
 interface IProps {
     account: string
 }
